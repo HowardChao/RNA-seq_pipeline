@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Hello wolrd function\n#'\n#' Pint Hello, world!\n#' @param x A numeric value to be squared\n#' @return The square of the input\n#' @export\nsquare <- function(x) {\n  return(x^2)\n}\n\n#' @export\nhello <- function() {\n  print(\"Hello, world!\")\n}\n\n\n",
+    "created" : 1523650224127.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4129614336",
+    "id" : "1EDC9616",
+    "lastKnownWriteTime" : 1523650623,
+    "last_content_update" : 1523650420712,
+    "path" : "/tempwork171/kuan-hao/rnaseqpipline/R/hello.R",
+    "project_path" : "R/hello.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

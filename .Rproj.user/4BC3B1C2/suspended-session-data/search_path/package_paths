@@ -1,0 +1,8 @@
+datasets="/usr/lib64/R/library/datasets"
+grDevices="/usr/lib64/R/library/grDevices"
+graphics="/usr/lib64/R/library/graphics"
+methods="/usr/lib64/R/library/methods"
+rnaseqpipline="/home/kuan-hao/R/x86_64-redhat-linux-gnu-library/3.2/rnaseqpipline"
+roxygen2="/home/kuan-hao/R/x86_64-redhat-linux-gnu-library/3.2/roxygen2"
+stats="/usr/lib64/R/library/stats"
+utils="/usr/lib64/R/library/utils"
