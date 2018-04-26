@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1524765388567.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FE3EBF06",
+    "lastKnownWriteTime" : 1524767344,
+    "last_content_update" : 1524767344940,
+    "path" : "~/bioinformatics/R_package/RNAseq/R/install_precheck.R",
+    "project_path" : "R/install_precheck.R",
+    "properties" : {
+        "cursorPosition" : "11,1",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
