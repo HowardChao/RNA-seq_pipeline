@@ -2,10 +2,10 @@
 % Please edit documentation in R/install_precheck.R
 \name{InstallGffcompare}
 \alias{InstallGffcompare}
-\title{Install gffcompare}
+\title{Install Gffcompare}
 \usage{
 InstallGffcompare()
 }
 \description{
-Install gffcompare
+Install Gffcompare
 }

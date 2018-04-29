@@ -2,12 +2,12 @@
 % Please edit documentation in R/install_precheck.R
 \name{CheckHisat2}
 \alias{CheckHisat2}
-\title{Check hisat2
+\title{Check Hisat2
 Check whether hisat2 is installed on the workstation}
 \usage{
 CheckHisat2()
 }
 \description{
-Check hisat2
+Check Hisat2
 Check whether hisat2 is installed on the workstation
 }

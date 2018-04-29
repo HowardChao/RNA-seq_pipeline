@@ -2,10 +2,10 @@
 % Please edit documentation in R/install_precheck.R
 \name{InstallAll}
 \alias{InstallAll}
-\title{Install Hisat2, StringTie, gffcompare, samtools}
+\title{Install Hisat2, StringTie, Gffcompare, Samtools}
 \usage{
 InstallAll()
 }
 \description{
-Install Hisat2, StringTie, gffcompare, samtools
+Install Hisat2, StringTie, Gffcompare, Samtools
 }

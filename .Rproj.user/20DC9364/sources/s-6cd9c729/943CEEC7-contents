@@ -1,7 +1,0 @@
-#' Say hello
-#'
-#' call this function to say hello to you
-#' @export
-hello <- function() {
-  print("Hello, world!")
-}
