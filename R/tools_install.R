@@ -168,43 +168,15 @@ BinarySamtools <- function() {
   }
 }
 
-#' Choose the location where 'gene_data' and 'RNAseq_bin' will be installed
-#' @export
-SetPrefixPath <- function(path.prefix = home.path) {
-  pkg.global.path.prefix$data_path <- path.prefix
-  if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path))){
-    cat(paste0("The following files will be installed under '", pkg.global.path.prefix$data_path, "'\n\n"))
-  }
-}
-
-#' Checking the absolute path
-#' @export
-CheckPrefixPath <- function(path.prefix = pkg.global.path.prefix$data_path, print = TRUE) {
-  if (pkg.global.path.prefix$data_path == "NOT_SET_YET") {
-    cat("You haven't set the prefix directory for the following steps.\nPlease run 'SetPrefixPath()' first to set the prefix directory.\n\n")
-    return(FALSE)
-  } else {
-    if (substr(path.prefix, nchar(path.prefix), nchar(path.prefix)) != '/') {
-      pkg.global.path.prefix$data_path <- paste0(path.prefix, '/')
-    }
-    if (isTRUE(print)) {
-      cat(paste0("Prefix directory: '", pkg.global.path.prefix$data_path, "'\n\n"))
-    }
-    return(TRUE)
-  }
-}
-
-
 #' Install Hisat2, StringTie, Gffcompare, Samtools
 #' @export
 InstallAll <- function() {
-
-  # add checking before running the code below
-  # give the function the location to RNAseq file
   # give the function the location to RNAoutput file
   # fix cat problem
   # the the user choose the version(之後再說)
-  sink("RNAseq_program_install_report.txt")
+
+  # try stringtie
+  #sink("RNAseq_program_install_report.txt")
   InstallHisat2()
   InstallStringTie()
   InstallGffcompare()
@@ -218,5 +190,5 @@ InstallAll <- function() {
   BinaryGffcompare()
   BinarySamtools()
   CheckAll()
-  sink()
+  #sink()
 }
