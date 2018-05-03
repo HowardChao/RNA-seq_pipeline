@@ -62,10 +62,34 @@ MkdirRNAseq_bin <- function() {
   }
 }
 
+#' Check sample gene and binary directory
+#' @export
+CheckDirAll <- function() {
+  if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
+    gene.data.logic <- dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/genes/")) && dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/genome/")) && dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/indexes/")) && dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/samples/"))
+    rnaseq.bin.logic <- dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/")) && dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
+    if (!isTRUE(gene.data.logic)){
+      cat(c("There are directories missing in", paste0(pkg.global.path.prefix$data_path, "gene_data/.")), "\n")
+    }
+    if (!isTRUE(rnaseq.bin.logic)){
+      cat(c("There are directories missing in", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/.")), "\n")
+    }
+    if (isTRUE(gene.data.logic) && isTRUE(rnaseq.bin.logic)){
+      cat(c("(O) :Directories are all correct.\n\n"))
+      return(TRUE)
+    } else {
+      cat(c("(X) :Please run 'MkdirAll()' to add the missing directories.\n\n"))
+      return(FALSE)
+    }
+  }
+}
+
 #' Create sample gene and binary directory
 #' @export
 MkdirAll <- function() {
-  MkdirSampleGeneDir()
-  MkdirRNAseq_bin()
-  ExportPath()
+  if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
+    MkdirSampleGeneDir()
+    MkdirRNAseq_bin()
+    ExportPath()
+  }
 }
