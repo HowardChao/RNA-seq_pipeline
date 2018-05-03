@@ -71,7 +71,7 @@ CheckBallgown <- function(){
 
 #' Check whether programs are installed
 #' @export
-CheckAll <- function() {
+CheckToolAll <- function() {
   CheckHisat2()
   CheckStringTie()
   CheckGffcompare()

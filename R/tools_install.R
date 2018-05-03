@@ -7,7 +7,7 @@ pkg.global.path.prefix$data_path <- "NOT_SET_YET"
 InstallHisat2 <- function() {
   # ftp server : ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-Linux_x86_64.zip
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Installing Hisat2 (hisat2-2.1.0-Linux_x86_64.zip) ************\n")
       current.path <- getwd()
       cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/"))
@@ -24,7 +24,7 @@ InstallHisat2 <- function() {
 InstallStringTie <- function() {
   # http://ccb.jhu.edu/software/stringtie/dl/stringtie-1.3.4d.tar.gz
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Installing StringTie (stringtie-1.3.4d.tar.gz) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/"))
@@ -40,7 +40,7 @@ InstallStringTie <- function() {
 InstallGffcompare <- function() {
   # http://ccb.jhu.edu/software/stringtie/dl/gffcompare-0.10.4.tar.gz
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Installing Gffcompare (gffcompare-0.10.4.tar.gz) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/"))
@@ -56,7 +56,7 @@ InstallGffcompare <- function() {
 InstallSamtools <- function() {
   # https://github.com/samtools/samtools/releases/download/1.8/samtools-1.8.tar.bz2
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Installing Samtools (samtools-1.8.tar.bz2) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/"))
@@ -71,7 +71,7 @@ InstallSamtools <- function() {
 #' @export
 UnpackHisat2 <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Unpacking Hisat2 (hisat2-2.1.0-Linux_x86_64.zip) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
@@ -86,7 +86,7 @@ UnpackHisat2 <- function() {
 #' @export
 UnpackStringTie <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Unpacking StringTie (stringtie-1.3.4d.tar.gz) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
@@ -101,7 +101,7 @@ UnpackStringTie <- function() {
 #' @export
 UnpackGffcompare <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Unpacking Gffcompare (gffcompare-0.10.4.tar.gz) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
@@ -116,7 +116,7 @@ UnpackGffcompare <- function() {
 #' @export
 UnpackSamtools <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Unpacking Samtools (samtools-1.8.tar.bz2) ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
@@ -131,7 +131,7 @@ UnpackSamtools <- function() {
 #' @export
 BinaryHisat2 <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Moving Hisat2 Binary ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/hisat2-2.1.0/"))
@@ -146,7 +146,7 @@ BinaryHisat2 <- function() {
 #' @export
 BinaryStringTie <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Making StringTie Binary ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/stringtie-1.3.4d/"))
@@ -162,7 +162,7 @@ BinaryStringTie <- function() {
 #' @export
 BinaryGffcompare <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Making Gffcompare Binary ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/gffcompare-0.10.4/"))
@@ -179,7 +179,7 @@ BinaryGffcompare <- function() {
 #' @export
 BinarySamtools <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       cat("************** Making Samtools Binary ************\n")
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/samtools-1.8/"))
@@ -200,7 +200,7 @@ InstallAll <- function() {
   # the the user choose the version(之後再說)
   # try stringtie
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    if (isTRUE(CheckDirAll())){
+    if (isTRUE(CheckDirAll(print = FALSE))){
       #sink("RNAseq_program_install_report.txt")
       InstallHisat2()
       InstallStringTie()

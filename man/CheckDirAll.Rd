@@ -4,7 +4,7 @@
 \alias{CheckDirAll}
 \title{Check sample gene and binary directory}
 \usage{
-CheckDirAll()
+CheckDirAll(print = TRUE)
 }
 \description{
 Check sample gene and binary directory
