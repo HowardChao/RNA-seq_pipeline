@@ -1,6 +1,6 @@
 #' Create sample gene directory
 #' @export
-MkdirSampleGeneDir <- function() {
+MkdirGeneDir <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
     cat("************** Creating gene-data directory ************\n")
     gene_data.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/')), showWarnings = FALSE) == 0
@@ -121,7 +121,7 @@ CheckDirAll <- function(print = TRUE) {
 #' @export
 MkdirAll <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
-    MkdirSampleGeneDir()
+    MkdirGeneDir()
     MkdirRNAseq_bin()
     ExportPath()
   }

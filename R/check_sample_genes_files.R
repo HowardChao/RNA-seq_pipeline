@@ -86,6 +86,19 @@ CheckSampleGenesFiles <- function(gene_name = "NO_DATA") {
           cat(c("(X) :", paste0("'",getwd(), "/merged_VS_ref/stringtie_merged.gtf", "'"), "is not exit\n"))
           cat("     Run 'StringTieMergeTrans()' to generate 'stringtie_merged.gtf' files\n\n")
         }
+        fastq.gz.files <- list.files(path = paste0(getwd(), '/samples_.fastq.gz/'), pattern = paste0( "^[A-Z]*", "[0-9]*", "_", gene_name, "_[0-9]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+
+        ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( "^[a-z,A-Z]*[0-9]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+        ballgown.dirs.number <- length(ballgown.dirs)
+        if (ballgown.dirs.number != 0){
+          for (i in ballgown.dirs){
+            cat(c("(O) :", paste0("'", getwd(), '/ballgown/', i, "'"), "is exit\n"))
+          }
+          cat(c("Total:", ballgown.dirs.number, "directories\n\n"))
+        }else {
+          cat(c("(X) :", paste0('\'',getwd(), '/ballgown/XXXX(gene)/'), "is not exit\n"))
+          cat("     Run 'StringTieToBallgown()' to generate ballgown/XXXX(gene)/ directories\n\n")
+        }
 
         on.exit(setwd(current.path))
         return(list(gtf.file.logic.df = gtf.file, fa.file.logic.df = fa.file,
@@ -99,7 +112,9 @@ CheckSampleGenesFiles <- function(gene_name = "NO_DATA") {
                     bam.files.df = bam.files,
                     gtf.files.number.df = gtf.files.number,
                     gtf.files.df = gtf.files,
-                    stringtie_merged.gtf.file.df = stringtie_merged.gtf.file))
+                    stringtie_merged.gtf.file.df = stringtie_merged.gtf.file,
+                    ballgown.dirs.number.df = ballgown.dirs.number,
+                    ballgown.dirs.df = ballgown.dirs))
       }
     }
   }

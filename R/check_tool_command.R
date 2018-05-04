@@ -6,9 +6,11 @@ CheckHisat2 <- function(){
   hisat2.installed <- system('hisat2 --version')==0
   if( isTRUE(hisat2.installed)){
     cat("'hisat2' is installed\n\n")
+    return(TRUE)
   }
   else{
     cat("'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
   }
 }
 
@@ -20,10 +22,12 @@ CheckStringTie <- function(){
   stringtie.installed <- system( 'stringtie --version')==0
   if( isTRUE(stringtie.installed)){
     cat("'stringtie' is installed\n\n")
+    return(TRUE)
   }
   else{
     cat("'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
-  }
+    return(FALSE)
+    }
 }
 
 #' Check Gffcompare
@@ -34,9 +38,11 @@ CheckGffcompare <- function() {
   gffcompare.old <- system( 'gffcompare --version')==0
   if( isTRUE(gffcompare.old)){
     cat("'gffcompare' is installed\n\n")
+    return(TRUE)
   }
   else{
     cat("\'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
   }
 }
 
@@ -48,9 +54,11 @@ CheckSamtools <- function(){
   samtools.old <- system( 'samtools --version')==0
   if( isTRUE(samtools.old)){
     cat("'samtools' is installed\n\n")
+    return(TRUE)
   }
   else{
     cat("\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
   }
 }
 
@@ -62,9 +70,11 @@ CheckBallgown <- function(){
   #samtools.old <- system( 'ballgown --version')==0
   if( isTRUE(samtools.old)){
     cat("'samtools' is installed\n\n")
+    return(TRUE)
   }
   else{
     cat("\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
   }
 }
 
@@ -76,6 +86,11 @@ CheckToolAll <- function() {
   CheckStringTie()
   CheckGffcompare()
   CheckSamtools()
+  if (isTRUE(CheckHisat2()) && isTRUE(CheckStringTie()) && isTRUE(CheckGffcompare()) && isTRUE(CheckSamtools())){
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
 }
 
 #' Add '~/RNAseq_bin/ to R environment "PATH"
