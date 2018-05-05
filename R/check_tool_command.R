@@ -89,6 +89,7 @@ CheckToolAll <- function() {
   if (isTRUE(CheckHisat2()) && isTRUE(CheckStringTie()) && isTRUE(CheckGffcompare()) && isTRUE(CheckSamtools())){
     return(TRUE)
   } else {
+    cat("(X) :Run 'ExportPath()' to set the environment.\n\n")
     return(FALSE)
   }
 }

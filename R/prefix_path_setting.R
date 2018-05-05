@@ -15,7 +15,7 @@ SetPrefixPath <- function(path.prefix = home.path) {
 #' Checking the absolute path
 #' @export
 CheckPrefixPath <- function(path.prefix = pkg.global.path.prefix$data_path, print = TRUE) {
-  if (pkg.global.path.prefix$data_path == "NOT_SET_YET") {
+  if (path.prefix == "NOT_SET_YET") {
     cat("(X) :You haven't set the prefix directory for the following steps.\n     Please run 'SetPrefixPath()' first to set the prefix directory.\n\n")
     return(FALSE)
   } else {

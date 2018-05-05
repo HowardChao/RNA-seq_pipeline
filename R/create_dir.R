@@ -27,29 +27,29 @@ MkdirGeneDir <- function() {
     } else {
       cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/indexes/'.\n     Please check whether the directory is already exit.\n"))
     }
-    samples.fastq.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/samples_.fastq.gz')), showWarnings = FALSE) == 0
+    samples.fastq.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/raw_fastq.gz')), showWarnings = FALSE) == 0
     if (!isTRUE(samples.fastq.dir)) {
-      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/samples_.fastq.gz/'.\n"))
+      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/raw_fastq.gz/'.\n"))
     } else {
-      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/samples_.fastq.gz/'.\n     Please check whether the directory is already exit.\n"))
+      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/raw_fastq.gz/'.\n     Please check whether the directory is already exit.\n"))
     }
-    samples.sam.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/samples_.sam')), showWarnings = FALSE) == 0
+    samples.sam.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/raw_sam')), showWarnings = FALSE) == 0
     if (!isTRUE(samples.sam.dir)) {
-      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/samples_.sam/'.\n"))
+      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/raw_sam/'.\n"))
     } else {
-      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/samples_.sam/'.\n     Please check whether the directory is already exit.\n"))
+      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/raw_sam/'.\n     Please check whether the directory is already exit.\n"))
     }
-    samples.bam.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/samples_.bam')), showWarnings = FALSE) == 0
+    samples.bam.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/raw_bam')), showWarnings = FALSE) == 0
     if (!isTRUE(samples.bam.dir)) {
-      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/samples_.bam/'.\n"))
+      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/raw_bam/'.\n"))
     } else {
-      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/samples_.bam/'.\n     Please check whether the directory is already exit.\n"))
+      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/raw_bam/'.\n     Please check whether the directory is already exit.\n"))
     }
-    samples.gtf.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/samples_.gtf')), showWarnings = FALSE) == 0
+    samples.gtf.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'gene_data/raw_gtf')), showWarnings = FALSE) == 0
     if (!isTRUE(samples.gtf.dir)) {
-      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/samples_.gtf/'.\n\n"))
+      cat(paste0("(O) :Create '", pkg.global.path.prefix$data_path, "gene_data/raw_gtf/'.\n\n"))
     } else {
-      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/samples_.gtf/'.\n     Please check whether the directory is already exit.\n\n"))
+      cat(paste0("(X) :Fail to create '", pkg.global.path.prefix$data_path, "gene_data/raw_gtf/'.\n     Please check whether the directory is already exit.\n\n"))
     }
   }
 }
@@ -87,10 +87,10 @@ CheckDirAll <- function(print = TRUE) {
     gene.data.logic <- dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ref_genes/")) &&
       dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ref_genome/")) &&
       dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/indexes/")) &&
-      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/samples_.fastq.gz/")) &&
-      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/samples_.sam/")) &&
-      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/samples_.bam/")) &&
-      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/samples_.gtf/"))
+      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/raw_fastq.gz/")) &&
+      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/raw_sam/")) &&
+      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/raw_bam/")) &&
+      dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/raw_gtf/"))
     rnaseq.bin.logic <- dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/")) && dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
 
     if (!isTRUE(gene.data.logic)){
@@ -99,6 +99,7 @@ CheckDirAll <- function(print = TRUE) {
     if (!isTRUE(rnaseq.bin.logic)){
       cat(c("There are directories missing in", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/.")), "\n")
     }
+    cat('\n')
     if (print){
       if (isTRUE(gene.data.logic) && isTRUE(rnaseq.bin.logic)){
         cat(c("(O) :Directories are all correct.\n\n"))
@@ -111,6 +112,7 @@ CheckDirAll <- function(print = TRUE) {
       if (isTRUE(gene.data.logic) && isTRUE(rnaseq.bin.logic)){
         return(TRUE)
       } else {
+        cat(c("(X) :Please run 'MkdirAll()' to add the missing directories.\n\n"))
         return(FALSE)
       }
     }
@@ -123,6 +125,5 @@ MkdirAll <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
     MkdirGeneDir()
     MkdirRNAseq_bin()
-    ExportPath()
   }
 }
