@@ -1,8 +1,4 @@
-*.rda
-*~
-*.pdf
-*.pptx
-*.RData
-*.Rout
-.Rhistory
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
