@@ -3,7 +3,11 @@
 SetPrefixPath <- function(path.prefix = home.path) {
   # Check the prefix exist
   if (isTRUE(dir.exists(path.prefix))){
-    pkg.global.path.prefix$data_path <- path.prefix
+    if (substr(path.prefix, nchar(path.prefix), nchar(path.prefix)) != '/') {
+      pkg.global.path.prefix$data_path <- paste0(path.prefix, '/')
+    } else {
+      pkg.global.path.prefix$data_path <- path.prefix
+    }
     cat(paste0("The following files will be installed under '", pkg.global.path.prefix$data_path, "'\n\n"))
     return(TRUE)
   } else {
@@ -19,9 +23,6 @@ CheckPrefixPath <- function(path.prefix = pkg.global.path.prefix$data_path, prin
     cat("(X) :You haven't set the prefix directory for the following steps.\n     Please run 'SetPrefixPath()' first to set the prefix directory.\n\n")
     return(FALSE)
   } else {
-    if (substr(path.prefix, nchar(path.prefix), nchar(path.prefix)) != '/') {
-      pkg.global.path.prefix$data_path <- paste0(path.prefix, '/')
-    }
     if (isTRUE(print)) {
       cat(paste0("(O) :Prefix directory: '", pkg.global.path.prefix$data_path, "'\n\n"))
     }
