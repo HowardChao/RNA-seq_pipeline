@@ -1,3 +1,7 @@
 ~%2Fbioinformatics%2FR_package%2FRNAseq%2FDESCRIPTION="34093DF9"
 ~%2Fbioinformatics%2FR_package%2FRNAseq%2FR%2Fballgown_related.R="B0F9ABFF"
+~%2Fbioinformatics%2FR_package%2FRNAseq%2FR%2Fcheck_sample_genes_files.R="513E9BE2"
+~%2Fbioinformatics%2FR_package%2FRNAseq%2FR%2Fcreate_dir.R="A03B1866"
+~%2Fbioinformatics%2FR_package%2FRNAseq%2FR%2Fdefault_setting.R="55D7C70F"
 ~%2Fbioinformatics%2FR_package%2FRNAseq%2FR%2Fhello.R="D4212376"
+~%2Fbioinformatics%2FR_package%2FRNAseq%2FR%2Fprefix_path_setting.R="3EAED33F"
