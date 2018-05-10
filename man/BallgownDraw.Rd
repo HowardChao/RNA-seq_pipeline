@@ -2,10 +2,10 @@
 % Please edit documentation in R/ballgown_related.R
 \name{BallgownDraw}
 \alias{BallgownDraw}
-\title{functions about ballgown}
+\title{Run ballgown analysis}
 \usage{
 BallgownDraw()
 }
 \description{
-functions about ballgown
+Run ballgown analysis
 }

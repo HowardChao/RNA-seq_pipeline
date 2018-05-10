@@ -1,4 +1,4 @@
-Package: RNAseq
+Package: RNASeq
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -11,13 +11,8 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
 Depends:
-    ballgown,
     devtools,
     genefilter,
     dplyr,
-    RSkittleBrewer
-Imports: ballgown,
-    devtools,
-    genefilter,
-    dplyr,
-    RSkittleBrewer
+    RSkittleBrewer,
+    ballgown

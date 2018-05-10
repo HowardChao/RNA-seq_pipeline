@@ -25,7 +25,15 @@ CheckPrefixPath <- function(path.prefix = pkg.global.path.prefix$data_path, prin
   } else {
     if (isTRUE(print)) {
       cat(paste0("(O) :Prefix directory: '", pkg.global.path.prefix$data_path, "'\n\n"))
+      print(ls.str(pkg.global.path.prefix))
     }
     return(TRUE)
   }
+}
+
+
+#' get pkg.global.path.prefix$data_path
+#' @export
+GetPrefix <- function() {
+  return(pkg.global.path.prefix$data_path)
 }
