@@ -5,7 +5,7 @@
 \title{Check Ballgown
 Check whether Ballgown is installed on the workstation}
 \usage{
-CheckBallgown()
+CheckBallgown(print = TRUE)
 }
 \description{
 Check Ballgown

@@ -5,7 +5,7 @@
 \title{Check Gffcompare
 Check whether Gffcompare is installed on the workstation}
 \usage{
-CheckGffcompare()
+CheckGffcompare(print = TRUE)
 }
 \description{
 Check Gffcompare

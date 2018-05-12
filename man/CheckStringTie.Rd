@@ -5,7 +5,7 @@
 \title{Check s'tringtie'
 Check whether 'stringtie' is installed on the workstation}
 \usage{
-CheckStringTie()
+CheckStringTie(print = TRUE)
 }
 \description{
 Check s'tringtie'

@@ -5,7 +5,7 @@
 \title{Check 'hisat2'
 Check whether 'hisat2' is installed on the workstation}
 \usage{
-CheckHisat2()
+CheckHisat2(print = TRUE)
 }
 \description{
 Check 'hisat2'

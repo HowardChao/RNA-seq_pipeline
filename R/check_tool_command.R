@@ -1,15 +1,17 @@
 #' Check 'hisat2'
 #' Check whether 'hisat2' is installed on the workstation
 #' @export
-CheckHisat2 <- function(){
+CheckHisat2 <- function(print=TRUE){
   cat("************** Checking hisat2 command ************\n")
   hisat2.installed <- system('hisat2 --version')==0
   if( isTRUE(hisat2.installed)){
-    cat("'hisat2' is installed\n\n")
+    if(isTRUE(print)){
+      cat("(\u2714) :'hisat2' is installed\n\n")
+    }
     return(TRUE)
   }
   else{
-    cat("'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) :'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -17,15 +19,17 @@ CheckHisat2 <- function(){
 #' Check s'tringtie'
 #' Check whether 'stringtie' is installed on the workstation
 #' @export
-CheckStringTie <- function(){
+CheckStringTie <- function(print=TRUE){
   cat("************** Checking stringtie command ************\n")
   stringtie.installed <- system( 'stringtie --version')==0
   if( isTRUE(stringtie.installed)){
-    cat("'stringtie' is installed\n\n")
+    if(isTRUE(print)){
+      cat("(\u2714) :'stringtie' is installed\n\n")
+    }
     return(TRUE)
   }
   else{
-    cat("'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) :'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
     }
 }
@@ -33,15 +37,17 @@ CheckStringTie <- function(){
 #' Check Gffcompare
 #' Check whether Gffcompare is installed on the workstation
 #' @export
-CheckGffcompare <- function() {
+CheckGffcompare <- function(print=TRUE) {
   cat("************** Checking gffcompare command ************\n")
   gffcompare.old <- system( 'gffcompare --version')==0
   if( isTRUE(gffcompare.old)){
-    cat("'gffcompare' is installed\n\n")
+    if(isTRUE(print)){
+      cat("(\u2714) :'gffcompare' is installed\n\n")
+    }
     return(TRUE)
   }
   else{
-    cat("\'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) :\'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -49,15 +55,17 @@ CheckGffcompare <- function() {
 #' Check Samtools
 #' Check whether Samtools is installed on the workstation
 #' @export
-CheckSamtools <- function(){
+CheckSamtools <- function(print=TRUE){
   cat("************** Checking samtools command ************\n")
   samtools.old <- system( 'samtools --version')==0
   if( isTRUE(samtools.old)){
-    cat("'samtools' is installed\n\n")
+    if(isTRUE(print)){
+      cat("(\u2714) :'samtools' is installed\n\n")
+    }
     return(TRUE)
   }
   else{
-    cat("\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) :\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -65,15 +73,17 @@ CheckSamtools <- function(){
 #' Check Ballgown
 #' Check whether Ballgown is installed on the workstation
 #' @export
-CheckBallgown <- function(){
+CheckBallgown <- function(print=TRUE){
   cat("************** Checking ballgown command ************\n")
   #samtools.old <- system( 'ballgown --version')==0
   if( isTRUE(samtools.old)){
-    cat("'samtools' is installed\n\n")
+    if(isTRUE(print)){
+      cat("(\u2714) :'samtools' is installed\n\n")
+    }
     return(TRUE)
   }
   else{
-    cat("\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) :\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -89,7 +99,7 @@ CheckToolAll <- function() {
   if (isTRUE(CheckHisat2()) && isTRUE(CheckStringTie()) && isTRUE(CheckGffcompare()) && isTRUE(CheckSamtools())){
     return(TRUE)
   } else {
-    cat("(X) :Run 'ExportPath()' to set the environment.\n\n")
+    cat("(\u2718) :Run 'ExportPath()' to set the environment.\n\n")
     return(FALSE)
   }
 }

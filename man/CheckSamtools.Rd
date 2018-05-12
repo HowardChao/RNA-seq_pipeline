@@ -5,7 +5,7 @@
 \title{Check Samtools
 Check whether Samtools is installed on the workstation}
 \usage{
-CheckSamtools()
+CheckSamtools(print = TRUE)
 }
 \description{
 Check Samtools
