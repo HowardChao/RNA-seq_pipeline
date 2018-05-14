@@ -18,9 +18,11 @@ StringTieAssemble <- function(gene_name = "NO_DATA") {
 
           for( i in 1:iteration.num){
             whole.command <- paste("-p 8 -G",paste0("ref_genes/", gene_name, ".gtf"), "-o", paste0("raw_gtf/", sample.name[i], ".gtf"), "-l", sample.name[i], paste0("raw_bam/", sample.name[i], ".bam"))
+            if (i != 1) cat("\n")
             cat(c("Input command :", paste("stringtie", whole.command), "\n"))
             system2(command = "stringtie", args = whole.command)
           }
+          cat("\n")
           on.exit(setwd(current.path))
         } else {
           cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or 'XXX.bam' is missing.\n\n"))
@@ -58,6 +60,7 @@ StringTieMergeTrans <- function(gene_name = "NO_DATA") {
           whole.command <- paste("--merge -p 8 -G", paste0("ref_genes/", gene_name, ".gtf"), "-o", "merged/stringtie_merged.gtf", "merged/mergelist.txt")
           cat(c("Input command :", paste("stringtie", whole.command), "\n"))
           system2(command = "stringtie", args = whole.command)
+          cat("\n")
           on.exit(setwd(current.path))
         } else {
           cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or", "'XXX.gtf' is missing.\n\n"))
@@ -86,9 +89,11 @@ StringTieToBallgown <- function(gene_name = "NO_DATA") {
           sample.value <- as.vector(sample.table)
           for( i in 1:iteration.num){
             whole.command <- paste("-e -B -p 8 -G", "merged/stringtie_merged.gtf", "-o", paste0("ballgown/", sample.name[i],"/", sample.name[i], ".gtf"), paste0("raw_bam/", sample.name[i], ".bam"))
+            if (i != 1) cat("\n")
             cat(c("Input command :", paste("stringtie", whole.command), "\n"))
             system2(command = "stringtie", args = whole.command)
           }
+          cat("\n")
           on.exit(setwd(current.path))
         } else {
           cat(c(paste0("(\u2718) :'stringtie_merged.gtf'"), "or", "'XXX.bam' is missing.\n\n"))

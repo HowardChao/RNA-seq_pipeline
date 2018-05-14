@@ -19,20 +19,32 @@ CreateHisat2Index <- function (gene_name = "NO_DATA", splice.site.info = TRUE, e
             current.path <- getwd()
             setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/indexes/"))
             if (isTRUE(splice.site.info)) {
+              cat(c("Input command :", paste("extract_splice_sites.py", paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.ss')), "\n"))
               system2(command = 'extract_splice_sites.py', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.ss')))
+              cat("\n")
             }
             if (isTRUE(exon.info)) {
+              cat(c("Input command :", paste("extract_exons.py", paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.exon')), "\n"))
               system2(command = 'extract_exons.py', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.exon')))
+              cat("\n")
             }
 
             if (isTRUE(splice.site.info) && isTRUE(exon.info)) {
+              cat(c("Input command :", paste("hisat2-build", paste('--ss', paste0(gene_name, '.ss'), '--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')), "\n")))
               system2(command = 'hisat2-build', args = c('--ss', paste0(gene_name, '.ss'), '--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+              cat("\n")
             } else if (isTRUE(splice.site.info) && !isTRUE(exon.info)) {
+              cat(c("Input command :", paste("hisat2-build", paste('--ss', paste0(gene_name, '.ss'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')), "\n")))
               system2(command = 'hisat2-build', args = c('--ss', paste0(gene_name, '.ss'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+              cat("\n")
             } else if (!isTRUE(splice.site.info) && isTRUE(exon.info)) {
+              cat(c("Input command :", paste("hisat2-build", paste('--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')), "\n")))
               system2(command = 'hisat2-build', args = c('--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+              cat("\n")
             } else {
+              cat(c("Input command :", paste("hisat2-build", paste(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')), "\n")))
               system2(command = 'hisat2-build', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+              cat("\n")
             }
             on.exit(setwd(current.path))
             cat(paste0("'", pkg.global.path.prefix$data_path, "gene_data/indexes/", gene_name, "_tran.*.ht2' has been created.\n\n"))
@@ -77,9 +89,11 @@ Hisat2AlignmentDefault <- function(gene_name = "NO_DATA") {
                 total.sub.command <- paste(total.sub.command, current.sub.command)
               }
               whole.command <- paste("-p 8 --dta -x", paste0("indexes/", gene_name, "_tran"), total.sub.command, "-S", paste0("raw_sam/", sample.name[i],".sam") )
+              if (i != 1) cat("\n")
               cat(c("Input command :", paste("hisat2", whole.command), "\n"))
               system2(command = "hisat2", args = whole.command)
             }
+            cat("\n")
             on.exit(setwd(current.path))
           }
         } else {

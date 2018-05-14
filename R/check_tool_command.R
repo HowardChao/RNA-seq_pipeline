@@ -8,12 +8,12 @@ CheckHisat2 <- function(print=TRUE){
   hisat2.installed <- system('hisat2 --version', ignore.stdout = !print , ignore.stderr = !print)==0
   if( isTRUE(hisat2.installed)){
     if(isTRUE(print)){
-      cat("(\u2714) :'hisat2' is installed\n\n")
+      cat("(\u2714) : 'hisat2' is installed\n\n")
     }
     return(TRUE)
   }
   else{
-    cat("(\u2718) :'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) : 'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -28,12 +28,12 @@ CheckStringTie <- function(print=TRUE){
   stringtie.installed <- system( 'stringtie --version', ignore.stdout = !print, ignore.stderr = !print)==0
   if( isTRUE(stringtie.installed)){
     if(isTRUE(print)){
-      cat("(\u2714) :'stringtie' is installed\n\n")
+      cat("(\u2714) : 'stringtie' is installed\n\n")
     }
     return(TRUE)
   }
   else{
-    cat("(\u2718) :'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) : 'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
     }
 }
@@ -48,12 +48,12 @@ CheckGffcompare <- function(print=TRUE) {
   gffcompare.old <- system( 'gffcompare --version', ignore.stdout = !print, ignore.stderr = !print)==0
   if( isTRUE(gffcompare.old)){
     if(isTRUE(print)){
-      cat("(\u2714) :'gffcompare' is installed\n\n")
+      cat("(\u2714) : 'gffcompare' is installed\n\n")
     }
     return(TRUE)
   }
   else{
-    cat("(\u2718) :\'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) : \'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -68,12 +68,12 @@ CheckSamtools <- function(print=TRUE){
   samtools.old <- system( 'samtools --version', ignore.stdout = !print, ignore.stderr = !print)==0
   if( isTRUE(samtools.old)){
     if(isTRUE(print)){
-      cat("(\u2714) :'samtools' is installed\n\n")
+      cat("(\u2714) : 'samtools' is installed\n\n")
     }
     return(TRUE)
   }
   else{
-    cat("(\u2718) :\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) : \'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -88,12 +88,12 @@ CheckBallgown <- function(print=TRUE){
   #samtools.old <- system( 'ballgown --version')==0
   if( isTRUE(samtools.old)){
     if(isTRUE(print)){
-      cat("(\u2714) :'samtools' is installed\n\n")
+      cat("(\u2714) : 'samtools' is installed\n\n")
     }
     return(TRUE)
   }
   else{
-    cat("(\u2718) :\'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    cat("(\u2718) : \'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
     return(FALSE)
   }
 }
@@ -109,7 +109,7 @@ CheckToolAll <- function(print=TRUE) {
   if (isTRUE(hisat2.check) && isTRUE(stringtie.check) && isTRUE(gff.check) && isTRUE(samtool.check)){
     return(TRUE)
   } else {
-    cat("(\u2718) :Run 'ExportPath()' to set the environment.\n\n")
+    cat("(\u2718) : Run 'ExportPath()' to set the environment.\n\n")
     return(FALSE)
   }
 }
@@ -123,6 +123,6 @@ ExportPath <- function() {
     Sys.setenv(
       PATH = paste(old.path, paste0(pkg.global.path.prefix$data_path, "RNAseq_bin"), sep = ":")
     )
-    cat("R environment 'PATH': ", Sys.getenv("PATH"), "\n\n")
+    cat("R environment 'PATH' : ", Sys.getenv("PATH"), "\n\n")
   }
 }

@@ -14,6 +14,7 @@ GffcompareRefSample <- function(gene_name = "NO_DATA") {
           whole.command <- paste("-r", paste0("ref_genes/", gene_name, ".gtf"), "-G -o merged/merged", "merged/stringtie_merged.gtf")
           cat(c("Input command :", paste("gffcompare", whole.command), "\n"))
           system2(command = "gffcompare", args = whole.command)
+          cat("\n")
           on.exit(setwd(current.path))
         } else {
           cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or", paste0("'stringtie_merged.gtf'"), "is missing.\n\n"))

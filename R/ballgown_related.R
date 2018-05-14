@@ -8,6 +8,7 @@ BallgownDraw <- function() {
   current.path <- getwd()
   print(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
   setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
+  cat(paste0("************** Differential analysis (Ballgown) **************\n"))
   pheno_data <- read.csv("phenodata.csv")
   print(pheno_data)
   pkg.ballgown.data$bg_chrX <- ballgown(dataDir = "ballgown", samplePattern = "ERR", pData = pheno_data)

@@ -18,9 +18,11 @@ SamtoolsToBam <- function(gene_name = "NO_DATA") {
           sample.value <- as.vector(sample.table)
           for( i in 1:iteration.num){
             whole.command <- paste("sort -@ 8 -o", paste0("raw_bam/", sample.name[i], ".bam"), paste0("raw_sam/", sample.name[i], ".sam"))
+            if (i != 1) cat("\n")
             cat(c("Input command :", paste("samtools", whole.command), "\n"))
             system2(command = "samtools", args = whole.command)
           }
+          cat("\n")
           on.exit(setwd(current.path))
         } else {
           cat(c("(\u2718) :'XXX.sam' is missing.\n\n"))
