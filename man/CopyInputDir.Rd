@@ -4,7 +4,7 @@
 \alias{CopyInputDir}
 \title{Copy input files directory}
 \usage{
-CopyInputDir(gene_name = "NO_DATA", abs_input_dir = "NOT_SET_YET")
+CopyInputDir(gene_name = "NO_DATA", abs.input.dir = "NOT_SET_YET")
 }
 \description{
 Copy input files directory

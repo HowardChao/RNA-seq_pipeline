@@ -4,7 +4,7 @@
 \alias{CheckToolAll}
 \title{Check whether programs are installed}
 \usage{
-CheckToolAll()
+CheckToolAll(print = TRUE)
 }
 \description{
 Check whether programs are installed

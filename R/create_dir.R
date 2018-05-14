@@ -83,6 +83,9 @@ MkdirRNAseq_bin <- function() {
 #' Check sample gene and binary directory
 #' @export
 CheckDirAll <- function(print = TRUE) {
+  if (print) {
+    cat(c("************** Checking 'gene_data/' and 'RNAseq_bin' directories ************\n"))
+  }
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
     gene.data.logic <- dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ref_genes/")) &&
       dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ref_genome/")) &&
@@ -92,29 +95,20 @@ CheckDirAll <- function(print = TRUE) {
       dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/raw_bam/")) &&
       dir.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/raw_gtf/"))
     rnaseq.bin.logic <- dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/")) && dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
-
     if (!isTRUE(gene.data.logic)){
       cat(c("There are directories missing in", paste0(pkg.global.path.prefix$data_path, "gene_data/.")), "\n")
     }
     if (!isTRUE(rnaseq.bin.logic)){
       cat(c("There are directories missing in", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/.")), "\n")
     }
-    cat('\n')
-    if (print){
-      if (isTRUE(gene.data.logic) && isTRUE(rnaseq.bin.logic)){
+    if (isTRUE(gene.data.logic) && isTRUE(rnaseq.bin.logic)){
+      if (print) {
         cat(c("(\u2714) :Directories are all correct.\n\n"))
-        return(TRUE)
-      } else {
-        cat(c("(\u2718) :Please run 'MkdirAll()' to add the missing directories.\n\n"))
-        return(FALSE)
       }
-    } else{
-      if (isTRUE(gene.data.logic) && isTRUE(rnaseq.bin.logic)){
-        return(TRUE)
-      } else {
-        cat(c("(\u2718) :Please run 'MkdirAll()' to add the missing directories.\n\n"))
-        return(FALSE)
-      }
+      return(TRUE)
+    } else {
+      cat(c("(\u2718) :Please run 'MkdirAll()' to add the missing directories.\n\n"))
+      return(FALSE)
     }
   }
 }

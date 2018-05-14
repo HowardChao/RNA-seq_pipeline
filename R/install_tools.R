@@ -6,15 +6,15 @@ pkg.global.path.prefix$input.files <- "NOT_SET_YET"
 #' Install Hisat2
 #' @export
 InstallHisat2 <- function() {
-  # ftp server : ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-Linux_x86_64.zip
+  # ftp server : ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-source.zip
   if (isTRUE(CheckDirAll(print = FALSE))){
-    cat("************** Installing Hisat2 (hisat2-2.1.0-Linux_x86_64.zip) ************\n")
+    cat("************** Installing Hisat2 (hisat2-2.1.0-source.zip) ************\n")
     current.path <- getwd()
     cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/\n"))
     setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/"))
-    system2(command = 'curl', args = c('ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-Linux_x86_64.zip', '--output', 'hisat2-2.1.0-Linux_x86_64.zip'), stdout = "", wait = TRUE)
+    system2(command = 'curl', args = c('ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-source.zip', '--output', 'hisat2-2.1.0-source.zip'), stdout = "", wait = TRUE)
     on.exit(setwd(current.path))
-    cat(paste0("'", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/hisat2-2.1.0-Linux_x86_64.zip' has been installed.\n\n"))
+    cat(paste0("'", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/hisat2-2.1.0-source.zip' has been installed.\n\n"))
   }
 }
 
@@ -67,11 +67,11 @@ InstallSamtools <- function() {
 #' @export
 UnpackHisat2 <- function() {
   if (isTRUE(CheckDirAll(print = FALSE))){
-    cat("************** Unpacking Hisat2 (hisat2-2.1.0-Linux_x86_64.zip) ************\n")
+    cat("************** Unpacking Hisat2 (hisat2-2.1.0-source.zip) ************\n")
     current.path <- getwd()
     cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/\n"))
     setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
-    system2(command = 'unzip', args = paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/hisat2-2.1.0-Linux_x86_64.zip"))
+    system2(command = 'unzip', args = paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/hisat2-2.1.0-source.zip"))
     on.exit(setwd(current.path))
     cat(paste0("Hisat2 has been unpacked. ('", pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/hisat2-2.1.0/')"), "\n\n")
   }
@@ -123,10 +123,12 @@ UnpackSamtools <- function() {
 #' @export
 BinaryHisat2 <- function() {
   if (isTRUE(CheckDirAll(print = FALSE))){
-    cat("************** Moving Hisat2 Binary ************\n")
+    cat("************** Making Hisat2 Binary ************\n")
     current.path <- getwd()
     setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/hisat2-2.1.0/"))
+    system2(command = 'make', stderr = FALSE)
     system2(command = 'cp', args = c("hisat2*", "*.py", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/")), stderr = FALSE)
+    system2(command = 'rm', args = c("*.cpp", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/")), stderr = FALSE)
     cat("hisat2 binaries are in: ", paste0("'", pkg.global.path.prefix$data_path, "RNAseq_bin/'\n\n"))
     on.exit(setwd(current.path))
   }
@@ -177,13 +179,11 @@ BinarySamtools <- function() {
 }
 
 #' Install Hisat2, StringTie, Gffcompare, Samtools
-#' @export
 InstallAll <- function() {
   # give the function the location to RNAoutput file
   # fix cat problem
   # the the user choose the version(之後再說)
   # try stringtie
-  if (isTRUE(CheckDirAll(print = FALSE))){
     #sink("RNAseq_program_install_report.txt")
     InstallHisat2()
     InstallStringTie()
@@ -197,8 +197,6 @@ InstallAll <- function() {
     BinaryStringTie()
     BinaryGffcompare()
     BinarySamtools()
-    return(CheckToolAll())
+    return(CheckToolAll(print=TRUE))
     #sink()
-  }
-  return(FALSE)
 }

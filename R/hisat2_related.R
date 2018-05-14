@@ -13,33 +13,31 @@ CreateHisat2Index <- function (gene_name = "NO_DATA", splice.site.info = TRUE, e
         if (!is.logical(splice.site.info) || !is.logical(exon.info)) {
           cat("(\u2718) :Please make sure the type of 'splice.site.info' and 'exon.info' are logical.\n")
         } else {
-          if (isTRUE(CheckHisat2())){
-            check.results <- ProgressGenesFiles(gene_name, print=TRUE)
-            cat(paste0("\n************** Creating Hisat2 Index **************\n"))
-            if (isTRUE(check.results$gtf.file.logic.df) && isTRUE(check.results$fa.file.logic.df)){
-              current.path <- getwd()
-              setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/indexes/"))
-              if (isTRUE(splice.site.info)) {
-                system2(command = 'extract_splice_sites.py', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.ss')))
-              }
-              if (isTRUE(exon.info)) {
-                system2(command = 'extract_exons.py', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.exon')))
-              }
-
-              if (isTRUE(splice.site.info) && isTRUE(exon.info)) {
-                system2(command = 'hisat2-build', args = c('--ss', paste0(gene_name, '.ss'), '--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
-              } else if (isTRUE(splice.site.info) && !isTRUE(exon.info)) {
-                system2(command = 'hisat2-build', args = c('--ss', paste0(gene_name, '.ss'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
-              } else if (!isTRUE(splice.site.info) && isTRUE(exon.info)) {
-                system2(command = 'hisat2-build', args = c('--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
-              } else {
-                system2(command = 'hisat2-build', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
-              }
-              on.exit(setwd(current.path))
-              cat(paste0("'", pkg.global.path.prefix$data_path, "gene_data/indexes/", gene_name, "_tran.*.ht2' has been created.\n\n"))
-            } else {
-              cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or", paste0("(X) :'", gene_name, ".fa'"), "is missing.\n\n"))
+          check.results <- ProgressGenesFiles(gene_name, print=TRUE)
+          cat(paste0("\n************** Creating Hisat2 Index **************\n"))
+          if (isTRUE(check.results$gtf.file.logic.df) && isTRUE(check.results$fa.file.logic.df)){
+            current.path <- getwd()
+            setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/indexes/"))
+            if (isTRUE(splice.site.info)) {
+              system2(command = 'extract_splice_sites.py', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.ss')))
             }
+            if (isTRUE(exon.info)) {
+              system2(command = 'extract_exons.py', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genes/', gene_name, '.gtf'), '>', paste0(gene_name, '.exon')))
+            }
+
+            if (isTRUE(splice.site.info) && isTRUE(exon.info)) {
+              system2(command = 'hisat2-build', args = c('--ss', paste0(gene_name, '.ss'), '--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+            } else if (isTRUE(splice.site.info) && !isTRUE(exon.info)) {
+              system2(command = 'hisat2-build', args = c('--ss', paste0(gene_name, '.ss'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+            } else if (!isTRUE(splice.site.info) && isTRUE(exon.info)) {
+              system2(command = 'hisat2-build', args = c('--exon', paste0(gene_name, '.exon'), paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+            } else {
+              system2(command = 'hisat2-build', args = c(paste0(pkg.global.path.prefix$data_path, 'gene_data/ref_genome/', gene_name, '.fa'), paste0(gene_name, '_tran')))
+            }
+            on.exit(setwd(current.path))
+            cat(paste0("'", pkg.global.path.prefix$data_path, "gene_data/indexes/", gene_name, "_tran.*.ht2' has been created.\n\n"))
+          } else {
+            cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or", paste0("(X) :'", gene_name, ".fa'"), "is missing.\n\n"))
           }
         }
       }

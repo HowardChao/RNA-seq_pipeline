@@ -2,8 +2,10 @@
 #' Check whether 'hisat2' is installed on the workstation
 #' @export
 CheckHisat2 <- function(print=TRUE){
-  cat("************** Checking hisat2 command ************\n")
-  hisat2.installed <- system('hisat2 --version')==0
+  if (print) {
+    cat("************** Checking hisat2 command ************\n")
+  }
+  hisat2.installed <- system('hisat2 --version', ignore.stdout = !print , ignore.stderr = !print)==0
   if( isTRUE(hisat2.installed)){
     if(isTRUE(print)){
       cat("(\u2714) :'hisat2' is installed\n\n")
@@ -20,8 +22,10 @@ CheckHisat2 <- function(print=TRUE){
 #' Check whether 'stringtie' is installed on the workstation
 #' @export
 CheckStringTie <- function(print=TRUE){
-  cat("************** Checking stringtie command ************\n")
-  stringtie.installed <- system( 'stringtie --version')==0
+  if (print){
+    cat("************** Checking stringtie command ************\n")
+  }
+  stringtie.installed <- system( 'stringtie --version', ignore.stdout = !print, ignore.stderr = !print)==0
   if( isTRUE(stringtie.installed)){
     if(isTRUE(print)){
       cat("(\u2714) :'stringtie' is installed\n\n")
@@ -38,8 +42,10 @@ CheckStringTie <- function(print=TRUE){
 #' Check whether Gffcompare is installed on the workstation
 #' @export
 CheckGffcompare <- function(print=TRUE) {
-  cat("************** Checking gffcompare command ************\n")
-  gffcompare.old <- system( 'gffcompare --version')==0
+  if(print) {
+    cat("************** Checking gffcompare command ************\n")
+  }
+  gffcompare.old <- system( 'gffcompare --version', ignore.stdout = !print, ignore.stderr = !print)==0
   if( isTRUE(gffcompare.old)){
     if(isTRUE(print)){
       cat("(\u2714) :'gffcompare' is installed\n\n")
@@ -56,8 +62,10 @@ CheckGffcompare <- function(print=TRUE) {
 #' Check whether Samtools is installed on the workstation
 #' @export
 CheckSamtools <- function(print=TRUE){
-  cat("************** Checking samtools command ************\n")
-  samtools.old <- system( 'samtools --version')==0
+  if (print) {
+    cat("************** Checking samtools command ************\n")
+  }
+  samtools.old <- system( 'samtools --version', ignore.stdout = !print, ignore.stderr = !print)==0
   if( isTRUE(samtools.old)){
     if(isTRUE(print)){
       cat("(\u2714) :'samtools' is installed\n\n")
@@ -74,7 +82,9 @@ CheckSamtools <- function(print=TRUE){
 #' Check whether Ballgown is installed on the workstation
 #' @export
 CheckBallgown <- function(print=TRUE){
-  cat("************** Checking ballgown command ************\n")
+  if (print){
+    cat("************** Checking ballgown command ************\n")
+  }
   #samtools.old <- system( 'ballgown --version')==0
   if( isTRUE(samtools.old)){
     if(isTRUE(print)){
@@ -91,12 +101,12 @@ CheckBallgown <- function(print=TRUE){
 
 #' Check whether programs are installed
 #' @export
-CheckToolAll <- function() {
-  CheckHisat2()
-  CheckStringTie()
-  CheckGffcompare()
-  CheckSamtools()
-  if (isTRUE(CheckHisat2()) && isTRUE(CheckStringTie()) && isTRUE(CheckGffcompare()) && isTRUE(CheckSamtools())){
+CheckToolAll <- function(print=TRUE) {
+  hisat2.check <- CheckHisat2(print=print)
+  stringtie.check <- CheckStringTie(print=print)
+  gff.check <- CheckGffcompare(print=print)
+  samtool.check <- CheckSamtools(print=print)
+  if (isTRUE(hisat2.check) && isTRUE(stringtie.check) && isTRUE(gff.check) && isTRUE(samtool.check)){
     return(TRUE)
   } else {
     cat("(\u2718) :Run 'ExportPath()' to set the environment.\n\n")

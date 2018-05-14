@@ -1,13 +1,13 @@
 #' rna seq pipline
 #' @export
-RNAseqPipeline <- function(path.prefix = home.path, input.files.path = "NOT_SET_YET", gene_name = "NO_DATA") {
+RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.files.path = "NOT_SET_YET", gene_name = "NO_DATA") {
   if (isTRUE(SetPrefixPath(path.prefix))){
     MkdirAll()
-    if (isTRUE(CheckDirAll(print = FALSE))){
+    if (isTRUE(CheckDirAll(print = TRUE))){
       if (gene_name == "NO_DATA"){
         cat("(\u2718) :gene_name is missing.\n     Can't find the target sample files.\n\n")
       } else {
-        if (isTRUE(CheckInputDir(gene_name = gene_name, abs_input_dir = input.files.path, print=TRUE))) {
+        if (isTRUE(CheckInputDirFiles(gene_name = gene_name, abs.input.dir = input.files.path, print=TRUE))) {
           CopyInputDir(gene_name, input.files.path)
           ExportPath()
           if (isTRUE(InstallAll())){

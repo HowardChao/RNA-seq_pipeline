@@ -1,3 +1,7 @@
 /home/kuan-hao/bioinformatics/R_package/RNASeq/DESCRIPTION="33BBB906"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/RNAseq_pipeline.R="3E3C2B72"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/ballgown_related.R="A45D9164"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/check_sample_genes_files.R="E19B2110"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/hello.R="B53BAFDE"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/install_tools.R="33EF5F91"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/prefix_path_setting.R="6FB62A18"

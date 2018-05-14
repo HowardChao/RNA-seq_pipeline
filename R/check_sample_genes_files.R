@@ -8,10 +8,12 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
     } else {
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
-      cat(paste0("************** Current progress of RNA-seq files in '", paste0(pkg.global.path.prefix$data_path, "gene_data/'"), " **************\n"))
+      if (print) {
+        cat(paste0("************** Current progress of RNA-seq files in '", paste0(pkg.global.path.prefix$data_path, "gene_data/'"), " **************\n"))
+      }
       gtf.file <- file.exists(paste0(getwd(), '/ref_genes/', gene_name, '.gtf'))
       if (isTRUE(gtf.file)) {
-        if(isTRUE(print)){
+        if(print){
           cat(c("(\u2714) :", paste0("'",getwd(), '/ref_genes/', gene_name, '.gtf', "'"), "is exit\n\n"))
         }
       } else {
@@ -20,7 +22,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       }
       fa.file <- file.exists(paste0(getwd(), '/ref_genome/', gene_name, '.fa'))
       if (isTRUE(fa.file)) {
-        if(isTRUE(print)){
+        if(print){
           cat(c("(\u2714) :",paste0("'", getwd(), '/ref_genome/', gene_name, '.fa', "'"), "is exit\n\n"))
         }
       } else {
@@ -30,7 +32,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       fastq.gz.files <- list.files(path = paste0(getwd(), '/raw_fastq.gz/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", "_", "[r]*[R]*","[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       fastq.gz.files.number <- length(fastq.gz.files)
       if (fastq.gz.files.number != 0){
-        if(isTRUE(print)){
+        if(print){
           for (i in fastq.gz.files){
             cat(c("(\u2714) :", paste0("'", getwd(), '/raw_fastq.gz/', i, "'"), "is exit\n"))
           }
@@ -42,7 +44,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       }
       phenodata.file <- file.exists(paste0(getwd(), '/ref_genes/phenodata.csv'))
       if (isTRUE(gtf.file)) {
-        if(isTRUE(print)){
+        if(print){
           cat(c("(\u2714) :", paste0("'",getwd(), '/ref_genes/phenodata.csv', "'"), "is exit\n\n"))
         }
       } else {
@@ -52,7 +54,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       ht2.files <- list.files(path = paste0(getwd(), '/indexes/'), pattern = paste0("^", gene_name, "_tran.[0-9]*.ht2$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ht2.files.number <- length(ht2.files)
       if (ht2.files.number != 0) {
-        if (isTRUE(print)) {
+        if (print) {
           for (i in ht2.files){
             cat(c("(\u2714) :",paste0("'",getwd(), '/indexes/', i, "'"), "is exit\n"))
           }
@@ -65,7 +67,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       sam.files <- list.files(path = paste0(getwd(), '/raw_sam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".sam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       sam.files.number <- length(sam.files)
       if (sam.files.number != 0){
-        if (isTRUE(print)) {
+        if (print) {
           for (i in sam.files){
             cat(c("(\u2714) :", paste0("'", getwd(), '/raw_sam/', i, "'"), "is exit\n"))
           }
@@ -78,7 +80,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       bam.files <- list.files(path = paste0(getwd(), '/raw_bam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".bam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       bam.files.number <- length(bam.files)
       if (bam.files.number != 0){
-        if (isTRUE(print)) {
+        if (print) {
           for (i in bam.files){
             cat(c("(\u2714) :", paste0("'", getwd(), '/raw_bam/', i, "'"), "is exit\n"))
           }
@@ -91,7 +93,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       gtf.files <- list.files(path = paste0(getwd(), '/raw_gtf/'), pattern = paste0("^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".gtf$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       gtf.files.number <- length(gtf.files)
       if (gtf.files.number != 0){
-        if (isTRUE(print)) {
+        if (print) {
           for (i in gtf.files){
             cat(c("(\u2714) :", paste0("'", getwd(), '/raw_gtf/', i, "'"), "is exit\n"))
           }
@@ -103,7 +105,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       }
       stringtie_merged.gtf.file <- file.exists(paste0(getwd(), '/merged/stringtie_merged.gtf'))
       if (isTRUE(stringtie_merged.gtf.file)) {
-        if (isTRUE(print)) {
+        if (print) {
           cat(c("(\u2714) :", paste0("'",getwd(), "/merged/stringtie_merged.gtf", "'"), "is exit\n\n"))
         }
       } else {
@@ -113,7 +115,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
       ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( "^[a-z,A-Z]*[0-9]*[a-z,A-Z]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ballgown.dirs.number <- length(ballgown.dirs)
       if (ballgown.dirs.number != 0){
-        if (isTRUE(print)) {
+        if (print) {
           for (i in ballgown.dirs){
             cat(c("(\u2714) :", paste0("'", getwd(), '/ballgown/', i, "'"), "is exit\n"))
           }

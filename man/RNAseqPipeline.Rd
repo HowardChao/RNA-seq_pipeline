@@ -4,8 +4,8 @@
 \alias{RNAseqPipeline}
 \title{rna seq pipline}
 \usage{
-RNAseqPipeline(path.prefix = home.path, input.files.path = "NOT_SET_YET",
-  gene_name = "NO_DATA")
+RNAseqPipeline(path.prefix = "NOT_SET_YET",
+  input.files.path = "NOT_SET_YET", gene_name = "NO_DATA")
 }
 \description{
 rna seq pipline
