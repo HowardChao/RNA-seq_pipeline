@@ -4,7 +4,7 @@
 \alias{Hisat2AlignmentDefault}
 \title{hisat2 alignment default}
 \usage{
-Hisat2AlignmentDefault(gene_name = "NO_DATA")
+Hisat2AlignmentDefault(gene_name = "NO_DATA", sample_prefix = "NO_DATA")
 }
 \description{
 hisat2 alignment default

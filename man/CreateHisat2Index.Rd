@@ -5,8 +5,8 @@
 \title{Creating Hisat2 index
 Creat Hisat2 index for further use}
 \usage{
-CreateHisat2Index(gene_name = "NO_DATA", splice.site.info = TRUE,
-  exon.info = TRUE)
+CreateHisat2Index(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
+  splice.site.info = TRUE, exon.info = TRUE)
 }
 \description{
 Creating Hisat2 index

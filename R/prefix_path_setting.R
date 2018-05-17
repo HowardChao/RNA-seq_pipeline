@@ -1,6 +1,6 @@
 #' Choose the location where 'gene_data' and 'RNAseq_bin' will be installed
 #' @export
-SetPrefixPath <- function(path.prefix = "NOT_SET_YET") {
+SetPrefixPath <- function(path.prefix = "NOT_SET_YET", print = TRUE) {
   # Check the prefix exist
   if (isTRUE(dir.exists(path.prefix))){
     if (substr(path.prefix, nchar(path.prefix), nchar(path.prefix)) != '/') {
@@ -8,8 +8,10 @@ SetPrefixPath <- function(path.prefix = "NOT_SET_YET") {
     } else {
       pkg.global.path.prefix$data_path <- path.prefix
     }
-    cat(c("************** Setting prefix path ************\n"))
-    cat(paste0("The following files will be installed under '", pkg.global.path.prefix$data_path, "'\n\n"))
+    if (print) {
+      cat(c("************** Setting prefix path ************\n"))
+      cat(paste0("The following files will be installed under '", pkg.global.path.prefix$data_path, "'\n\n"))
+    }
     return(TRUE)
   } else if (path.prefix == "NOT_SET_YET") {
     cat("(\u2718) :Please give value to prefix path.\n\n")

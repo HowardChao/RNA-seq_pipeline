@@ -4,7 +4,7 @@
 \alias{BallgownDraw}
 \title{Run ballgown analysis}
 \usage{
-BallgownDraw()
+BallgownDraw(sample_prefix = "NO_DATA", covariate = "NO_DATA")
 }
 \description{
 Run ballgown analysis

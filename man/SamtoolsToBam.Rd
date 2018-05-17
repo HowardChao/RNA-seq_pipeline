@@ -4,7 +4,7 @@
 \alias{SamtoolsToBam}
 \title{use 'samtools' to sort and convert the SAM files to BAM}
 \usage{
-SamtoolsToBam(gene_name = "NO_DATA")
+SamtoolsToBam(gene_name = "NO_DATA", sample_prefix = "NO_DATA")
 }
 \description{
 use 'samtools' to sort and convert the SAM files to BAM

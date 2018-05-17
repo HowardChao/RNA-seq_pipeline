@@ -1,9 +1,14 @@
 #' check 'gene_data' and subdirectory files exit
 #' @export
-ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
+ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",print = TRUE) {
   if (isTRUE(CheckDirAll(print = FALSE))){
-    if (gene_name == "NO_DATA"){
-      cat("(\u2718) :gene_name is missing.\nSample files checking fails\n\n")
+    if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
+      if (gene_name == "NO_DATA") {
+        cat("(\u2718) :gene_name is missing.\n     Gene files checking fails\n\n")
+      }
+      if (sample_prefix == "NO_DATA"){
+        cat("(\u2718) :sample_prefix is missing.\n     Gene files checking fails\n\n")
+      }
       return(FALSE)
     } else {
       current.path <- getwd()
@@ -29,7 +34,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
         cat(c("(\u2718) :",paste0("'", getwd(), '/ref_genome/', gene_name, '.fa', "'"), "is not exit\n"))
         cat(c("     Put the", paste0("'",gene_name,".fa", "'"), "file in", paste0("'",getwd(), '/ref_genome/', "'"), "to fix the error.\n\n"))
       }
-      fastq.gz.files <- list.files(path = paste0(getwd(), '/raw_fastq.gz/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", "_", "[r]*[R]*","[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      fastq.gz.files <- list.files(path = paste0(getwd(), '/raw_fastq.gz/'), pattern = paste0( sample_prefix, "[0-9]*", "_", "[r]*[R]*","[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       fastq.gz.files.number <- length(fastq.gz.files)
       if (fastq.gz.files.number != 0){
         if(print){
@@ -39,8 +44,8 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
           cat(c("Total:", fastq.gz.files.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u2718) :", paste0('\'',getwd(), '/raw_fastq.gz/XXX_*.fastq.gz\''), "is not exit\n"))
-        cat(c("     Put the", "'XXX_*.fastq.gz'", "file in", paste0("'",getwd(), '/raw_fastq.gz/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0('\'',getwd(), '/raw_fastq.gz/', sample_prefix, 'XXX_*.fastq.gz\''), "is not exit\n"))
+        cat(c("     Put the", paste0(sample_prefix, 'XXX_*.fastq.gz'), "file in", paste0("'",getwd(), '/raw_fastq.gz/', "'"), "to fix the error.\n\n"))
       }
       phenodata.file <- file.exists(paste0(getwd(), '/ref_genes/phenodata.csv'))
       if (isTRUE(gtf.file)) {
@@ -112,7 +117,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
         cat(c("(\u231B) :", paste0("'",getwd(), "/merged/stringtie_merged.gtf", "'"), "is not exit\n"))
         cat("     Files haven't created yet. Run 'StringTieMergeTrans()' to generate 'stringtie_merged.gtf' files\n\n")
       }
-      ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( "^[a-z,A-Z]*[0-9]*[a-z,A-Z]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( sample_prefix, "[0-9]*[a-z,A-Z]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ballgown.dirs.number <- length(ballgown.dirs)
       if (ballgown.dirs.number != 0){
         if (print) {
@@ -122,8 +127,8 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", print = TRUE) {
           cat(c("Total:", ballgown.dirs.number, "directories\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'',getwd(), '/ballgown/XXX/'), "is not exit\n"))
-        cat("     Directories haven't created yet. Run 'StringTieToBallgown()' to generate ballgown/XXX/ directories\n\n")
+        cat(c("(\u231B) :", paste0('\'',getwd(), '/ballgown/', sample_prefix, "XXX/"), "is not exit\n"))
+        cat("     Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample_prefix, "XXX/"), "directories\n\n")
       }
 
       on.exit(setwd(current.path))

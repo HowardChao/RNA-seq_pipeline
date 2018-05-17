@@ -3,6 +3,7 @@
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fballgown_related.R="D077874"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fcheck_sample_genes_files.R="D3D85E82"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fcheck_tool_command.R="EDE985F5"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fcmd_batch_rnaseq_pipline.R="3644D110"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fcreate_dir.R="29E1C903"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fdefault_setting.R="53B998C9"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fgffcompare_related.R="4CA0FECE"

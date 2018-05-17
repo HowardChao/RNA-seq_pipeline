@@ -4,7 +4,7 @@
 \alias{StringTieToBallgown}
 \title{stringtie estimate transcript abundances and create table counts for Ballgown}
 \usage{
-StringTieToBallgown(gene_name = "NO_DATA")
+StringTieToBallgown(gene_name = "NO_DATA", sample_prefix = "NO_DATA")
 }
 \description{
 stringtie estimate transcript abundances and create table counts for Ballgown

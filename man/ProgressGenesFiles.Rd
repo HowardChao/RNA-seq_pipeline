@@ -4,7 +4,8 @@
 \alias{ProgressGenesFiles}
 \title{check 'gene_data' and subdirectory files exit}
 \usage{
-ProgressGenesFiles(gene_name = "NO_DATA", print = TRUE)
+ProgressGenesFiles(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
+  print = TRUE)
 }
 \description{
 check 'gene_data' and subdirectory files exit

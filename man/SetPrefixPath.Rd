@@ -4,7 +4,7 @@
 \alias{SetPrefixPath}
 \title{Choose the location where 'gene_data' and 'RNAseq_bin' will be installed}
 \usage{
-SetPrefixPath(path.prefix = "NOT_SET_YET")
+SetPrefixPath(path.prefix = "NOT_SET_YET", print = TRUE)
 }
 \description{
 Choose the location where 'gene_data' and 'RNAseq_bin' will be installed

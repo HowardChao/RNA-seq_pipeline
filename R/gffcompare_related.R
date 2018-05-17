@@ -1,12 +1,19 @@
 #' Examine how the transcripts compare with the reference annotation
 #' @export
-GffcompareRefSample <- function(gene_name = "NO_DATA") {
+GffcompareRefSample <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
   if (isTRUE(CheckGffcompare(print=FALSE))){
     if (isTRUE(CheckDirAll(print = FALSE))){
-      if (gene_name == "NO_DATA"){
-        cat("(\u2718) :gene_name is missing.\n     Can't find the target sample files to merge\n\n")
+      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
+        if (gene_name == "NO_DATA") {
+          cat("(\u2718) :gene_name is missing.\n\n")
+        }
+        if (sample_prefix == "NO_DATA") {
+          cat("(\u2718) :sample_prefix is missing.\n\n")
+        }
+      } else if (sample_prefix == "NO_DATA") {
+        cat("(\u2718) :sample_prefix is missing.\n\n")
       } else{
-        check.results <- ProgressGenesFiles(gene_name, print=TRUE)
+        check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
         cat(paste0("\n************** Gffcompare comparing transcripts between merged and reference **************\n"))
         if ( isTRUE(check.results$stringtie_merged.gtf.file.df) && isTRUE(check.results$gtf.file.logic.df)){
           current.path <- getwd()

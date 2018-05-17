@@ -1,9 +1,14 @@
 #' Check input files directory
 #' @export
-CheckInputDirFiles <- function(gene_name = "NO_DATA", abs.input.dir = "NOT_SET_YET", print=TRUE) {
+CheckInputDirFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA", abs.input.dir = "NOT_SET_YET", print=TRUE) {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
-    if (gene_name == "NO_DATA"){
-      cat("(\u2718) : 'gene_name' is missing.\n\n")
+    if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
+      if (gene_name == "NO_DATA") {
+        cat("(\u2718) :gene_name is missing.\n\n")
+      }
+      if (sample_prefix == "NO_DATA") {
+        cat("(\u2718) :sample_prefix is missing.\n\n")
+      }
       return(FALSE)
     }
     if (abs.input.dir == "NOT_SET_YET") {
@@ -29,7 +34,7 @@ CheckInputDirFiles <- function(gene_name = "NO_DATA", abs.input.dir = "NOT_SET_Y
       raw.fastq.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/raw_fastq.gz/"))
       phenodata.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"))
       if (isTRUE(raw.fastq.dir)) {
-        raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*_", "[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+        raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = paste0( sample_prefix, "[0-9]*", "[A-Z, a-z]*_", "[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
         raw.fastq.number <- length(raw.fastq)
       }
       if (!isTRUE(gtf.file)) {
@@ -84,8 +89,8 @@ CheckInputDirFiles <- function(gene_name = "NO_DATA", abs.input.dir = "NOT_SET_Y
 
 #' Copy input files directory
 #' @export
-CopyInputDir <- function(gene_name = "NO_DATA", abs.input.dir = "NOT_SET_YET") {
-  if (isTRUE(CheckInputDirFiles(gene_name, abs.input.dir,print=FALSE))) {
+CopyInputDir <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA", abs.input.dir = "NOT_SET_YET") {
+  if (isTRUE(CheckInputDirFiles(gene_name, sample_prefix = sample_prefix, abs.input.dir,print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))

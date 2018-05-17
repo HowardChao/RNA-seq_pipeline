@@ -1,19 +1,24 @@
 #' Creating Hisat2 index
 #' Creat Hisat2 index for further use
 #' @export
-CreateHisat2Index <- function (gene_name = "NO_DATA", splice.site.info = TRUE, exon.info = TRUE) {
+CreateHisat2Index <- function (gene_name = "NO_DATA", sample_prefix = "NO_DATA", splice.site.info = TRUE, exon.info = TRUE) {
   ## need to change 'Let the user can choose where to put their files'
   ## need to learn how to get the filenames under a directory
   ## need to use 'real filename' rather than the 'chrX'
   if (isTRUE(CheckHisat2(print=FALSE))){
     if (isTRUE(CheckDirAll(print = FALSE))){
-      if (gene_name == "NO_DATA"){
-        cat("(\u2718) :gene_name is missing.\n     Can't find the target sample files to align.\n\n")
+      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
+        if (gene_name == "NO_DATA") {
+          cat("(\u2718) :gene_name is missing.\n\n")
+        }
+        if (sample_prefix == "NO_DATA") {
+          cat("(\u2718) :sample_prefix is missing.\n\n")
+        }
       } else {
         if (!is.logical(splice.site.info) || !is.logical(exon.info)) {
           cat("(\u2718) :Please make sure the type of 'splice.site.info' and 'exon.info' are logical.\n")
         } else {
-          check.results <- ProgressGenesFiles(gene_name, print=TRUE)
+          check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
           cat(paste0("\n************** Creating Hisat2 Index **************\n"))
           if (isTRUE(check.results$gtf.file.logic.df) && isTRUE(check.results$fa.file.logic.df)){
             current.path <- getwd()
@@ -59,13 +64,18 @@ CreateHisat2Index <- function (gene_name = "NO_DATA", splice.site.info = TRUE, e
 
 #' hisat2 alignment default
 #' @export
-Hisat2AlignmentDefault <- function(gene_name = "NO_DATA") {
+Hisat2AlignmentDefault <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
   if (isTRUE(CheckHisat2(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
-      if (gene_name == "NO_DATA"){
-        cat("(\u2718) :gene_name is missing.\n     Can't find the target sample files to align.\n\n")
+      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
+        if (gene_name == "NO_DATA") {
+          cat("(\u2718) :gene_name is missing.\nn")
+        }
+        if (sample_prefix == "NO_DATA") {
+          cat("(\u2718) :sample_prefix is missing.\n\n")
+        }
       } else {
-        check.results <- ProgressGenesFiles(gene_name, print=TRUE)
+        check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
         cat(paste0("\n************** Hisat2 Aligning **************\n"))
         if (check.results$ht2.files.number.df != 0 && check.results$fastq.gz.files.number.df != 0){
           # Map reads to each alignment
@@ -73,9 +83,9 @@ Hisat2AlignmentDefault <- function(gene_name = "NO_DATA") {
           setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
           # Determine 'r'/'R'/''
           deleteback <- gsub("[1-2]*.fastq.gz$", replace = "", check.results$fastq.gz.files.df)
-          sample.table.r.value <- gsub("[A-Z,a-z]*[0-9]*[A-Z, a-z]*_", replace = "", deleteback)
+          sample.table.r.value <- gsub(paste0(sample_prefix, "[0-9]*_"), replace = "", deleteback)
           if (isTRUE(length(unique(sample.table.r.value)) != 1)){
-            cat("(\u2718) :Inconsistent formats. Please check files are all 'XXX_r*.fastq.gz' OR 'XXX_R*.fastq.gz' OR 'XXX_*.fastq.gz'\n\n")
+            cat("(\u2718) :Inconsistent formats. Please check files are all",  paste0("'", sample_prefix, "XXX_r*.fastq.gz'"), "OR",  paste0("'", sample_prefix, "XXX_R*.fastq.gz'"), "OR",  paste0("'", sample_prefix, "XXX_*.fastq.gz'"), "\n\n")
           } else {
             sample.table <- table(gsub(paste0("_[R]*[r]*[1-2]*.fastq.gz$"), replace = "", check.results$fastq.gz.files.df))
             iteration.num <- length(sample.table)
