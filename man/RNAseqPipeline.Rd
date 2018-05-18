@@ -5,8 +5,8 @@
 \title{rna seq pipline}
 \usage{
 RNAseqPipeline(path.prefix = "NOT_SET_YET",
-  input.files.path = "NOT_SET_YET", gene_name = "NO_DATA",
-  sample_prefix = "NO_DATA")
+  input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA",
+  sample.pattern = "NO_DATA")
 }
 \description{
 rna seq pipline

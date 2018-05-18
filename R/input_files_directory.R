@@ -1,24 +1,24 @@
 #' Check input files directory
 #' @export
-CheckInputDirFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA", abs.input.dir = "NOT_SET_YET", print=TRUE) {
+CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA", print=TRUE) {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
-    if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-      if (gene_name == "NO_DATA") {
-        cat("(\u2718) :gene_name is missing.\n\n")
+    if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+      if (gene.name == "NO_DATA") {
+        cat("(\u2718) :gene.name is missing.\n\n")
       }
-      if (sample_prefix == "NO_DATA") {
-        cat("(\u2718) :sample_prefix is missing.\n\n")
+      if (sample.pattern == "NO_DATA") {
+        cat("(\u2718) :sample.pattern is missing.\n\n")
       }
       return(FALSE)
     }
-    if (abs.input.dir == "NOT_SET_YET") {
+    if (input.path.prefix == "NOT_SET_YET") {
       cat("(\u2718) : Directory to 'input_files/' is missing.\n     Can't check input file directory.\n\n")
       return(FALSE)
     } else {
-      if (substr(abs.input.dir, nchar(abs.input.dir), nchar(abs.input.dir)) != '/') {
-        pkg.global.path.prefix$input.files <- paste0(abs.input.dir, '/')
+      if (substr(input.path.prefix, nchar(input.path.prefix), nchar(input.path.prefix)) != '/') {
+        pkg.global.path.prefix$input.files <- paste0(input.path.prefix, '/')
       } else {
-        pkg.global.path.prefix$input.files <- abs.input.dir
+        pkg.global.path.prefix$input.files <- input.path.prefix
       }
       input.file.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/"))
       if(!isTRUE(input.file.dir)){
@@ -29,26 +29,26 @@ CheckInputDirFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
         cat(c("************** Checking hierarchy of", paste0("'", pkg.global.path.prefix$input.files, 'input_files/\''), "************\n"))
         cat(c("(\u2714) : Prefix of input_files", paste0("'",pkg.global.path.prefix$input.files, "'"), "is valid\n\n"))
       }
-      gtf.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene_name, ".gtf"))
-      fa.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene_name, ".fa"))
+      gtf.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene.name, ".gtf"))
+      fa.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene.name, ".fa"))
       raw.fastq.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/raw_fastq.gz/"))
       phenodata.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"))
       if (isTRUE(raw.fastq.dir)) {
-        raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = paste0( sample_prefix, "[0-9]*", "[A-Z, a-z]*_", "[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+        raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = paste0( sample.pattern, "[0-9]*", "_", "[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
         raw.fastq.number <- length(raw.fastq)
       }
       if (!isTRUE(gtf.file)) {
-        cat(paste0("(\u2718) : '", gene_name, ".gtf'", " is missing.\n"))
+        cat(paste0("(\u2718) : '", gene.name, ".gtf'", " is missing.\n"))
       } else {
         if (print) {
-          cat(paste0("(\u2714) : '", gene_name, ".gtf'", " is in 'input_files'\n"))
+          cat(paste0("(\u2714) : '", gene.name, ".gtf'", " is in 'input_files'\n"))
         }
       }
       if (!isTRUE(fa.file)) {
-        cat(paste0("(\u2718) : '", gene_name, ".fa'", " is missing.\n"))
+        cat(paste0("(\u2718) : '", gene.name, ".fa'", " is missing.\n"))
       } else {
         if (print) {
-          cat(paste0("(\u2714) : '", gene_name, ".fa'", " is in 'input_files'\n"))
+          cat(paste0("(\u2714) : '", gene.name, ".fa'", " is in 'input_files'\n"))
         }
       }
       if (!isTRUE(raw.fastq.dir)) {
@@ -89,18 +89,18 @@ CheckInputDirFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
 
 #' Copy input files directory
 #' @export
-CopyInputDir <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA", abs.input.dir = "NOT_SET_YET") {
-  if (isTRUE(CheckInputDirFiles(gene_name, sample_prefix = sample_prefix, abs.input.dir,print=FALSE))) {
+CopyInputDir <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+    if (isTRUE(CheckInputDirFiles(input.path.prefix = input.path.prefix, gene.name = gene.name, sample.pattern = sample.pattern, print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
       cat(c("************** Copying", paste0("'", pkg.global.path.prefix$input.files, "input_files/"), "************\n"))
-      cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", gene_name, ".gtf"), "\n"))
-      file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", gene_name, ".gtf"), paste0(getwd(), "/ref_genes/", gene_name, ".gtf"))
-      cat(c("          To :"), paste0(getwd(), "/ref_genes/", gene_name, ".gtf", "\n"))
-      cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", gene_name, ".fa"),  "\n"))
-      file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", gene_name, ".fa"), paste0(getwd(), "/ref_genome/", gene_name, ".fa"))
-      cat(c("          To :"), paste0(getwd(), "/ref_genome/", gene_name, ".fa", "\n"))
+      cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", gene.name, ".gtf"), "\n"))
+      file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", gene.name, ".gtf"), paste0(getwd(), "/ref_genes/", gene.name, ".gtf"))
+      cat(c("          To :"), paste0(getwd(), "/ref_genes/", gene.name, ".gtf", "\n"))
+      cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", gene.name, ".fa"),  "\n"))
+      file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", gene.name, ".fa"), paste0(getwd(), "/ref_genome/", gene.name, ".fa"))
+      cat(c("          To :"), paste0(getwd(), "/ref_genome/", gene.name, ".fa", "\n"))
       cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", "raw_fastq.gz/"),  "\n"))
       file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", "raw_fastq.gz/"), paste0(getwd(), "/"), overwrite = TRUE, recursive = TRUE)
       cat(c("          To :", paste0(getwd(),"/raw_fastq.gz/"), "\n"))

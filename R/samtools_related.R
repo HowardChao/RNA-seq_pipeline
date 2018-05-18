@@ -1,17 +1,17 @@
 #' use 'samtools' to sort and convert the SAM files to BAM
 #' @export
-SamtoolsToBam <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
+SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
   if (isTRUE(CheckSamtools(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))) {
-      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-        if (gene_name == "NO_DATA") {
-          cat("(\u2718) :gene_name is missing.\n\n")
+      if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+        if (gene.name == "NO_DATA") {
+          cat("(\u2718) :gene.name is missing.\n\n")
         }
-        if (sample_prefix == "NO_DATA") {
-          cat("(\u2718) :sample_prefix is missing.\n\n")
+        if (sample.pattern == "NO_DATA") {
+          cat("(\u2718) :sample.pattern is missing.\n\n")
         }
       } else {
-        check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
+        check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
         cat(paste0("\n************** Samtools converting '.sam' to '.bam' **************\n"))
         if (check.results$sam.files.number.df != 0){
           # Map reads to each alignment

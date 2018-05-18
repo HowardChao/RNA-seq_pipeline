@@ -1,17 +1,17 @@
 #' stringtie assemble and quantify expressed genes and transcripts
 #' @export
-StringTieAssemble <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
+StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
   if (isTRUE(CheckStringTie(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))) {
-      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-        if (gene_name == "NO_DATA") {
-          cat("(\u2718) :gene_name is missing.\n\n")
+      if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+        if (gene.name == "NO_DATA") {
+          cat("(\u2718) :gene.name is missing.\n\n")
         }
-        if (sample_prefix == "NO_DATA") {
-          cat("(\u2718) :sample_prefix is missing.\n\n")
+        if (sample.pattern == "NO_DATA") {
+          cat("(\u2718) :sample.pattern is missing.\n\n")
         }
       } else {
-        check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
+        check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
         cat(paste0("\n************** Stringtie assembling **************\n"))
         if (check.results$bam.files.number.df != 0 && isTRUE(check.results$gtf.file.logic.df)){
           current.path <- getwd()
@@ -22,7 +22,7 @@ StringTieAssemble <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") 
           sample.value <- as.vector(sample.table)
 
           for( i in 1:iteration.num){
-            whole.command <- paste("-p 8 -G",paste0("ref_genes/", gene_name, ".gtf"), "-o", paste0("raw_gtf/", sample.name[i], ".gtf"), "-l", sample.name[i], paste0("raw_bam/", sample.name[i], ".bam"))
+            whole.command <- paste("-p 8 -G",paste0("ref_genes/", gene.name, ".gtf"), "-o", paste0("raw_gtf/", sample.name[i], ".gtf"), "-l", sample.name[i], paste0("raw_bam/", sample.name[i], ".bam"))
             if (i != 1) cat("\n")
             cat(c("Input command :", paste("stringtie", whole.command), "\n"))
             system2(command = "stringtie", args = whole.command)
@@ -30,7 +30,7 @@ StringTieAssemble <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") 
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or 'XXX.bam' is missing.\n\n"))
+          cat(c(paste0("(\u2718) :'", gene.name, ".gtf'"), "or 'XXX.bam' is missing.\n\n"))
         }
       }
     }
@@ -39,18 +39,18 @@ StringTieAssemble <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") 
 
 #' stringtie merge transcripts from all samples
 #' @export
-StringTieMergeTrans <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
+StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
   if (isTRUE(CheckStringTie(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
-      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-        if (gene_name == "NO_DATA") {
-          cat("(\u2718) :gene_name is missing.\n\n")
+      if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+        if (gene.name == "NO_DATA") {
+          cat("(\u2718) :gene.name is missing.\n\n")
         }
-        if (sample_prefix == "NO_DATA") {
-          cat("(\u2718) :sample_prefix is missing.\n\n")
+        if (sample.pattern == "NO_DATA") {
+          cat("(\u2718) :sample.pattern is missing.\n\n")
         }
       } else{
-        check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
+        check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
         cat(paste0("\n************** Stringtie merging transcripts **************\n"))
         if ( isTRUE(check.results$gtf.file.logic.df) && check.results$gtf.files.number.df != 0){
           current.path <- getwd()
@@ -67,13 +67,13 @@ StringTieMergeTrans <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA"
           write.file<-file("merged/mergelist.txt")
           writeLines(write.content, write.file)
           close(write.file)
-          whole.command <- paste("--merge -p 8 -G", paste0("ref_genes/", gene_name, ".gtf"), "-o", "merged/stringtie_merged.gtf", "merged/mergelist.txt")
+          whole.command <- paste("--merge -p 8 -G", paste0("ref_genes/", gene.name, ".gtf"), "-o", "merged/stringtie_merged.gtf", "merged/mergelist.txt")
           cat(c("Input command :", paste("stringtie", whole.command), "\n"))
           system2(command = "stringtie", args = whole.command)
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c(paste0("(\u2718) :'", gene_name, ".gtf'"), "or", "'XXX.gtf' is missing.\n\n"))
+          cat(c(paste0("(\u2718) :'", gene.name, ".gtf'"), "or", "'XXX.gtf' is missing.\n\n"))
         }
       }
     }
@@ -82,18 +82,18 @@ StringTieMergeTrans <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA"
 
 #' stringtie estimate transcript abundances and create table counts for Ballgown
 #' @export
-StringTieToBallgown <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
+StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
   if (isTRUE(CheckStringTie(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
-      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-        if (gene_name == "NO_DATA") {
-          cat("(\u2718) :gene_name is missing.\n\n")
+      if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+        if (gene.name == "NO_DATA") {
+          cat("(\u2718) :gene.name is missing.\n\n")
         }
-        if (sample_prefix == "NO_DATA") {
-          cat("(\u2718) :sample_prefix is missing.\n\n")
+        if (sample.pattern == "NO_DATA") {
+          cat("(\u2718) :sample.pattern is missing.\n\n")
         }
       } else{
-        check.results <- ProgressGenesFiles(gene_name, sample_prefix, print=TRUE)
+        check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
         cat(paste0("\n************** Stringtie creating table counts for Ballgown **************\n"))
         if ((check.results$bam.files.number.df != 0) && isTRUE(check.results$stringtie_merged.gtf.file.df)){
           current.path <- getwd()

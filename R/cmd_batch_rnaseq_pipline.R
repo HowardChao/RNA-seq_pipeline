@@ -1,24 +1,24 @@
 #' Create 'RNAseqPipline.R' that user can
-RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.files.path = "NOT_SET_YET", gene_name = "NO_DATA", sample_prefix = "NO_DATA") {
+RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
   if (isTRUE(SetPrefixPath(path.prefix, print = FALSE))) {
-    if (isTRUE(dir.exists(input.files.path))) {
-      if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-        if (gene_name == "NO_DATA") {
-          cat("(\u2718) :gene_name is missing.\n\n")
+    if (isTRUE(dir.exists(input.path.prefix))) {
+      if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+        if (gene.name == "NO_DATA") {
+          cat("(\u2718) :gene.name is missing.\n\n")
         }
-        if (sample_prefix == "NO_DATA") {
-          cat("(\u2718) :sample_prefix is missing.\n\n")
+        if (sample.pattern == "NO_DATA") {
+          cat("(\u2718) :sample.pattern is missing.\n\n")
         }
       } else {
         current.path <- getwd()
-        cat("Current directory : ", pkg.global.path.prefix$data_path, "\n\n")
         setwd(pkg.global.path.prefix$data_path)
-        fileConn<-file("RNAseq_pipline.R")
+        fileConn<-file("RNASEQ_PIPELINE.R")
         first <- "library(RNASeq)"
-        cat(paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.files.path = "', input.files.path, '", gene_name = "', gene_name, '", sample_prefix = "', sample_prefix, '")'))
-        second <- paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.files.path = "', input.files.path, '", gene_name = "', gene_name, '", sample_prefix = "', sample_prefix, '")')
+        second <- paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '")')
         writeLines(c(first, second), fileConn)
         close(fileConn)
+        cat(" Local : Run command 'R CMD BATCH RNASEQ_PIPELINE.R &' \n")
+        cat("Server : Run command 'nohup R CMD BATCH RNASEQ_PIPELINE.R &' \n\n")
         on.exit(setwd(current.path))
       }
     } else {

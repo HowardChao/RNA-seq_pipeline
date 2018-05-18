@@ -4,8 +4,8 @@
 \alias{CheckInputDirFiles}
 \title{Check input files directory}
 \usage{
-CheckInputDirFiles(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
-  abs.input.dir = "NOT_SET_YET", print = TRUE)
+CheckInputDirFiles(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA",
+  sample.pattern = "NO_DATA", print = TRUE)
 }
 \description{
 Check input files directory

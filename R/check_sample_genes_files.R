@@ -1,13 +1,13 @@
 #' check 'gene_data' and subdirectory files exit
 #' @export
-ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",print = TRUE) {
+ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", print = TRUE) {
   if (isTRUE(CheckDirAll(print = FALSE))){
-    if (gene_name == "NO_DATA" || sample_prefix == "NO_DATA"){
-      if (gene_name == "NO_DATA") {
-        cat("(\u2718) :gene_name is missing.\n     Gene files checking fails\n\n")
+    if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+      if (gene.name == "NO_DATA") {
+        cat("(\u2718) :gene.name is missing.\n     Gene files checking fails\n\n")
       }
-      if (sample_prefix == "NO_DATA"){
-        cat("(\u2718) :sample_prefix is missing.\n     Gene files checking fails\n\n")
+      if (sample.pattern == "NO_DATA"){
+        cat("(\u2718) :sample.pattern is missing.\n     Gene files checking fails\n\n")
       }
       return(FALSE)
     } else {
@@ -16,25 +16,25 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
       if (print) {
         cat(paste0("************** Current progress of RNA-seq files in '", paste0(pkg.global.path.prefix$data_path, "gene_data/'"), " **************\n"))
       }
-      gtf.file <- file.exists(paste0(getwd(), '/ref_genes/', gene_name, '.gtf'))
+      gtf.file <- file.exists(paste0(getwd(), '/ref_genes/', gene.name, '.gtf'))
       if (isTRUE(gtf.file)) {
         if(print){
-          cat(c("(\u2714) :", paste0("'",getwd(), '/ref_genes/', gene_name, '.gtf', "'"), "is exit\n\n"))
+          cat(c("(\u2714) :", paste0("'",getwd(), '/ref_genes/', gene.name, '.gtf', "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u2718) :", paste0("'",getwd(), '/ref_genes/', gene_name, '.gtf', "'"), "is not exit\n"))
-        cat(c("     Put the", paste0("'",gene_name,".gtf", "'"), "file in", paste0("'",getwd(), '/ref_genes/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0("'",getwd(), '/ref_genes/', gene.name, '.gtf', "'"), "is not exit\n"))
+        cat(c("     Put the", paste0("'",gene.name,".gtf", "'"), "file in", paste0("'",getwd(), '/ref_genes/', "'"), "to fix the error.\n\n"))
       }
-      fa.file <- file.exists(paste0(getwd(), '/ref_genome/', gene_name, '.fa'))
+      fa.file <- file.exists(paste0(getwd(), '/ref_genome/', gene.name, '.fa'))
       if (isTRUE(fa.file)) {
         if(print){
-          cat(c("(\u2714) :",paste0("'", getwd(), '/ref_genome/', gene_name, '.fa', "'"), "is exit\n\n"))
+          cat(c("(\u2714) :",paste0("'", getwd(), '/ref_genome/', gene.name, '.fa', "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u2718) :",paste0("'", getwd(), '/ref_genome/', gene_name, '.fa', "'"), "is not exit\n"))
-        cat(c("     Put the", paste0("'",gene_name,".fa", "'"), "file in", paste0("'",getwd(), '/ref_genome/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :",paste0("'", getwd(), '/ref_genome/', gene.name, '.fa', "'"), "is not exit\n"))
+        cat(c("     Put the", paste0("'",gene.name,".fa", "'"), "file in", paste0("'",getwd(), '/ref_genome/', "'"), "to fix the error.\n\n"))
       }
-      fastq.gz.files <- list.files(path = paste0(getwd(), '/raw_fastq.gz/'), pattern = paste0( sample_prefix, "[0-9]*", "_", "[r]*[R]*","[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      fastq.gz.files <- list.files(path = paste0(getwd(), '/raw_fastq.gz/'), pattern = paste0( sample.pattern, "[0-9]*", "_", "[r]*[R]*","[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       fastq.gz.files.number <- length(fastq.gz.files)
       if (fastq.gz.files.number != 0){
         if(print){
@@ -44,19 +44,19 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
           cat(c("Total:", fastq.gz.files.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u2718) :", paste0('\'',getwd(), '/raw_fastq.gz/', sample_prefix, 'XXX_*.fastq.gz\''), "is not exit\n"))
-        cat(c("     Put the", paste0(sample_prefix, 'XXX_*.fastq.gz'), "file in", paste0("'",getwd(), '/raw_fastq.gz/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0('\'',getwd(), '/raw_fastq.gz/', sample.pattern, 'XXX_*.fastq.gz\''), "is not exit\n"))
+        cat(c("     Put the", paste0(sample.pattern, 'XXX_*.fastq.gz'), "file in", paste0("'",getwd(), '/raw_fastq.gz/', "'"), "to fix the error.\n\n"))
       }
-      phenodata.file <- file.exists(paste0(getwd(), '/ref_genes/phenodata.csv'))
+      phenodata.file <- file.exists(paste0(getwd(), '/phenodata.csv'))
       if (isTRUE(gtf.file)) {
         if(print){
-          cat(c("(\u2714) :", paste0("'",getwd(), '/ref_genes/phenodata.csv', "'"), "is exit\n\n"))
+          cat(c("(\u2714) :", paste0("'",getwd(), '/phenodata.csv', "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u2718) :", paste0("'",getwd(), '/ref_genes/phenodata.csv', "'"), "is not exit\n"))
-        cat(c("     Put the", paste0("'phenodata.csv'"), "file in", paste0("'",getwd(), '/ref_genes/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0("'",getwd(), '/phenodata.csv', "'"), "is not exit\n"))
+        cat(c("     Put the", paste0("'phenodata.csv'"), "file in", paste0("'",getwd(), '/', "'"), "to fix the error.\n\n"))
       }
-      ht2.files <- list.files(path = paste0(getwd(), '/indexes/'), pattern = paste0("^", gene_name, "_tran.[0-9]*.ht2$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      ht2.files <- list.files(path = paste0(getwd(), '/indexes/'), pattern = paste0("^", gene.name, "_tran.[0-9]*.ht2$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ht2.files.number <- length(ht2.files)
       if (ht2.files.number != 0) {
         if (print) {
@@ -66,7 +66,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
           cat(c("Total:", ht2.files.number, "files\n\n"))
         }
       } else {
-        cat(c("(\u231B) :", paste0('\'',getwd(), '/indexes/', gene_name, '_tran.*.ht2\''), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'',getwd(), '/indexes/', gene.name, '_tran.*.ht2\''), "is not exit\n"))
         cat("     Files haven't created yet. Run 'CreateHisat2Index()' to generate '*.ht2' files\n\n")
       }
       sam.files <- list.files(path = paste0(getwd(), '/raw_sam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".sam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
@@ -117,7 +117,7 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
         cat(c("(\u231B) :", paste0("'",getwd(), "/merged/stringtie_merged.gtf", "'"), "is not exit\n"))
         cat("     Files haven't created yet. Run 'StringTieMergeTrans()' to generate 'stringtie_merged.gtf' files\n\n")
       }
-      ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( sample_prefix, "[0-9]*[a-z,A-Z]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( sample.pattern, "[0-9]*[a-z,A-Z]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ballgown.dirs.number <- length(ballgown.dirs)
       if (ballgown.dirs.number != 0){
         if (print) {
@@ -127,8 +127,8 @@ ProgressGenesFiles <- function(gene_name = "NO_DATA", sample_prefix = "NO_DATA",
           cat(c("Total:", ballgown.dirs.number, "directories\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'',getwd(), '/ballgown/', sample_prefix, "XXX/"), "is not exit\n"))
-        cat("     Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample_prefix, "XXX/"), "directories\n\n")
+        cat(c("(\u231B) :", paste0('\'',getwd(), '/ballgown/', sample.pattern, "XXX/"), "is not exit\n"))
+        cat("     Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample.pattern, "XXX/"), "directories\n\n")
       }
 
       on.exit(setwd(current.path))

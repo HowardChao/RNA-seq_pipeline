@@ -4,10 +4,10 @@ pkg.ballgown.data$bg_chrX_filt <- ""
 
 #' Run ballgown analysis
 #' @export
-BallgownDraw <- function(sample_prefix = "NO_DATA", covariate = "NO_DATA") {
-  if (sample_prefix == "NO_DATA" || covariate == "NO_DATA") {
-    if (sample_prefix == "NO_DATA") {
-      cat("(\u2718) :sample_prefix is missing.\n\n")
+BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
+  if (sample.pattern == "NO_DATA" || covariate == "NO_DATA") {
+    if (sample.pattern == "NO_DATA") {
+      cat("(\u2718) :sample.pattern is missing.\n\n")
     }
     if (covariate == "NO_DATA") {
       cat("(\u2718) :covariate is missing.\n\n")
@@ -20,7 +20,7 @@ BallgownDraw <- function(sample_prefix = "NO_DATA", covariate = "NO_DATA") {
     pheno_data <- read.csv("phenodata.csv")
     print(pheno_data)
     # make ballgown object
-    pkg.ballgown.data$bg_chrX <- ballgown(dataDir = "ballgown", samplePattern = sample_prefix, pData = pheno_data)
+    pkg.ballgown.data$bg_chrX <- ballgown(dataDir = "ballgown", samplePattern = sample.pattern, pData = pheno_data)
     # set the condition to filter the ballgown object
     pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX,"rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1",genomesubset=TRUE)
     #print(pkg.ballgown.data$bg_chrX_filt)

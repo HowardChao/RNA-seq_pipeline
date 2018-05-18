@@ -78,27 +78,6 @@ CheckSamtools <- function(print=TRUE){
   }
 }
 
-#' Check Ballgown
-#' Check whether Ballgown is installed on the workstation
-#' @export
-CheckBallgown <- function(print=TRUE){
-  if (print){
-    cat("************** Checking ballgown command ************\n")
-  }
-  #samtools.old <- system( 'ballgown --version')==0
-  if( isTRUE(samtools.old)){
-    if(isTRUE(print)){
-      cat("(\u2714) : 'samtools' is installed\n\n")
-    }
-    return(TRUE)
-  }
-  else{
-    cat("(\u2718) : \'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
-    return(FALSE)
-  }
-}
-
-
 #' Check whether programs are installed
 #' @export
 CheckToolAll <- function(print=TRUE) {
