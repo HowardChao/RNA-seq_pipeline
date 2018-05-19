@@ -96,7 +96,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
         }
       }
       if (isTRUE(ht2.dir) && ht2.files.number == 0) {
-        cat(c("(\u26A0) : 'indexes/' directory has been created but there are no samples in 'indexes/' or files' names in 'indexes/' are incorrect.\n     No files will be copied.\n     (1). Make sure files name are", paste0("'", gene.name, "_tran.[0-9].ht2'"), "\n     (2). If you don't have", paste0("'", gene.name, "_tran.[0-9].ht2'"), "files, remove 'indexes' directory\n\n"))
+        cat(c("(\u26A0) : 'indexes/' directory has been created but there are no samples in 'indexes/' or files' names in 'indexes/' are incorrect.\n      No files will be copied.\n      (1). Make sure files name are", paste0("'", gene.name, "_tran.[0-9].ht2'"), "\n      (2). If you don't have", paste0("'", gene.name, "_tran.[0-9].ht2'"), "files, remove 'indexes' directory\n\n"))
         return(FALSE)
       } else if (isTRUE(ht2.dir) && ht2.files.number >= 0) {
         pkg.global.ht2$logic <- TRUE
