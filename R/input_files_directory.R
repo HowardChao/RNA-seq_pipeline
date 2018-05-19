@@ -1,3 +1,6 @@
+pkg.global.ht2 <- new.env()
+pkg.global.ht2$logic <- FALSE
+
 #' Check input files directory
 #' @export
 CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA", print=TRUE) {
@@ -33,9 +36,14 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
       fa.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene.name, ".fa"))
       raw.fastq.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/raw_fastq.gz/"))
       phenodata.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"))
+      ht2.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/indexes/"))
       if (isTRUE(raw.fastq.dir)) {
         raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = paste0( sample.pattern, "[0-9]*", "_", "[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
         raw.fastq.number <- length(raw.fastq)
+      }
+      if (isTRUE(ht2.dir)) {
+        ht2.files <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/indexes/'), pattern = paste0("^", gene.name, "_tran.[0-9]*.ht2$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+        ht2.files.number <- length(ht2.files)
       }
       if (!isTRUE(gtf.file)) {
         cat(paste0("(\u2718) : '", gene.name, ".gtf'", " is missing.\n"))
@@ -60,10 +68,10 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
       }
       if (isTRUE(raw.fastq.dir) && raw.fastq.number == 0) {
         cat(c("(\u2718) : There are no samples in 'raw_fastq.gz/' or samples' names in 'raw_fastq.gz/' are incorrect.\n"))
-      } else {
+      } else if (isTRUE(raw.fastq.dir) && raw.fastq.number >= 0) {
         if (print){
           for (i in raw.fastq) {
-            cat(paste0("(\u2714) : 'raw_fastq.gz/", i, "'"), "is in 'input_files'\n")
+            cat(paste0("(\u2714) : 'raw_fastq.gz/", i, "'"), "is in 'input_files/'\n")
           }
         }
       }
@@ -74,9 +82,36 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
           cat(paste0("(\u2714) : '", "phenodata.csv is in 'input_files'\n"))
         }
       }
+
+
+      if (!isTRUE(ht2.dir)) {
+        ## not exist
+        if (print) {
+          cat(c("(\u26A0) : 'indexes/' is optional. You can download the corresponding 'XXX.ht2' from 'https://ccb.jhu.edu/software/hisat2/index.shtml' to speed up the process.\n"))
+        }
+      } else {
+        if (print) {
+          ## exist
+          cat(paste0("(\u2714) : 'indexes/' is in 'input_files'\n"))
+        }
+      }
+      if (isTRUE(ht2.dir) && ht2.files.number == 0) {
+        cat(c("(\u26A0) : 'indexes/' directory has been created but there are no samples in 'indexes/' or files' names in 'indexes/' are incorrect.\n     No files will be copied.\n     (1). Make sure files name are", paste0("'", gene.name, "_tran.[0-9].ht2'"), "\n     (2). If you don't have", paste0("'", gene.name, "_tran.[0-9].ht2'"), "files, remove 'indexes' directory\n\n"))
+        return(FALSE)
+      } else if (isTRUE(ht2.dir) && ht2.files.number >= 0) {
+        pkg.global.ht2$logic <- TRUE
+        if (print){
+          for (i in ht2.files) {
+            cat(paste0("(\u2714) : 'indexes/", i, "'"), "is in 'input_files/'\n")
+          }
+        }
+      }
       if (isTRUE(gtf.file) && isTRUE(raw.fastq.dir) && isTRUE(raw.fastq.dir) && raw.fastq.number != 0 && isTRUE(phenodata.file)) {
         if (print) {
-          cat(c(paste0("\n(\u2714) : '", pkg.global.path.prefix$input.files,"input_files/", "'"), "is valid !\n\n"))
+          cat(c(paste0("\n(\u2714) : '", pkg.global.path.prefix$input.files,"input_files/", "'"), "is valid !\n"))
+          if (isTRUE(ht2.dir) && ht2.files.number != 0) {
+            cat(paste0("(\u2714) : optional directory 'indexes/' is valid !\n\n"))
+          }
         }
         return(TRUE)
       } else {
@@ -89,7 +124,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
 
 #' Copy input files directory
 #' @export
-CopyInputDir <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+CopyInputDir <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA", optional = pkg.global.ht2$logic) {
     if (isTRUE(CheckInputDirFiles(input.path.prefix = input.path.prefix, gene.name = gene.name, sample.pattern = sample.pattern, print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
       current.path <- getwd()
@@ -106,8 +141,15 @@ CopyInputDir <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA
       cat(c("          To :", paste0(getwd(),"/raw_fastq.gz/"), "\n"))
       cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"),  "\n"))
       file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"), paste0(getwd(), "/phenodata.csv"))
-      cat(c("          To :"), paste0(getwd(), "/phenodata.csv\n\n"))
+      cat(c("          To :"), paste0(getwd(), "/phenodata.csv\n"))
       on.exit(setwd(current.path))
+      if (isTRUE(optional)) {
+        cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", "indexes/"),  "\n"))
+        file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", "indexes/"), paste0(getwd(), "/"), overwrite = TRUE, recursive = TRUE)
+        cat(c("          To :", paste0(getwd(),"/indexes/"), "\n\n"))
+      } else {
+        cat("\n")
+      }
     }
   }
 }

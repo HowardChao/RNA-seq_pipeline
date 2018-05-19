@@ -22,11 +22,12 @@ InstallToolsCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NO
           fileConn<-file("INSTALL_TOOLS.R")
           first <- "library(RNASeq)"
           second <- paste0("SetPrefixPath('", pkg.global.path.prefix$data_path, "')")
-          third <- paste0("CopyInputDir(input.path.prefix = '", pkg.global.path.prefix$input.files, "', gene.name = '", gene.name, "', sample.pattern = '", sample.pattern, "')")
-          fourth <- "InstallAll()"
-          fifth <-  "ExportPath()"
-          sixth <- "CheckToolAll()"
-          writeLines(c(first, second, third, fourth, fifth, sixth), fileConn)
+          third <- paste0('CheckInputDirFiles(input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '")')
+          fourth <- paste0("CopyInputDir(input.path.prefix = '", pkg.global.path.prefix$input.files, "', gene.name = '", gene.name, "', sample.pattern = '", sample.pattern, "')")
+          fifth <- "InstallAll()"
+          sixth <-  "ExportPath()"
+          seventh <- "CheckToolAll()"
+          writeLines(c(first, second, third, fourth, fifth, sixth, seventh), fileConn)
           close(fileConn)
           cat(" Local : Run command 'R CMD BATCH INSTALL_TOOLS.R &' \n")
           cat("Server : Run command 'nohup R CMD BATCH INSTALL_TOOLS.R &' \n\n")

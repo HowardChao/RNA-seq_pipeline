@@ -5,7 +5,7 @@
 \title{Copy input files directory}
 \usage{
 CopyInputDir(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA",
-  sample.pattern = "NO_DATA")
+  sample.pattern = "NO_DATA", optional = pkg.global.ht2$logic)
 }
 \description{
 Copy input files directory

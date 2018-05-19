@@ -67,7 +67,7 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       } else {
         cat(c("(\u231B) :", paste0('\'',getwd(), '/indexes/', gene.name, '_tran.*.ht2\''), "is not exit\n"))
-        cat("     Files haven't created yet. Run 'CreateHisat2Index()' to generate '*.ht2' files\n\n")
+        cat("     Files haven't created yet. Run 'CreateHisat2Index()' to generate '*.ht2' files or download from 'https://ccb.jhu.edu/software/hisat2/index.shtml'\n\n")
       }
       sam.files <- list.files(path = paste0(getwd(), '/raw_sam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".sam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       sam.files.number <- length(sam.files)

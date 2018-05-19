@@ -15,7 +15,10 @@ RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT
           ExportPath()
           check.results <- ProgressGenesFiles(gene.name = gene.name, sample.pattern = sample.pattern, print=FALSE)
           if (isTRUE(check.results$gtf.file.logic.df) && isTRUE(check.results$fa.file.logic.df) && (check.results$fastq.gz.files.number.df != 0)){
-            CreateHisat2Index(gene.name, sample.pattern)
+            print(check.results$ht2.files.number.df)
+            if (check.results$ht2.files.number.df == 0) {
+              CreateHisat2Index(gene.name, sample.pattern)
+            }
             Hisat2AlignmentDefault(gene.name, sample.pattern)
             SamtoolsToBam(gene.name, sample.pattern)
             StringTieAssemble(gene.name, sample.pattern)

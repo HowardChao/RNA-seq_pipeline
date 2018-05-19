@@ -25,10 +25,12 @@ CheckAllParameter <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "
           print(results$fastq.gz.files.number.df)
           print(results$phenodata.file.df)
           if (isTRUE(results$gtf.file.logic.df) && isTRUE(results$fa.file.logic.df) && results$fastq.gz.files.number.df != 0 && isTRUE(results$phenodata.file.df)) {
+            # If precheck doesn't have .ht2 files is fine
             ExportPath()
             if (isTRUE(CheckToolAll(print=TRUE))) {
-              cat("(\u2714) : Successful in RNAseq-pipeline precheck. \n\n")
-              cat(paste0("Run 'RNAseqPipelineCMD(path.prefix = \"", pkg.global.path.prefix$data_path, "\", input.path.prefix = \"", input.path.prefix, "\",  gene.name = \"", gene.name, "\", sample.pattern = \"", sample.pattern, "\")'\n\n" ))
+              cat("(\u2714) : Successful in RNAseq-pipeline precheck. \n")
+              cat(paste0("(\u2714) : Now running 'RNAseqPipelineCMD(path.prefix = \"", pkg.global.path.prefix$data_path, "\", input.path.prefix = \"", input.path.prefix, "\",  gene.name = \"", gene.name, "\", sample.pattern = \"", sample.pattern, "\")'\n\n" ))
+              RNAseqPipelineCMD(path.prefix = path.prefix, input.path.prefix = input.path.prefix, gene.name = gene.name, sample.pattern = sample.pattern)
             }
           }
         }

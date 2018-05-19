@@ -22,7 +22,8 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
     # make ballgown object
     pkg.ballgown.data$bg_chrX <- ballgown(dataDir = "ballgown", samplePattern = sample.pattern, pData = pheno_data)
     # set the condition to filter the ballgown object
-    pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX,"rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1",genomesubset=TRUE)
+    #save a file
+    pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX,"rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >0",genomesubset=TRUE)
     #print(pkg.ballgown.data$bg_chrX_filt)
 
     results_transcripts <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate=covariate,adjustvars = c("population"), getFC=TRUE, meas="FPKM")
@@ -36,8 +37,8 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
 
     cat(c("************** Writing .csv ************\n"))
     dir.create(file.path(paste0(getwd(), '/ballgown/results/')), showWarnings = FALSE)
-    write.csv(results_transcripts, paste0(getwd(), '/ballgown/results/', "chrX_transcript_results.csv"), row.names=FALSE)
-    write.csv(results_genes, paste0(getwd(), '/ballgown/results/', "chrX_gene_results.csv"), row.names=FALSE)
+    #write.csv(results_transcripts, paste0(getwd(), '/ballgown/results/', "chrX_transcript_results.csv"), row.names=FALSE)
+    #write.csv(results_genes, paste0(getwd(), '/ballgown/results/', "chrX_gene_results.csv"), row.names=FALSE)
 
     print(subset(results_transcripts,results_transcripts$qval<0.05))
     print(subset(results_genes,results_genes$qval<0.05))
@@ -45,10 +46,12 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
     palette(tropical)
     fpkm <- texpr(pkg.ballgown.data$bg_chrX,meas="FPKM")
     fpkm <- log2(fpkm+1)
+
     #cat(c("************** draw box plot ************\n"))
     png("ballgown/results/sample_vs_FPKM.png")
     boxplot(fpkm,col=as.numeric(pheno_data$sex),las=2,ylab='log2(FPKM+1)')
     dev.off()
+
     fpkm_summary <- texpr(pkg.ballgown.data$bg_chrX,meas="all")
     write.csv(fpkm_summary, "ballgown/results/FPKM_summary.csv", row.names = FALSE)
     #print(ballgown::transcriptNames(pkg.ballgown.data$bg_chrX)[11])
@@ -57,7 +60,7 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
     print(fpkm)
     points(fpkm[11,] ~ jitter(as.numeric(pheno_data$sex)), col=as.numeric(pheno_data$sex))
     plotTranscripts(ballgown::geneIDs(pkg.ballgown.data$bg_chrX)[1721], pkg.ballgown.data$bg_chrX, main=c('Gene XIST in sample ERR188234'), sample=c('ERR188234'))
-    plotMeans('MSTRG.56', pkg.ballgown.data$bg_chrX_filt, groupvar="sex",legend=FALSE)
+    plotMeans('MSTRG.56', pkg.ballgown.data$bg_chrX_filt, grouar="sex",legend=FALSE)
     on.exit(setwd(current.path))
   }
 }
