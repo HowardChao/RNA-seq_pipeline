@@ -33,7 +33,9 @@ RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT
                 finals$sam.files.number.df != 0 &&
                 finals$bam.files.number.df != 0 &&
                 finals$gtf.files.number.df != 0 &&
-                isTRUE(finals$stringtie_merged.gtf.file.df) && finals$ballgown.dirs.number.df != 0) {
+                isTRUE(finals$stringtie_merged.gtf.file.df) &&
+                finals$gffcompare.related.dirs.number.df != 0 &&
+                finals$ballgown.dirs.number.df != 0) {
               cat(paste0("\n**************************************\n"))
               cat(paste0("************** Success! **************\n"))
               cat(paste0("**************************************\n"))

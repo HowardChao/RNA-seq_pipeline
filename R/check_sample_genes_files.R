@@ -67,7 +67,7 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       } else {
         cat(c("(\u231B) :", paste0('\'',getwd(), '/indexes/', gene.name, '_tran.*.ht2\''), "is not exit\n"))
-        cat("     Files haven't created yet. Run 'CreateHisat2Index()' to generate '*.ht2' files or download from 'https://ccb.jhu.edu/software/hisat2/index.shtml'\n\n")
+        cat("       Files haven't created yet. Run 'CreateHisat2Index()' to generate '*.ht2' files or download from 'https://ccb.jhu.edu/software/hisat2/index.shtml'\n\n")
       }
       sam.files <- list.files(path = paste0(getwd(), '/raw_sam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".sam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       sam.files.number <- length(sam.files)
@@ -80,7 +80,7 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       }else {
         cat(c("(\u231B) :", paste0('\'',getwd(), '/raw_sam/XXX.sam\''), "is not exit\n"))
-        cat("     Files haven't created yet. Run 'Hisat2AlignmentDefault()' to generate 'XXX.sam' files\n\n")
+        cat("       Files haven't created yet. Run 'Hisat2AlignmentDefault()' to generate 'XXX.sam' files\n\n")
       }
       bam.files <- list.files(path = paste0(getwd(), '/raw_bam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".bam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       bam.files.number <- length(bam.files)
@@ -93,7 +93,7 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       }else {
         cat(c("(\u231B) :", paste0('\'',getwd(), '/raw_sam/XXX.bam\''), "is not exit\n"))
-        cat("     Files haven't created yet. Run 'SamtoolsToBam()' to generate 'XXX.bam' files\n\n")
+        cat("       Files haven't created yet. Run 'SamtoolsToBam()' to generate 'XXX.bam' files\n\n")
       }
       gtf.files <- list.files(path = paste0(getwd(), '/raw_gtf/'), pattern = paste0("^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".gtf$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       gtf.files.number <- length(gtf.files)
@@ -106,7 +106,7 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       }else {
         cat(c("(\u231B) :", paste0('\'',getwd(), '/raw_gtf/XXX.gtf\''), "is not exit\n"))
-        cat("     Files haven't created yet. Run 'StringTieAssemble()' to generate 'XXX.gtf' files\n\n")
+        cat("       Files haven't created yet. Run 'StringTieAssemble()' to generate 'XXX.gtf' files\n\n")
       }
       stringtie_merged.gtf.file <- file.exists(paste0(getwd(), '/merged/stringtie_merged.gtf'))
       if (isTRUE(stringtie_merged.gtf.file)) {
@@ -115,7 +115,20 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       } else {
         cat(c("(\u231B) :", paste0("'",getwd(), "/merged/stringtie_merged.gtf", "'"), "is not exit\n"))
-        cat("     Files haven't created yet. Run 'StringTieMergeTrans()' to generate 'stringtie_merged.gtf' files\n\n")
+        cat("       Files haven't created yet. Run 'StringTieMergeTrans()' to generate 'stringtie_merged.gtf' files\n\n")
+      }
+      gffcompare.related.dirs <- list.files(path = paste0(getwd(), '/merged/'), pattern = "^merged.", all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      gffcompare.related.dirs.number <- length(gffcompare.related.dirs)
+      if (gffcompare.related.dirs.number != 0){
+        if (print) {
+          for (i in gffcompare.related.dirs){
+            cat(c("(\u2714) :", paste0("'", getwd(), '/merged/', i, "'"), "is exit\n"))
+          }
+          cat(c("Total:", gffcompare.related.dirs.number, "files\n\n"))
+        }
+      }else {
+        cat(c("(\u231B) :", paste0('\'',getwd(), '/merged/', "merged.", "XXX/"), "is not exit\n"))
+        cat("       Directories haven't created yet. Run 'GffcompareRefSample()' to generate", paste0("merged/", "merged.XXX/"), "files\n\n")
       }
       ballgown.dirs <- list.files(path = paste0(getwd(), '/ballgown/'), pattern = paste0( sample.pattern, "[0-9]*[a-z,A-Z]*$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ballgown.dirs.number <- length(ballgown.dirs)
@@ -128,7 +141,7 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         }
       }else {
         cat(c("(\u231B) :", paste0('\'',getwd(), '/ballgown/', sample.pattern, "XXX/"), "is not exit\n"))
-        cat("     Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample.pattern, "XXX/"), "directories\n\n")
+        cat("       Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample.pattern, "XXX/"), "directories\n\n")
       }
 
       on.exit(setwd(current.path))
@@ -145,6 +158,8 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
                   gtf.files.number.df = gtf.files.number,
                   gtf.files.df = gtf.files,
                   stringtie_merged.gtf.file.df = stringtie_merged.gtf.file,
+                  gffcompare.related.dirs.df = gffcompare.related.dirs,
+                  gffcompare.related.dirs.number.df = gffcompare.related.dirs.number,
                   ballgown.dirs.number.df = ballgown.dirs.number,
                   ballgown.dirs.df = ballgown.dirs))
     }
