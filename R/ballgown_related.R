@@ -13,9 +13,14 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
       cat("(\u2718) :covariate is missing.\n\n")
     }
   } else {
+    # sorting 'pheno_data'
     print(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
     cat(paste0("************** Differential analysis (Ballgown) **************\n"))
     pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
+    pheno_data.arrange <- arrange(pheno_data, pheno_data$sex)
+    sample.names <- as.character(pheno_data.arrange$ids)
+    sample.names.with.covariate <- paste0(pheno_data.arrange$ids, ".", pheno_data.arrange$sex)
+    sample.number <- length(sample.names)
     cat("\u25CF 1. printing phenodata.csv : ")
     print(pheno_data)
     cat("\n")
@@ -31,29 +36,11 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
 
     # load gene name for further usage
     bg_table = texpr(pkg.ballgown.data$bg_chrX_filt, 'all')
+    # gene_id vs gene_name
     bg_gene_names = unique(bg_table[, 9:10])
 
-    # Pull the gene_expression data frame from the ballgown object
+    # FPKM for all samples in the ballgown object
     gene_expression = as.data.frame(gexpr(pkg.ballgown.data$bg_chrX_filt))
-
-    colnames(gene_expression)
-    row.names(gene_expression)
-
-    dim(gene_expression)
-
-    # the way to see certain genes
-    i = row.names(gene_expression) == "MSTRG.1"
-    gene_expression[i,]
-
-    # load transcript to gene index from ballgown object
-    transcript_gene_table = indexes(pkg.ballgown.data$bg_chrX)$t2g
-    transcript_gene_table
-
-    # check how many rows
-    length(row.names(transcript_gene_table))
-
-    # check unique gene id
-    length(unique(transcript_gene_table[,"g_id"]))
 
     # draw for distribution of transcript count per gene
     counts=table(transcript_gene_table[,"g_id"])
@@ -75,29 +62,75 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
     # Set the columns for finding FPKM and create shorter names for figures
     data_columns=c(1:12)
 
-    results_transcripts_cov <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate="sex",adjustvars = c("population"), getFC=TRUE, meas="cov")
-
     # stattest : Test each transcript, gene, exon, or intron in a ballgown object for differential expression, using comparisons of linear models.
     # the expression measurement to use for statistical tests. Must be one of "cov", "FPKM", "rcount", "ucount", "mrcount", or "mcov". Not all expression measurements are available for all features. Leave as default if gowntable is provided.
 
     # differential expression
     results_transcripts <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate="sex",adjustvars = c("population"), getFC=TRUE, meas="FPKM")
-    results_transcripts <- data.frame(geneNames=ballgown::geneNames(pkg.ballgown.data$bg_chrX_filt), geneIDs=ballgown::geneIDs(pkg.ballgown.data$bg_chrX_filt), results_transcripts)
+    results_transcripts$feature=NULL
+    colnames(results_transcripts)[1] <- "transcriptIDs"
+    results_transcripts <- data.frame(geneNames=ballgown::geneNames(pkg.ballgown.data$bg_chrX_filt), geneIDs=ballgown::geneIDs(pkg.ballgown.data$bg_chrX_filt), transcriptNames=transcriptNames(pkg.ballgown.data$bg_chrX_filt), results_transcripts)
+
+    #results_genes <- stattest(gown=pkg.ballgown.data$bg_chrX_filt, feature="gene", covariate="sex", adjustvars = c("population"), getFC=TRUE, meas="FPKM")
+    #results_genes <- data.frame(results_genes, transcriptNames=transcriptNames(pkg.ballgown.data$bg_chrX_filt), transcriptIDs=transcriptIDs(pkg.ballgown.data$bg_chrX_filt))
+    #results_genes <- arrange(results_genes,pval)
+    #table(results_genes$qval<0.05)
+    #table(results_genes$pval<0.05)
+
+    # adding fpkm
+    # cov : average per-base read coverage
+    fpkm <- data.frame(texpr(pkg.ballgown.data$bg_chrX_filt,meas="FPKM"))
+    log2_fpkm_plus <- log2(fpkm+1)
+    fpkm_mean <- rowMeans(fpkm)
+    log2_fpkm_plus_mean <- rowMeans(log2_fpkm_plus)
+    for( i in 1:length(sample.names)){
+        #print(i)
+      a <- paste0("FPKM.", sample.names[i])
+      results_transcripts[[sample.names.with.covariate[i]]] <- fpkm[[a]]
+    }
+
     results_transcripts <- arrange(results_transcripts,pval)
     results_transcripts %>% filter(qval < 0.05)
     table(results_transcripts$qval < 0.05)
+    table(results_transcripts$pval < 0.05)
 
-    results_genes <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="gene", covariate="sex", adjustvars = c("population"), getFC=TRUE, meas="FPKM")
-    results_genes <- arrange(results_genes,pval)
-    table(results_genes$qval<0.05)
+    typeof(fpkm)
+
+    results_transcripts$fpkm_mean <- fpkm_mean
+    results_transcripts$log2_fpkm_plus_mean <- log2_fpkm_plus_mean
+
+    # relationship between exon and transcript
+    exon_id_list <- as.data.frame(eexpr(pkg.ballgown.data$bg_chrX_filt, 'all')$e_id,  col.names = "e_id")
+    exon_id_list
+    exon_read_count <- as.data.frame(eexpr(pkg.ballgown.data$bg_chrX_filt, 'rcount'))
+    exon_read_count
+    exon_read_count$e_id <-unlist (exon_id_list)
+    exon_read_count
+    exon_to_trans <- indexes(pkg.ballgown.data$bg_chrX_filt)$e2t
+
+
+    # merge to one dataset
+    # merged <- merge(exon_to_trans, exon_read_count, by = interaction(exon_to_trans$e_id, exon_read_count$e_id))
 
     ## Ma plot
-    results_transcripts$mean <- rowMeans(texpr(pkg.ballgown.data$bg_chrX_filt))
-
-    ggplot(results_transcripts, aes(log2(mean), log2(fc), colour = qval<0.05)) +
+    ggplot(results_transcripts, aes(log2(fpkm_mean), log2(fc), colour = qval<0.05)) +
       scale_color_manual(values=c("#999999", "#FF0000")) +
       geom_point() +
       geom_hline(yintercept=0)
+
+
+    ## volcano plot
+    # Make a basic volcano plot
+    with(results_genes, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot", xlim=c(-2.5,2)))
+
+    # Add colored points: red if padj<0.05, orange of log2FC>1, green if both)
+    with(subset(res, padj<.05 ), points(fc, -log10(pval), pch=20, col="red"))
+    with(subset(res, abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="orange"))
+    with(subset(res, padj<.05 & abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="green"))
+
+    # Label points with the textxy function from the calibrate plot
+    library(calibrate)
+    with(subset(res, padj<.05 & abs(log2FoldChange)>1), textxy(log2FoldChange, -log10(pvalue), labs=Gene, cex=.8))
 
     #results_transcripts.tpm <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate="sex",adjustvars = c("population"), getFC=TRUE, meas="TPM")
 
@@ -108,8 +141,7 @@ BallgownDraw <- function(sample.pattern = "NO_DATA", covariate = "NO_DATA") {
     print(subset(results_genes,results_genes$qval<0.05))
     tropical <- c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
     palette(tropical)
-    fpkm <- texpr(pkg.ballgown.data$bg_chrX,meas="FPKM")
-    fpkm <- log2(fpkm+1)
+
     data_columns=c(1:12)
     fpkm_gene <- as.data.frame(gexpr(pkg.ballgown.data$bg_chrX))
     fpkm_gene <- log2(fpkm[,data_columns]+1)
