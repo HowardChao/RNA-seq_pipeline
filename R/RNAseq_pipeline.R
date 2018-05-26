@@ -5,10 +5,10 @@ RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT
     if (isTRUE(CheckDirAll(print = TRUE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else {
         if (isTRUE(CheckInputDirFiles(input.path.prefix = input.path.prefix, gene.name = gene.name, sample.pattern = sample.pattern, print=TRUE))) {
