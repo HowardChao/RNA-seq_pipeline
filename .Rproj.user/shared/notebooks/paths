@@ -1,6 +1,7 @@
 /home/kuan-hao/bioinformatics/R_package/RNASeq/.Rbuildignore="49017D3E"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/DESCRIPTION="33BBB906"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/NAMESPACE="957E50F8"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/DEG_volcano_plot.R="A323FEA9"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/RNAseq_pipeline.R="3E3C2B72"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/ballgown_related.R="A45D9164"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/check_all_before_RNAseq.R="5A308E75"
