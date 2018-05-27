@@ -39,11 +39,12 @@ DEGMAPlot <- function() {
     DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))
     ## Ma plot
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/MA_plot.png"))
-    ggplot(DEG_dataset, aes(log2(FPKM.all.mean), log2FC, colour = qval<0.05)) +
+    p <- ggplot(DEG_dataset, aes(log2(FPKM.all.mean), log2FC, colour = qval<0.05)) +
       scale_color_manual(values=c("#999999", "#FF0000")) +
       geom_point() +
       geom_hline(yintercept=0, color="blue") +
-      ylim(6,-6)
+      ylim(-6, 6)
+    print(p)
     dev.off()
   } else {
     cat("(\u2718) : 'FPKM_DEG_result.csv' haven't created yet.\n\n")
@@ -108,3 +109,34 @@ DEGTranscriptRelatedPlot <- function(){
   dev.off()
 }
 
+#'
+#' @export
+DEGFPKMBoxPlot <- function() {
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+    # load gene name for further usage
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    }
+    load(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
+    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
+    # frequency plot
+    tropical <- c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
+    palette(tropical)
+    fpkm = texpr(bg,meas="FPKM")
+    fpkm = log2(fpkm+1)
+    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/FPKM_box_plot.png"))
+    boxplot(fpkm, col=as.numeric(DEG_dataset$sex), las=2, ylab='log2(FPKM+1)')
+    dev.off()
+  }
+}
+
+
+#'
+#' @export
+DEGPlotAll <- function() {
+  DEGVolcanoPlot()
+  DEGMAPlot()
+  DEGFrequencyPlot()
+  DEGTranscriptRelatedPlot()
+  DEGFPKMBoxPlot()
+}

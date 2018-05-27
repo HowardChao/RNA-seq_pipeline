@@ -16,4 +16,5 @@ Depends:
     genefilter,
     dplyr,
     RSkittleBrewer,
-    ballgown
+    ballgown,
+    rafalib
