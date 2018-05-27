@@ -37,7 +37,8 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
 
         cat("\u25CF 3. Making ballgown object : \n")
         pkg.ballgown.data$bg_chrX <- ballgown(dataDir = paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown"), samplePattern = sample.pattern, pData = pheno_data, meas = 'all')
-        saveRDS(pkg.ballgown.data$bg_chrX, file=paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
+        bg <- pkg.ballgown.data$bg_chrX
+        save(bg, file = paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
         cat('\n')
         pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX,"rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1",genomesubset=TRUE)
         #print(pkg.ballgown.data$bg_chrX_filt)
@@ -49,10 +50,8 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         if (length(adjustvars) != 0) {
           cat(c("         \u25CF adjustvars :", adjustvars, "\n"))
           results_transcripts <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate=covariate, adjustvars = adjustvars, getFC=TRUE, meas="FPKM")
-          print(1)
         } else {
           results_transcripts <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate=covariate, getFC=TRUE, meas="FPKM")
-          print(2)
         }
         results_transcripts$feature <- NULL
         results_transcripts$FC <- results_transcripts$fc
