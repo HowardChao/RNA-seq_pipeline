@@ -1,6 +1,6 @@
 #' Create 'RNAseqPipline.R' that user can
 #'
-RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (path.prefix == "NOT_SET_YET" || input.path.prefix == "NOT_SET_YET" ||gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
     if (path.prefix == "NOT_SET_YET") {
       cat("(\u2718) : 'path.prefix' is missing.\n\n")
@@ -20,7 +20,7 @@ RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "
       if (isTRUE(CheckPrefixPath(path.prefix = pkg.global.path.prefix$data_path, print = TRUE))) {
         if (isTRUE(CheckDirAll(print = TRUE))) {
           results <- ProgressGenesFiles(gene.name = gene.name, sample.pattern = sample.pattern, print=TRUE)
-          if (isTRUE(results$gtf.file.logic.df) && isTRUE(results$fa.file.logic.df) && results$fastq.gz.files.number.df != 0 && isTRUE(results$phenodata.file.df)) {
+          if (isTRUE(results$gtf.file.logic.df) && isTRUE(results$fa.file.logic.df) && results$fastq.gz.files.number.df != 0 && isTRUE(results$phenodata.file.df) && (results$phenodata.invalid.column.number.df == 0)) {
             # If precheck doesn't have .ht2 files is fine
             ExportPath()
             if (isTRUE(CheckToolAll(print=TRUE))) {
@@ -29,7 +29,7 @@ RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "
               setwd(pkg.global.path.prefix$data_path)
               fileConn<-file("Rscript/RNASEQ_PIPELINE.R")
               first <- "library(RNASeq)"
-              second <- paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '")')
+              second <- paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '", num.parallel.threads = "', num.parallel.threads, '")')
               writeLines(c(first, second), fileConn)
               close(fileConn)
               cat(c(paste0(" Local : Run command 'R CMD BATCH ", getwd(), "/Rscript/RNASEQ_PIPELINE.R"),  paste0(getwd(), "/Rscript_out/RNASEQ_PIPELINE.Rout"), "&' \n"))

@@ -6,7 +6,7 @@
 \usage{
 RNAseqPipelineCMD(path.prefix = "NOT_SET_YET",
   input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA",
-  sample.pattern = "NO_DATA")
+  sample.pattern = "NO_DATA", num.parallel.threads = 8)
 }
 \description{
 Create 'RNAseqPipline.R' that user can

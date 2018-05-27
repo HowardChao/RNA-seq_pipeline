@@ -4,7 +4,8 @@
 \alias{StringTieAssemble}
 \title{stringtie assemble and quantify expressed genes and transcripts}
 \usage{
-StringTieAssemble(gene.name = "NO_DATA", sample.pattern = "NO_DATA")
+StringTieAssemble(gene.name = "NO_DATA", sample.pattern = "NO_DATA",
+  num.parallel.threads = 8)
 }
 \description{
 stringtie assemble and quantify expressed genes and transcripts

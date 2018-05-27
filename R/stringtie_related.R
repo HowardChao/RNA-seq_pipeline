@@ -1,6 +1,6 @@
 #' stringtie assemble and quantify expressed genes and transcripts
 #' @export
-StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (isTRUE(CheckStringTie(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))) {
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
@@ -22,7 +22,7 @@ StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA")
           sample.value <- as.vector(sample.table)
 
           for( i in 1:iteration.num){
-            whole.command <- paste("-p 8 -G",paste0("ref_genes/", gene.name, ".gtf"), "-o", paste0("raw_gtf/", sample.name[i], ".gtf"), "-l", sample.name[i], paste0("raw_bam/", sample.name[i], ".bam"))
+            whole.command <- paste("-p", num.parallel.threads, "-G",paste0("ref_genes/", gene.name, ".gtf"), "-o", paste0("raw_gtf/", sample.name[i], ".gtf"), "-l", sample.name[i], paste0("raw_bam/", sample.name[i], ".bam"))
             if (i != 1) cat("\n")
             cat(c("Input command :", paste("stringtie", whole.command), "\n"))
             system2(command = "stringtie", args = whole.command)
@@ -39,7 +39,7 @@ StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA")
 
 #' stringtie merge transcripts from all samples
 #' @export
-StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (isTRUE(CheckStringTie(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
@@ -67,7 +67,7 @@ StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
           write.file<-file("merged/mergelist.txt")
           writeLines(write.content, write.file)
           close(write.file)
-          whole.command <- paste("--merge -p 8 -G", paste0("ref_genes/", gene.name, ".gtf"), "-o", "merged/stringtie_merged.gtf", "merged/mergelist.txt")
+          whole.command <- paste("--merge -p", num.parallel.threads, "-G", paste0("ref_genes/", gene.name, ".gtf"), "-o", "merged/stringtie_merged.gtf", "merged/mergelist.txt")
           cat(c("Input command :", paste("stringtie", whole.command), "\n"))
           system2(command = "stringtie", args = whole.command)
           cat("\n")
@@ -82,7 +82,7 @@ StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
 
 #' stringtie estimate transcript abundances and create table counts for Ballgown
 #' @export
-StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (isTRUE(CheckStringTie(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
@@ -103,7 +103,7 @@ StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
           sample.name <- names(sample.table)
           sample.value <- as.vector(sample.table)
           for( i in 1:iteration.num){
-            whole.command <- paste("-e -B -p 8 -G", "merged/stringtie_merged.gtf", "-o", paste0("ballgown/", sample.name[i],"/", sample.name[i], ".gtf"), paste0("raw_bam/", sample.name[i], ".bam"))
+            whole.command <- paste("-e -B -p", num.parallel.threads, "-G", "merged/stringtie_merged.gtf", "-o", paste0("ballgown/", sample.name[i],"/", sample.name[i], ".gtf"), paste0("raw_bam/", sample.name[i], ".bam"))
             if (i != 1) cat("\n")
             cat(c("Input command :", paste("stringtie", whole.command), "\n"))
             system2(command = "stringtie", args = whole.command)

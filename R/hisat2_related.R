@@ -64,7 +64,7 @@ CreateHisat2Index <- function (gene.name = "NO_DATA", sample.pattern = "NO_DATA"
 
 #' hisat2 alignment default
 #' @export
-Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (isTRUE(CheckHisat2(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
@@ -83,9 +83,9 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
           setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
           # Determine 'r'/'R'/''
           deleteback <- gsub("[1-2]*.fastq.gz$", replace = "", check.results$fastq.gz.files.df)
-          sample.table.r.value <- gsub(paste0(sample.pattern, "[0-9]*_"), replace = "", deleteback)
+          sample.table.r.value <- gsub(paste0("[A-Z, a-z]*[0-9]*_"), replace = "", deleteback)
           if (isTRUE(length(unique(sample.table.r.value)) != 1)){
-            cat("(\u2718) :Inconsistent formats. Please check files are all",  paste0("'", sample.pattern, "XXX_r*.fastq.gz'"), "OR",  paste0("'", sample.pattern, "XXX_R*.fastq.gz'"), "OR",  paste0("'", sample.pattern, "XXX_*.fastq.gz'"), "\n\n")
+            cat("(\u2718) :Inconsistent formats. Please check files are all",  paste0("'XXX_r*.fastq.gz'"), "OR",  paste0("'XXX_R*.fastq.gz'"), "OR",  paste0("'XXX_*.fastq.gz'"), "\n\n")
           } else {
             sample.table <- table(gsub(paste0("_[R]*[r]*[1-2]*.fastq.gz$"), replace = "", check.results$fastq.gz.files.df))
             iteration.num <- length(sample.table)
@@ -98,7 +98,7 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
                 current.sub.command <- paste(paste0("-", j),  paste0("raw_fastq.gz/", sample.name[i], "_", sample.table.r.value[1], j, ".fastq.gz"))
                 total.sub.command <- paste(total.sub.command, current.sub.command)
               }
-              whole.command <- paste("-p 8 --dta -x", paste0("indexes/", gene.name, "_tran"), total.sub.command, "-S", paste0("raw_sam/", sample.name[i],".sam") )
+              whole.command <- paste("-p", num.parallel.threads,"--dta -x", paste0("indexes/", gene.name, "_tran"), total.sub.command, "-S", paste0("raw_sam/", sample.name[i],".sam") )
               if (i != 1) cat("\n")
               cat(c("Input command :", paste("hisat2", whole.command), "\n"))
               system2(command = "hisat2", args = whole.command)

@@ -1,6 +1,6 @@
 #' use 'samtools' to sort and convert the SAM files to BAM
 #' @export
-SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (isTRUE(CheckSamtools(print=FALSE))) {
     if (isTRUE(CheckDirAll(print = FALSE))) {
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
@@ -22,7 +22,7 @@ SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
           sample.name <- names(sample.table)
           sample.value <- as.vector(sample.table)
           for( i in 1:iteration.num){
-            whole.command <- paste("sort -@ 8 -o", paste0("raw_bam/", sample.name[i], ".bam"), paste0("raw_sam/", sample.name[i], ".sam"))
+            whole.command <- paste("sort -@", num.parallel.threads, "-o", paste0("raw_bam/", sample.name[i], ".bam"), paste0("raw_sam/", sample.name[i], ".sam"))
             if (i != 1) cat("\n")
             cat(c("Input command :", paste("samtools", whole.command), "\n"))
             system2(command = "samtools", args = whole.command)

@@ -4,7 +4,8 @@
 \alias{Hisat2AlignmentDefault}
 \title{hisat2 alignment default}
 \usage{
-Hisat2AlignmentDefault(gene.name = "NO_DATA", sample.pattern = "NO_DATA")
+Hisat2AlignmentDefault(gene.name = "NO_DATA", sample.pattern = "NO_DATA",
+  num.parallel.threads = 8)
 }
 \description{
 hisat2 alignment default

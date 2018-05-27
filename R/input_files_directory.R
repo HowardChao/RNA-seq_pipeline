@@ -38,7 +38,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
       phenodata.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"))
       ht2.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/indexes/"))
       if (isTRUE(raw.fastq.dir)) {
-        raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = paste0( sample.pattern, "[0-9]*", "_", "[1-2]*.fastq.gz$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+        raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = sample.pattern, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
         raw.fastq.number <- length(raw.fastq)
       }
       if (isTRUE(ht2.dir)) {

@@ -1,6 +1,6 @@
 #' rna seq pipline
 #' @export
-RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
+RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
   if (isTRUE(SetPrefixPath(path.prefix))){
     if (isTRUE(CheckDirAll(print = TRUE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
@@ -19,16 +19,18 @@ RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT
             if (check.results$ht2.files.number.df == 0) {
               CreateHisat2Index(gene.name, sample.pattern)
             }
-            Hisat2AlignmentDefault(gene.name, sample.pattern)
-            SamtoolsToBam(gene.name, sample.pattern)
-            StringTieAssemble(gene.name, sample.pattern)
-            StringTieMergeTrans(gene.name, sample.pattern)
+            Hisat2AlignmentDefault(gene.name, sample.pattern, num.parallel.threads = num.parallel.threads)
+            SamtoolsToBam(gene.name, sample.pattern, num.parallel.threads = num.parallel.threads)
+            StringTieAssemble(gene.name, sample.pattern, num.parallel.threads = num.parallel.threads)
+            StringTieMergeTrans(gene.name, sample.pattern, num.parallel.threads = num.parallel.threads)
             GffcompareRefSample(gene.name, sample.pattern)
-            StringTieToBallgown(gene.name, sample.pattern)
+            StringTieToBallgown(gene.name, sample.pattern, num.parallel.threads = num.parallel.threads)
             finals <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
 
             if (isTRUE(finals$gtf.file.logic.df) && isTRUE(finals$fa.file.logic.df) &&
                 finals$fastq.gz.files.number.df != 0 &&
+                isTRUE(finals$phenodata.file.df) &&
+                finals$phenodata.invalid.column.number.df == 0 &&
                 finals$ht2.files.number.df != 0 &&
                 finals$sam.files.number.df != 0 &&
                 finals$bam.files.number.df != 0 &&

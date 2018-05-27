@@ -4,7 +4,8 @@
 \alias{BallgownPreprocess}
 \title{Run ballgown analysis}
 \usage{
-BallgownPreprocess(sample.pattern = "NO_DATA", covariate = "NO_DATA")
+BallgownPreprocess(gene.name = "NO_DATA", sample.pattern = "NO_DATA",
+  covariate = "NO_DATA")
 }
 \description{
 Run ballgown analysis

@@ -24,7 +24,7 @@ CheckAllParameter <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "
           print(results$fa.file.logic.df)
           print(results$fastq.gz.files.number.df)
           print(results$phenodata.file.df)
-          if (isTRUE(results$gtf.file.logic.df) && isTRUE(results$fa.file.logic.df) && results$fastq.gz.files.number.df != 0 && isTRUE(results$phenodata.file.df)) {
+          if (isTRUE(results$gtf.file.logic.df) && isTRUE(results$fa.file.logic.df) && results$fastq.gz.files.number.df != 0 && isTRUE(results$phenodata.file.df) && (results$phenodata.invalid.column.number.df == 0)) {
             # If precheck doesn't have .ht2 files is fine
             ExportPath()
             if (isTRUE(CheckToolAll(print=TRUE))) {

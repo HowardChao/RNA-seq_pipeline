@@ -4,7 +4,8 @@
 \alias{StringTieMergeTrans}
 \title{stringtie merge transcripts from all samples}
 \usage{
-StringTieMergeTrans(gene.name = "NO_DATA", sample.pattern = "NO_DATA")
+StringTieMergeTrans(gene.name = "NO_DATA", sample.pattern = "NO_DATA",
+  num.parallel.threads = 8)
 }
 \description{
 stringtie merge transcripts from all samples
