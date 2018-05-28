@@ -16,40 +16,41 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
       if (print) {
         cat(paste0("************** Current progress of RNA-seq files in '", paste0(pkg.global.path.prefix$data_path, "gene_data/'"), " **************\n"))
       }
-      gtf.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/", '/ref_genes/', gene.name, '.gtf'))
+      gtf.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data", '/ref_genes/', gene.name, '.gtf'))
       if (isTRUE(gtf.file)) {
         if(print){
-          cat(c("(\u2714) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/ref_genes/', gene.name, '.gtf', "'"), "is exit\n\n"))
+          cat(c("(\u2714) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/ref_genes/', gene.name, '.gtf', "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u2718) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/ref_genes/', gene.name, '.gtf', "'"), "is not exit\n"))
-        cat(c("     Put the", paste0("'",gene.name,".gtf", "'"), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/ref_genes/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/ref_genes/', gene.name, '.gtf', "'"), "is not exit\n"))
+        cat(c("     Put the", paste0("'",gene.name,".gtf", "'"), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/ref_genes/', "'"), "to fix the error.\n\n"))
       }
-      fa.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/", '/ref_genome/', gene.name, '.fa'))
+      fa.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data", '/ref_genome/', gene.name, '.fa'))
       if (isTRUE(fa.file)) {
         if(print){
-          cat(c("(\u2714) :",paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/ref_genome/', gene.name, '.fa', "'"), "is exit\n\n"))
+          cat(c("(\u2714) :",paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/ref_genome/', gene.name, '.fa', "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u2718) :",paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/ref_genome/', gene.name, '.fa', "'"), "is not exit\n"))
-        cat(c("     Put the", paste0("'",gene.name,".fa", "'"), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/ref_genome/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :",paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/ref_genome/', gene.name, '.fa', "'"), "is not exit\n"))
+        cat(c("     Put the", paste0("'",gene.name,".fa", "'"), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/ref_genome/', "'"), "to fix the error.\n\n"))
       }
-      fastq.gz.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/raw_fastq.gz/'), pattern = sample.pattern, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      fastq.gz.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/raw_fastq.gz/'), pattern = sample.pattern, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       fastq.gz.files.number <- length(fastq.gz.files)
       if (fastq.gz.files.number != 0){
         if(print){
           for (i in fastq.gz.files){
-            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/raw_fastq.gz/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/raw_fastq.gz/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", fastq.gz.files.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u2718) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data/", '/raw_fastq.gz/XXX_*.fastq.gz\''), "is not exit\n"))
-        cat(c("     Put the", paste0('XXX_*.fastq.gz'), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/raw_fastq.gz/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data", '/raw_fastq.gz/XXX_*.fastq.gz\''), "is not exit\n"))
+        cat(c("     Put the", paste0('XXX_*.fastq.gz'), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/raw_fastq.gz/', "'"), "to fix the error.\n\n"))
       }
-      phenodata.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/", '/phenodata.csv'))
+      phenodata.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data", '/phenodata.csv'))
       invalid.column.number <- -1
-      pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/", "/phenodata.csv"))
+      adjustvars <- c()
+      pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data", "/phenodata.csv"))
       sample.table <- as.data.frame(table(pheno_data[1]))
       compare.sample.table <- as.data.frame(table(pheno_data[2]))
       extract.fastq.gz.sample.names <- unique(gsub("_[1-2]*.fastq.gz", "", fastq.gz.files))
@@ -83,97 +84,97 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
       }
       if (isTRUE(gtf.file)) {
         if(print){
-          cat(c("(\u2714) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/phenodata.csv', "'"), "is exit\n\n"))
+          cat(c("(\u2714) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/phenodata.csv', "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u2718) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/phenodata.csv', "'"), "is not exit\n"))
-        cat(c("     Put the", paste0("'phenodata.csv'"), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/', "'"), "to fix the error.\n\n"))
+        cat(c("(\u2718) :", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/phenodata.csv', "'"), "is not exit\n"))
+        cat(c("     Put the", paste0("'phenodata.csv'"), "file in", paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/', "'"), "to fix the error.\n\n"))
       }
-      ht2.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/indexes/'), pattern = paste0("^", gene.name, "_tran.[0-9]*.ht2$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      ht2.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/indexes/'), pattern = paste0("^", gene.name, "_tran.[0-9]*.ht2$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ht2.files.number <- length(ht2.files)
       if (ht2.files.number != 0) {
         if (print) {
           for (i in ht2.files){
-            cat(c("(\u2714) :",paste0("'",pkg.global.path.prefix$data_path, "gene_data/", '/indexes/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :",paste0("'",pkg.global.path.prefix$data_path, "gene_data", '/indexes/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", ht2.files.number, "files\n\n"))
         }
       } else {
-        cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data/", '/indexes/', gene.name, '_tran.*.ht2\''), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data", '/indexes/', gene.name, '_tran.*.ht2\''), "is not exit\n"))
         cat("       Files haven't created yet. Run 'CreateHisat2Index()' to generate '*.ht2' files or download from 'https://ccb.jhu.edu/software/hisat2/index.shtml'\n\n")
       }
-      sam.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/raw_sam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".sam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      sam.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/raw_sam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".sam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       sam.files.number <- length(sam.files)
       if (sam.files.number != 0){
         if (print) {
           for (i in sam.files){
-            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/raw_sam/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/raw_sam/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", sam.files.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'', pkg.global.path.prefix$data_path, "gene_data/", '/raw_sam/XXX.sam\''), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'', pkg.global.path.prefix$data_path, "gene_data", '/raw_sam/XXX.sam\''), "is not exit\n"))
         cat("       Files haven't created yet. Run 'Hisat2AlignmentDefault()' to generate 'XXX.sam' files\n\n")
       }
-      bam.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/raw_bam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".bam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      bam.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/raw_bam/'), pattern = paste0( "^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".bam$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       bam.files.number <- length(bam.files)
       if (bam.files.number != 0){
         if (print) {
           for (i in bam.files){
-            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/raw_bam/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/raw_bam/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", bam.files.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'', pkg.global.path.prefix$data_path, "gene_data/", '/raw_sam/XXX.bam\''), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'', pkg.global.path.prefix$data_path, "gene_data", '/raw_sam/XXX.bam\''), "is not exit\n"))
         cat("       Files haven't created yet. Run 'SamtoolsToBam()' to generate 'XXX.bam' files\n\n")
       }
-      gtf.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/raw_gtf/'), pattern = paste0("^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".gtf$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      gtf.files <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/raw_gtf/'), pattern = paste0("^[A-Z, a-z]*", "[0-9]*", "[A-Z, a-z]*", ".gtf$"), all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       gtf.files.number <- length(gtf.files)
       if (gtf.files.number != 0){
         if (print) {
           for (i in gtf.files){
-            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/raw_gtf/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/raw_gtf/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", gtf.files.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data/", '/raw_gtf/XXX.gtf\''), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data", '/raw_gtf/XXX.gtf\''), "is not exit\n"))
         cat("       Files haven't created yet. Run 'StringTieAssemble()' to generate 'XXX.gtf' files\n\n")
       }
-      stringtie_merged.gtf.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/", '/merged/stringtie_merged.gtf'))
+      stringtie_merged.gtf.file <- file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data", '/merged/stringtie_merged.gtf'))
       if (isTRUE(stringtie_merged.gtf.file)) {
         if (print) {
-          cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", "/merged/stringtie_merged.gtf", "'"), "is exit\n\n"))
+          cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", "/merged/stringtie_merged.gtf", "'"), "is exit\n\n"))
         }
       } else {
-        cat(c("(\u231B) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", "/merged/stringtie_merged.gtf", "'"), "is not exit\n"))
+        cat(c("(\u231B) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", "/merged/stringtie_merged.gtf", "'"), "is not exit\n"))
         cat("       Files haven't created yet. Run 'StringTieMergeTrans()' to generate 'stringtie_merged.gtf' files\n\n")
       }
-      gffcompare.related.dirs <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/merged/'), pattern = "^merged.", all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      gffcompare.related.dirs <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/merged/'), pattern = "^merged.", all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       gffcompare.related.dirs.number <- length(gffcompare.related.dirs)
       if (gffcompare.related.dirs.number != 0){
         if (print) {
           for (i in gffcompare.related.dirs){
-            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/merged/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/merged/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", gffcompare.related.dirs.number, "files\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'', pkg.global.path.prefix$data_path, "gene_data/", '/merged/', "merged.", "XXX/"), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'', pkg.global.path.prefix$data_path, "gene_data", '/merged/', "merged.", "XXX/"), "is not exit\n"))
         cat("       Directories haven't created yet. Run 'GffcompareRefSample()' to generate", paste0("merged/", "merged.XXX/"), "files\n\n")
       }
-      ballgown.dirs <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data/", '/ballgown/'), pattern = sample.pattern, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+      ballgown.dirs <- list.files(path = paste0(pkg.global.path.prefix$data_path, "gene_data", '/ballgown/'), pattern = sample.pattern, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
       ballgown.dirs.number <- length(ballgown.dirs)
       if (ballgown.dirs.number != 0){
         if (print) {
           for (i in ballgown.dirs){
-            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data/", '/ballgown/', i, "'"), "is exit\n"))
+            cat(c("(\u2714) :", paste0("'", pkg.global.path.prefix$data_path, "gene_data", '/ballgown/', i, "'"), "is exit\n"))
           }
           cat(c("Total:", ballgown.dirs.number, "directories\n\n"))
         }
       }else {
-        cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data/", '/ballgown/', gsub(".fastq.gz", replace = "", sample.pattern), "/"), "is not exit\n"))
+        cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data", '/ballgown/', gsub(".fastq.gz", replace = "", sample.pattern), "/"), "is not exit\n"))
         cat("       Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample.pattern, "/"), "directories\n\n")
       }
 
