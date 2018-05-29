@@ -17,4 +17,6 @@ Depends:
     dplyr,
     RSkittleBrewer,
     ballgown,
-    rafalib
+    rafalib,
+    factoextra,
+    FactoMineR

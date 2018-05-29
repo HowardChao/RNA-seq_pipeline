@@ -9,7 +9,7 @@ DEGVolcanoPlot <- function() {
     DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))
     ## Volcano plot
     # Make a basic volcano plot
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/volcano_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Volcano_plot.png"))
     par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
     topT <- as.data.frame(DEG_dataset)
     with(topT, plot(log2FC, -log10(pval), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value), xlim=c(-15,15), ylim = c(0,12)))
@@ -68,7 +68,7 @@ DEGFrequencyPlot <- function() {
     mypar(1, 1)
     pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
     sample.table <- as.data.frame(table(pheno_data[2]))
-    shist(log2(pms[, 9]), unit = 0.1, type = "n", xlab = "log (base 2) FPKM",
+    shist(log2(pms[, 5]), unit = 0.1, type = "n", xlab = "log (base 2) FPKM",
           main = "All samples", xlim = c(-5, 15))
     for(i in 1:length(row.names(sample.table))){
       current.sum <- 0
@@ -79,7 +79,7 @@ DEGFrequencyPlot <- function() {
         }
       }
       for(j in 1:sample.table$Freq[i]){
-        plot.column.number <- 8+j+current.sum + i -1
+        plot.column.number <- 4+j+current.sum + i -1
         shist(log2(pms[, plot.column.number]), unit = 0.1, col = plot.column.number, add = TRUE, lwd = 2, lty = plot.column.number)
       }
     }
@@ -104,10 +104,14 @@ DEGTranscriptRelatedPlot <- function(){
   legend("topright", legend_text, lty=NULL)
   dev.off()
 
-  # draw the distribution of gene length
-  png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Distribution_transcript_length_plot.png"))
+  # draw the distribution of transcript length
   full_table <- texpr(bg, 'all')
+  t.mini.length = min(full_table$length[full_table$length > 0])
+  t.max.length = max(full_table$length[full_table$length > 0])
+  png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Distribution_transcript_length_plot.png"))
   hist(full_table$length, breaks=50, xlab="Transcript length (bp)", main="Distribution of transcript lengths", col="steelblue")
+  legend_text = c(paste("Minimum transcript length =", t.mini.length), paste("Maximum transcript length =", t.max.length))
+  legend("topright", legend_text, lty=NULL)
   dev.off()
 }
 
@@ -124,7 +128,7 @@ DEGFPKMBoxPlot <- function() {
     # frequency plot
     tropical <- c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
     palette(tropical)
-    fpkm = texpr(bg,meas="FPKM")
+    fpkm = data.frame(texpr(bg,meas="FPKM"))
     fpkm = log2(fpkm+1)
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/FPKM_box_plot.png"))
     boxplot(fpkm, col=as.numeric(DEG_dataset$sex), las=2, ylab='log2(FPKM+1)')
@@ -132,6 +136,57 @@ DEGFPKMBoxPlot <- function() {
   }
 }
 
+#'
+#' @export
+DEGPCAPlot <- function(){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+    # load gene name for further usage
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    }
+    load(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
+    fpkm <- data.frame(texpr(bg,meas="FPKM"))
+    fpkm.trans <- data.frame(t(fpkm))
+    fpkm.trans.row.names <- row.names(fpkm_trans)
+    fpkm.trans.row.names.clean <- gsub("FPKM.", "", fpkm.trans.row.names)
+    row.names(fpkm_trans) <- fpkm.trans.row.names.clean
+
+    fpkm_trans.sort <- fpkm_trans[ order(row.names(fpkm_trans)), ]
+
+
+    pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
+    pheno_data.sort <- pheno_data[order(pheno_data$id),]
+    fpkm_trans.sort$attribute <- as.character(pheno_data.sort[,2])
+
+    # scale.unit = TRUE ==> the data are scaled to unit variance before the analysis.
+    res.pca <- PCA(fpkm_trans.sort[,-ncol(fpkm_trans.sort)], scale.unit = TRUE, ncp = 2, graph = FALSE)
+    eig.val <- get_eigenvalue(res.pca)
+    fviz_eig(res.pca, addlabels = TRUE, ylim = c(0, 50))
+
+    #var$coord: coordinates of variables to create a scatter plot
+    #var$cos2: represents the quality of representation for variables on the factor map. It’s calculated as the squared coordinates: var.cos2 = var.coord * var.coord.
+    #var$contrib: contains the contributions (in percentage) of the variables to the principal components. The contribution of a variable (var) to a given principal component is (in percentage) : (var.cos2 * 100) / (total cos2 of the component).
+    var <- get_pca_var(res.pca)
+
+
+    plotPCA(DEG_dataset[,5:8], 5)
+
+
+    fpkm.pca <- PCA(fpkm_trans.sort[,-ncol(fpkm_trans.sort)], scale.unit = TRUE, ncp = 2, graph = TRUE)
+    fviz_pca_ind(fpkm.pca,
+                 title = "Principal Component Analysis",
+                 xlab = paste0("PC1(", round(data.frame(eig.val)$variance.percent[1], 2), "%)"), ylab = paste0("PC2(", round(data.frame(eig.val)$variance.percent[2],2), "%)"),
+                 legend.title = "Treatment variable", legend.position = "top",
+                 pointshape = 21,
+                 pointsize = 2.5,
+                 geom.ind = "point", # show points only (nbut not "text")
+                 fill.ind = fpkm_trans.sort$attribute,
+                 col.ind = fpkm_trans.sort$attribute, # color by groups
+                 #palette = c("#00AFBB", "#E7B800"),
+#                 addEllipses = TRUE, # Concentration ellipses
+    )
+  }
+}
 
 #'
 #' @export

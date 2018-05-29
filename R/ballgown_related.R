@@ -54,10 +54,11 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
           results_transcripts <- stattest(pkg.ballgown.data$bg_chrX_filt, feature="transcript",covariate=covariate, getFC=TRUE, meas="FPKM")
         }
         results_transcripts$feature <- NULL
-        results_transcripts$FC <- results_transcripts$fc
-        results_transcripts$log2FC <- log2(results_transcripts$fc)
-        results_transcripts$fc <- NULL
-        colnames(results_transcripts)[1] <- "transcriptIDs"
+        results_transcripts.FC <- results_transcripts$fc
+        results_transcripts.log2FC <- log2(results_transcripts$fc)
+        results_transcripts.pval <- results_transcripts$pval
+        results_transcripts.qval <- results_transcripts$qval
+        results_transcripts$fc <- NULL; results_transcripts$pval <- NULL; results_transcripts$qval <- NULL; colnames(results_transcripts)[1] <- "transcriptIDs"
         results_transcripts <- data.frame(geneNames=ballgown::geneNames(pkg.ballgown.data$bg_chrX_filt), geneIDs=ballgown::geneIDs(pkg.ballgown.data$bg_chrX_filt), transcriptNames=transcriptNames(pkg.ballgown.data$bg_chrX_filt), results_transcripts)
         # adding fpkm
         # cov : average per-base read coverage
@@ -83,6 +84,10 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
           columns.to.mean <- c()
         }
         results_transcripts[["FPKM.all.mean"]] <- rowMeans(results_transcripts[all.mean])
+        results_transcripts[["FC"]] <- results_transcripts.FC
+        results_transcripts[["log2FC"]] <-results_transcripts.log2FC
+        results_transcripts[["pval"]] <- results_transcripts.pval
+        results_transcripts[["qval"]] <- results_transcripts.qval
         cat("     \u25CF writing data.frame into 'FPKM_DEG_result.csv' ......'\n\n")
         write.csv(results_transcripts, paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"), row.names=FALSE)
         cat("\u25CF 5. Printing DEG dataset : \n")
