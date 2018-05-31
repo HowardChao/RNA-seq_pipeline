@@ -193,7 +193,7 @@ DEGPCAPlot <- function(){
       #var$cos2: represents the quality of representation for variables on the factor map. It’s calculated as the squared coordinates: var.cos2 = var.coord * var.coord.
       #var$contrib: contains the contributions (in percentage) of the variables to the principal components. The contribution of a variable (var) to a given principal component is (in percentage) : (var.cos2 * 100) / (total cos2 of the component).
       #var <- get_pca_var(res.pca)
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/PCA_plot.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/PCA_plot_factoextra.png"))
       p2 <- fviz_pca_ind(fpkm.pca,
                    title = "Principal Component Analysis",
                    xlab = paste0("PC1(", round(data.frame(eig.val)$variance.percent[1], 2), "%)"), ylab = paste0("PC2(", round(data.frame(eig.val)$variance.percent[2],2), "%)"),
@@ -207,6 +207,22 @@ DEGPCAPlot <- function(){
                    #                 addEllipses = TRUE, # Concentration ellipses
       )
       print(p2)
+      dev.off()
+
+      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/PCA_plot_self.png"))
+      fpkm.trans.sort$attribute <- factor(fpkm.trans.sort$attribute)
+      length(fpkm.trans.sort)
+      FPKM.res.PCA = PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort))
+
+      my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
+                  rgb(50, 147, 255,maxColorValue = 255))
+
+      par(mfrow=c(1,1))
+      plot(FPKM.res.PCA$ind$coord[,1] , FPKM.res.PCA$ind$coord[,2], xlab=paste0("PC1(", round(FPKM.res.PCA$eig[,2][1], 2), "%)") , ylab=paste0("PC2(", round(FPKM.res.PCA$eig[,2][2], 2), "%)") , pch=20 , cex=3 ,
+           col=my_colors )
+      #my_colors[as.numeric(res.PCA$call$quali.sup$quali.sup[,1])]
+      abline(h=0 , v=0, lty= 2)
+      legend("bottomright", legend=levels(FPKM.res.PCA$call$quali.sup$quali.sup[,1] ) , col=my_colors, pch=20 )
       dev.off()
     }
   }
@@ -238,22 +254,36 @@ DEGCorrelationPlot <- function(){
       }
       count <- count + pheno.data.table$Freq[i]
     }
-    res <- cor(head(DEG_dataset[select.column]), method = c("pearson", "kendall", "spearman"))
+    res <- round(cor(head(DEG_dataset[select.column]), method = c("pearson", "kendall", "spearman")), 3)
+    # Correlation_dot_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_dot_plot.png"))
     p1 <- corrplot(res, type = "upper", order = "hclust",
              tl.col = "black", tl.srt = 45)
     print(p1)
     dev.off()
+
+    # Correlation_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_plot.png"))
     p2 <- chart.Correlation(res, histogram=TRUE, pch=19)
     print(p2)
     dev.off()
 
+    # Correlation_heat_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_heat_plot.png"))
-    col<- colorRampPalette(c("blue", "white", "red"))(20)
-    p3 <- heatmap(x = res, col = col, symm = TRUE)
-    print(p3)
+    melted_res <- melt(res)
+    ggheatmap <- ggplot(melted_res, aes(Var2, Var1, fill = value))+
+      geom_tile(color = "white")+
+      scale_fill_gradient2(low = "blue", high = "red", mid = "white",
+                           midpoint = 0, limit = c(-1,1), space = "Lab",
+                           name="Pearson\nCorrelation") +
+      theme_minimal()+ # minimal theme
+      theme(axis.text.x = element_text(angle = 45, vjust = 1,
+                                       size = 12, hjust = 1))+
+      coord_fixed()
+    # Print the heatmap
+    print(ggheatmap)
     dev.off()
+
   }
 }
 
