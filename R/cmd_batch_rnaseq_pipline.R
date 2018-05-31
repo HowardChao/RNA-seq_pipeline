@@ -25,16 +25,13 @@ RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "
             ExportPath()
             if (isTRUE(CheckToolAll(print=TRUE))) {
               cat("(\u2714) : Successful in RNAseq-pipeline precheck. \n\n")
-              current.path <- getwd()
-              setwd(pkg.global.path.prefix$data_path)
-              fileConn<-file("Rscript/RNASEQ_PIPELINE.R")
+              fileConn<-file(paste0(pkg.global.path.prefix$data_path, "Rscript/RNASEQ_PIPELINE.R"))
               first <- "library(RNASeq)"
               second <- paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '", num.parallel.threads = "', num.parallel.threads, '")')
               writeLines(c(first, second), fileConn)
               close(fileConn)
               cat(c(paste0(" Local : Run command 'R CMD BATCH ", getwd(), "/Rscript/RNASEQ_PIPELINE.R"),  paste0(getwd(), "/Rscript_out/RNASEQ_PIPELINE.Rout"), "&' \n"))
               cat(c(paste0("Server : Run command 'nohup R CMD BATCH ", getwd(), "/Rscript/RNASEQ_PIPELINE.R"),  paste0(getwd(), "/Rscript_out/RNASEQ_PIPELINE.Rout"), "&' \n\n"))
-              on.exit(setwd(current.path))
             }
           }
         }

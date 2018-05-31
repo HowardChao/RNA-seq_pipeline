@@ -7,7 +7,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
     if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
       if (gene.name == "NO_DATA") {
-        cat("(\u2718) :gene.name is missing.\n\n")
+        cat("(\u2718) : gene.name is missing.\n\n")
       }
       if (sample.pattern == "NO_DATA") {
         cat("(\u2718) :sample.pattern is missing.\n\n")
@@ -25,7 +25,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
       }
       input.file.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/"))
       if(!isTRUE(input.file.dir)){
-        cat(c("(\u2718) :", paste0("'",pkg.global.path.prefix$input.files, "input_files/'"), "is not exit. Please check the prefix absolute path of input_files.\n\n"))
+        cat(c("(\u2718) : ", paste0("'",pkg.global.path.prefix$input.files, "input_files/'"), "is not exit. Please check whether prefix absolute path of 'input_files' is valid.\n\n"))
         return(FALSE)
       }
       if (print) {
@@ -46,14 +46,16 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
         ht2.files.number <- length(ht2.files)
       }
       if (!isTRUE(gtf.file)) {
-        cat(paste0("(\u2718) : '", gene.name, ".gtf'", " is missing.\n"))
+        grab.gtf.file <- Sys.glob(file.path(path = paste0(pkg.global.path.prefix$input.files, 'input_files'), "*.gtf"))
+        cat(paste0("(\u2718) : '", gene.name, ".gtf(user input)' and '", grab.gtf.file, "(find in directory)' ", " are mismatched.\n"))
       } else {
         if (print) {
           cat(paste0("(\u2714) : '", gene.name, ".gtf'", " is in 'input_files'\n"))
         }
       }
       if (!isTRUE(fa.file)) {
-        cat(paste0("(\u2718) : '", gene.name, ".fa'", " is missing.\n"))
+        grab.fa.file <- Sys.glob(file.path(path = paste0(pkg.global.path.prefix$input.files, 'input_files'), "*.fa"))
+        cat(paste0("(\u2718) : '", gene.name, ".fa(user input)' and '", grab.fa.file, "(find in directory)' ", " are mismatched.\n"))
       } else {
         if (print) {
           cat(paste0("(\u2714) : '", gene.name, ".fa'", " is in 'input_files'\n"))
@@ -67,7 +69,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
         }
       }
       if (isTRUE(raw.fastq.dir) && raw.fastq.number == 0) {
-        cat(c("(\u2718) : There are no samples in 'raw_fastq.gz/' or samples' names in 'raw_fastq.gz/' are incorrect.\n"))
+        cat(paste0("(\u2718) : Sample pattern \"", sample.pattern ,"\" is not found in 'raw_fastq.gz/'.\n"))
       } else if (isTRUE(raw.fastq.dir) && raw.fastq.number >= 0) {
         if (print){
           for (i in raw.fastq) {
@@ -96,7 +98,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
         }
       }
       if (isTRUE(ht2.dir) && ht2.files.number == 0) {
-        cat(c("(\u26A0) : 'indexes/' directory has been created but there are no samples in 'indexes/' or files' names in 'indexes/' are incorrect.\n      No files will be copied.\n      (1). Make sure files name are", paste0("'", gene.name, "_tran.[0-9].ht2'"), "\n      (2). If you don't have", paste0("'", gene.name, "_tran.[0-9].ht2'"), "files, remove 'indexes' directory\n\n"))
+        cat(c("(\u26A0) : 'indexes/' directory has been created but there are no samples in 'indexes/' or files' names", paste0("\"^", gene.name, "_tran.[0-9]*.ht2$\""), "in 'indexes/' are not found.\n      No files will be copied.\n      (1). Check whether files name", paste0("'", gene.name, "_tran.[0-9]*.ht2'"), "matches the files in 'indexes' directory.\n      (2). If you don't have", paste0("'", gene.name, "_tran.[0-9].ht2'"), "files, remove 'indexes' directory\n\n"))
         return(FALSE)
       } else if (isTRUE(ht2.dir) && ht2.files.number >= 0) {
         pkg.global.ht2$logic <- TRUE

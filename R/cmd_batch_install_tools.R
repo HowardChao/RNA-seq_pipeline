@@ -20,7 +20,6 @@ InstallToolsCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NO
         # CheckInputDirFiles will determin whether 'gene.name' and 'sample.pattern' is valid !!
         MkdirAll()
         if (isTRUE(CheckDirAll(print = TRUE))){
-          current.path <- getwd()
           setwd(pkg.global.path.prefix$data_path)
           r_script.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'Rscript/')), showWarnings = FALSE) == 0
           r_script.out.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'Rscript_out/')), showWarnings = FALSE) == 0
@@ -36,7 +35,6 @@ InstallToolsCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NO
           close(fileConn)
           cat(c(paste0(" Local : Run command 'R CMD BATCH ", getwd(), "/Rscript/INSTALL_TOOLS.R"),  paste0(getwd(), "/Rscript_out/INSTALL_TOOLS.Rout"), "&' \n"))
           cat(c(paste0("Server : Run command 'nohup R CMD BATCH ", getwd(), "/Rscript/INSTALL_TOOLS.R"),  paste0(getwd(), "/Rscript_out/INSTALL_TOOLS.Rout"), "&' \n\n"))
-          on.exit(setwd(current.path))
         }
       }
     }

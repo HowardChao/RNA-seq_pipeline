@@ -19,4 +19,6 @@ Depends:
     ballgown,
     rafalib,
     factoextra,
-    FactoMineR
+    FactoMineR,
+    corrplot,
+    PerformanceAnalytics

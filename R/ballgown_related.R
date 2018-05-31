@@ -1,6 +1,6 @@
 pkg.ballgown.data <- new.env()
-pkg.ballgown.data$bg_chrX <- ""
-pkg.ballgown.data$bg_chrX_filt <- ""
+pkg.ballgown.data$bg_chrX <- NULL
+pkg.ballgown.data$bg_chrX_filt <- NULL
 
 #' Run ballgown analysis
 #' @export
@@ -100,6 +100,18 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
     }
   }
 }
+
+#' load ballgown object
+#' @export
+LoadBallgownObject <- function() {
+  if(isTRUE(file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda")))) {
+    load(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
+    pkg.ballgown.data$bg_chrX <- bg
+  } else {
+    cat(paste0("(\u2718) : '", paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"), "' haven't created yet. Please run \"BallgownPreprocess(gene.name, sample.pattern, covariate)\" first.\n\n"))
+  }
+}
+
 
 #' check pkg.ballgown.data
 #' @export

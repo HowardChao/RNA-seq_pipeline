@@ -19,5 +19,8 @@
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Finput_files_directory.R="FA2FF3EB"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Finstall_tools.R="D9A19111"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fprefix_path_setting.R="D3B450A2"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FprepDE.py_create_count_table="43B8F029"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FprepDE_create_count_table="151EEC42"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FprepDE_create_count_table.R="4A156395"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fsamtools_related.R="5E28A1D7"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fstringtie_related.R="2E4D4D1A"

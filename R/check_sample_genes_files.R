@@ -11,8 +11,6 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
       }
       return(FALSE)
     } else {
-      current.path <- getwd()
-      setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
       if (print) {
         cat(paste0("************** Current progress of RNA-seq files in '", paste0(pkg.global.path.prefix$data_path, "gene_data/'"), " **************\n"))
       }
@@ -177,8 +175,6 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         cat(c("(\u231B) :", paste0('\'',pkg.global.path.prefix$data_path, "gene_data", '/ballgown/', gsub(".fastq.gz", replace = "", sample.pattern), "/"), "is not exit\n"))
         cat("       Directories haven't created yet. Run 'StringTieToBallgown()' to generate", paste0("ballgown/", sample.pattern, "/"), "directories\n\n")
       }
-
-      on.exit(setwd(current.path))
       return(list(gtf.file.logic.df = gtf.file, fa.file.logic.df = fa.file,
                   fastq.gz.files.number.df = fastq.gz.files.number,
                   fastq.gz.files.df = fastq.gz.files,
