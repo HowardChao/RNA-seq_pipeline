@@ -20,10 +20,9 @@ InstallToolsCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NO
         # CheckInputDirFiles will determin whether 'gene.name' and 'sample.pattern' is valid !!
         MkdirAll()
         if (isTRUE(CheckDirAll(print = TRUE))){
-          setwd(pkg.global.path.prefix$data_path)
           r_script.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'Rscript/')), showWarnings = FALSE) == 0
           r_script.out.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'Rscript_out/')), showWarnings = FALSE) == 0
-          fileConn<-file("Rscript/INSTALL_TOOLS.R")
+          fileConn<-file(paste0(pkg.global.path.prefix$data_path, "Rscript/INSTALL_TOOLS.R"))
           first <- "library(RNASeq)"
           second <- paste0("SetPrefixPath('", pkg.global.path.prefix$data_path, "')")
           third <- paste0('CheckInputDirFiles(input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '")')
@@ -33,8 +32,8 @@ InstallToolsCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NO
           seventh <- "CheckToolAll()"
           writeLines(c(first, second, third, fourth, fifth, sixth, seventh), fileConn)
           close(fileConn)
-          cat(c(paste0(" Local : Run command 'R CMD BATCH ", getwd(), "/Rscript/INSTALL_TOOLS.R"),  paste0(getwd(), "/Rscript_out/INSTALL_TOOLS.Rout"), "&' \n"))
-          cat(c(paste0("Server : Run command 'nohup R CMD BATCH ", getwd(), "/Rscript/INSTALL_TOOLS.R"),  paste0(getwd(), "/Rscript_out/INSTALL_TOOLS.Rout"), "&' \n\n"))
+          system2(command = 'R', args = paste0("CMD BATCH ", pkg.global.path.prefix$data_path, "/Rscript/INSTALL_TOOLS.R ", pkg.global.path.prefix$data_path, "/Rscript_out/INSTALL_TOOLS.Rout"), stdout = "", wait = FALSE)
+          cat(paste0("\u2605 Tools are installing in the background. Check current progress in '", pkg.global.path.prefix$data_path, "/Rscript_out/INSTALL_TOOLS.Rout'\n\n"))
         }
       }
     }

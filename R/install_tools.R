@@ -197,6 +197,6 @@ InstallAll <- function() {
     BinaryStringTie()
     BinaryGffcompare()
     BinarySamtools()
-    return(CheckToolAll(print=TRUE))
+    return(CheckToolAll(print=FALSE))
     #sink()
 }

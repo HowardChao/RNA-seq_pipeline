@@ -32,5 +32,13 @@ PreDECountTable <- function(sample.pattern="NO_DATA", print=TRUE) {
 #' DEG analysis with edgeR
 #' @export
 DEGedgeRPlot <- function() {
-
+  # likelihood ratio test and quasi-likelihood F-test
+  pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
+  x <- read.csv("gene_count_matrix.csv")
+  group <- pheno_data$sex
+  y <- DGEList(counts=x[-1], group = group)
+  keep <- rowSums(cpm(y)>1) >= 2
+  y <- y[keep, , keep.lib.sizes=FALSE]
+  y <- calcNormFactors(y)
+  y$samples
 }

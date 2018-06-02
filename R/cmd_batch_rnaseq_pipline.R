@@ -30,8 +30,8 @@ RNAseqPipelineCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "
               second <- paste0('RNAseqPipeline(path.prefix = "', path.prefix, '", input.path.prefix = "', input.path.prefix, '", gene.name = "', gene.name, '", sample.pattern = "', sample.pattern, '", num.parallel.threads = "', num.parallel.threads, '")')
               writeLines(c(first, second), fileConn)
               close(fileConn)
-              cat(c(paste0(" Local : Run command 'R CMD BATCH ", getwd(), "/Rscript/RNASEQ_PIPELINE.R"),  paste0(getwd(), "/Rscript_out/RNASEQ_PIPELINE.Rout"), "&' \n"))
-              cat(c(paste0("Server : Run command 'nohup R CMD BATCH ", getwd(), "/Rscript/RNASEQ_PIPELINE.R"),  paste0(getwd(), "/Rscript_out/RNASEQ_PIPELINE.Rout"), "&' \n\n"))
+              system2(command = 'R', args = paste0("CMD BATCH ", pkg.global.path.prefix$data_path, "/Rscript/RNASEQ_PIPELINE.R ", pkg.global.path.prefix$data_path, "/Rscript_out/RNASEQ_PIPELINE.Rout"), stdout = "", wait = FALSE)
+              cat(paste0("\u2605 RNAseq alignment, assembly, mergence, comparison, reads preprocess are doing in the background. Check current progress in '", pkg.global.path.prefix$data_path, "/Rscript_out/RNASEQ_PIPELINE.Rout'\n\n"))
             }
           }
         }

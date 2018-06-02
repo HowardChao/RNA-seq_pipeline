@@ -5,17 +5,16 @@ pkg.global.ht2$logic <- FALSE
 #' @export
 CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA", sample.pattern = "NO_DATA", print=TRUE) {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
-    if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+    if (input.path.prefix == "NOT_SET_YET" ||gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
+      if (input.path.prefix == "NOT_SET_YET") {
+        cat("(\u2718) : 'input.path.prefix' is missing.\n     Can't check input file directory.\n\n")
+      }
       if (gene.name == "NO_DATA") {
-        cat("(\u2718) : gene.name is missing.\n\n")
+        cat("(\u2718) : 'gene.name' is missing.\n\n")
       }
       if (sample.pattern == "NO_DATA") {
-        cat("(\u2718) :sample.pattern is missing.\n\n")
+        cat("(\u2718) : 'sample.pattern' is missing.\n\n")
       }
-      return(FALSE)
-    }
-    if (input.path.prefix == "NOT_SET_YET") {
-      cat("(\u2718) : Directory to 'input_files/' is missing.\n     Can't check input file directory.\n\n")
       return(FALSE)
     } else {
       if (substr(input.path.prefix, nchar(input.path.prefix), nchar(input.path.prefix)) != '/') {
@@ -32,10 +31,15 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
         cat(c("************** Checking hierarchy of", paste0("'", pkg.global.path.prefix$input.files, 'input_files/\''), "************\n"))
         cat(c("(\u2714) : Prefix of input_files", paste0("'",pkg.global.path.prefix$input.files, "'"), "is valid\n\n"))
       }
+      # only check whether exist
       gtf.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene.name, ".gtf"))
+      # only check whether exist
       fa.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/",gene.name, ".fa"))
+      # check exist and rules
       raw.fastq.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/raw_fastq.gz/"))
+      # check exist and rules
       phenodata.file <- file.exists(paste0(pkg.global.path.prefix$input.files, "input_files/phenodata.csv"))
+      # check exist and rules
       ht2.dir <- dir.exists(paste0(pkg.global.path.prefix$input.files, "input_files/indexes/"))
       if (isTRUE(raw.fastq.dir)) {
         raw.fastq <- list.files(path = paste0(pkg.global.path.prefix$input.files, 'input_files/raw_fastq.gz/'), pattern = sample.pattern, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
@@ -47,7 +51,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
       }
       if (!isTRUE(gtf.file)) {
         grab.gtf.file <- Sys.glob(file.path(path = paste0(pkg.global.path.prefix$input.files, 'input_files'), "*.gtf"))
-        cat(paste0("(\u2718) : '", gene.name, ".gtf(user input)' and '", grab.gtf.file, "(find in directory)' ", " are mismatched.\n"))
+        cat(paste0("(\u2718) : '", gene.name, ".gtf (user input)' and '", grab.gtf.file, " (find in directory)' ", " are mismatched.\n"))
       } else {
         if (print) {
           cat(paste0("(\u2714) : '", gene.name, ".gtf'", " is in 'input_files'\n"))
@@ -55,7 +59,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
       }
       if (!isTRUE(fa.file)) {
         grab.fa.file <- Sys.glob(file.path(path = paste0(pkg.global.path.prefix$input.files, 'input_files'), "*.fa"))
-        cat(paste0("(\u2718) : '", gene.name, ".fa(user input)' and '", grab.fa.file, "(find in directory)' ", " are mismatched.\n"))
+        cat(paste0("(\u2718) : '", gene.name, ".fa (user input)' and '", grab.fa.file, " (find in directory)' ", " are mismatched.\n"))
       } else {
         if (print) {
           cat(paste0("(\u2714) : '", gene.name, ".fa'", " is in 'input_files'\n"))
@@ -84,8 +88,34 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
           cat(paste0("(\u2714) : '", "phenodata.csv is in 'input_files'\n"))
         }
       }
-
-
+      invalid.column.number <- -1
+      pheno_data <- read.csv(paste0(pkg.global.path.prefix$input.files, "/input_files/phenodata.csv"))
+      sample.table <- as.data.frame(table(pheno_data[1]))
+      compare.sample.table <- as.data.frame(table(pheno_data[2]))
+      extract.fastq.gz.sample.names <- unique(gsub("_[1-2]*.fastq.gz", "", raw.fastq))
+      if(length(extract.fastq.gz.sample.names) == length(row.names(sample.table))){
+        # check the number of sample(rows) in 'phenodata.csv' is same as the number of unique samples in 'fastq.gz.files'
+        if(identical(sort(extract.fastq.gz.sample.names), sort(as.character(sample.table[1][,1])))){
+          # check all the name in bath 'phenodata.csv' and 'fastq.gz.files' are same
+          if (length(row.names(compare.sample.table)) == 2) {
+            ## only two groups are allowed
+            invalid.column.number <- 0
+            for( i in 1:length(pheno_data) ){
+              if(length(pheno_data[i][is.na(pheno_data[i]) == TRUE]) != 0) {
+                invalid.column.number <- invalid.column.number + 1
+                cat(paste0("(\u2718) : There are missing values in column '", names(pheno_data[i]), "'\n" ))
+              }
+            }
+            if (invalid.column.number != 0) {
+              cat(paste0("(\u2718) : ", invalid.column.number, " columns are invalid. Please fix 'phenodata.csv'\n\n" ))
+            }
+          }
+        } else {
+          cat(paste0("(\u2718) : Sample names in 'phenodata.csv' and 'XXX.fastq.gz' are different. Please check 'phenodata.csv' matches the 'XXX.fastq.gz'\n\n" ))
+        }
+      } else {
+        cat(paste0("(\u2718) : The sample's numbers in 'phenodata.csv' and 'XXX.fastq.gz' are different. Please check 'phenodata.csv' matches the 'XXX.fastq.gz'\n\n" ))
+      }
       if (!isTRUE(ht2.dir)) {
         ## not exist
         if (print) {
@@ -108,7 +138,7 @@ CheckInputDirFiles <- function(input.path.prefix = "NOT_SET_YET", gene.name = "N
           }
         }
       }
-      if (isTRUE(gtf.file) && isTRUE(raw.fastq.dir) && isTRUE(raw.fastq.dir) && raw.fastq.number != 0 && isTRUE(phenodata.file)) {
+      if (isTRUE(gtf.file) && isTRUE(raw.fastq.dir) && isTRUE(raw.fastq.dir) && raw.fastq.number != 0 && isTRUE(phenodata.file) && invalid.column.number == 0 ) {
         if (print) {
           cat(c(paste0("\n(\u2714) : '", pkg.global.path.prefix$input.files,"input_files/", "'"), "is valid !\n"))
           if (isTRUE(ht2.dir) && ht2.files.number != 0) {

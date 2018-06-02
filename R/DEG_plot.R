@@ -14,8 +14,11 @@ DEGVolcanoPlot <- function() {
     par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
     topT <- as.data.frame(DEG_dataset)
     with(topT, plot(log2FC, -log10(pval), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value), xlim=c(-15,15), ylim = c(0,12)))
-    with(subset(topT, pval<0.05 & abs(log2FC)>3), points(log2FC, -log10(pval), pch=20, col="red"))
-    with(subset(topT, pval<0.05 & log2FC< -3), points(log2FC, -log10(pval), pch=20, col="green"))
+    # user4 input pvalue log2FC
+    # pval to qvalue
+    with(subset(topT, pval<0.05 & abs(log2FC)>=1), points(log2FC, -log10(pval), pch=20, col="red"))
+    with(subset(topT, pval<0.05 & log2FC<= -1), points(log2FC, -log10(pval), pch=20, col="green"))
+    # hight = -log10(pavl) = height
     abline(v=c(-3,3), h=2, col="black", lty='dashed')
     #abline(v=0, col="black", lty=3, lwd=1.0)
     #abline(v=-2, col="black", lty=4, lwd=2.0)
