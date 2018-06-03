@@ -93,7 +93,6 @@ DEGFrequencyPlot <- function() {
   }
 }
 
-
 #'
 #' @export
 DEGTranscriptRelatedPlot <- function(){
@@ -252,17 +251,14 @@ DEGCorrelationPlot <- function(){
       for(j in 1:pheno.data.table$Freq[i]){
         a <- j + 4 + count + (i-1)
         select.column <- c(select.column, a)
-        #count <- count+j
-        #print(count)
       }
       count <- count + pheno.data.table$Freq[i]
     }
     res <- round(cor(head(DEG_dataset[select.column]), method = c("pearson", "kendall", "spearman")), 3)
     # Correlation_dot_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_dot_plot.png"))
-    p1 <- corrplot(res, type = "upper", order = "hclust",
+    corrplot(res, type = "upper", order = "hclust",
              tl.col = "black", tl.srt = 45)
-    print(p1)
     dev.off()
 
     # Correlation_plot.png
@@ -274,7 +270,8 @@ DEGCorrelationPlot <- function(){
     # Correlation_heat_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_heat_plot.png"))
     melted_res <- melt(res)
-    ggheatmap <- ggplot(melted_res, aes(Var2, Var1, fill = value))+
+    colnames(melted_res) <- c("Var1", "Var2", "value")
+    ggheatmap <- ggplot(melted_res, aes(Var1, Var2, fill = value))+
       geom_tile(color = "white")+
       scale_fill_gradient2(low = "blue", high = "red", mid = "white",
                            midpoint = 0, limit = c(-1,1), space = "Lab",

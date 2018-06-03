@@ -23,4 +23,8 @@ Depends:
     corrplot,
     PerformanceAnalytics,
     edgeR,
-    DESeq2
+    DESeq2,
+    stringr,
+    gridExtra,
+    grid,
+    reshape2

@@ -14,6 +14,7 @@
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fcreate_dir.R="29E1C903"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fdefault_setting.R="53B998C9"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fgffcompare_related.R="4CA0FECE"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fglobal_variable.R="8A60BC7F"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fhaha%2Ftry.R="1E56DEBA"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fhello.R="8725EDC2"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fhisat2_related.R="8ADF6C6B"
@@ -27,3 +28,5 @@
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Frna_reads_process.R="304ED387"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fsamtools_related.R="5E28A1D7"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fstringtie_related.R="2E4D4D1A"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Futility_installtool_and_rnaseqpipline.R="E21E35F2"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Futility_installtool_rnaseqpipline.R="94341A3B"
