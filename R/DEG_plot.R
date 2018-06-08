@@ -1,25 +1,25 @@
 #' DEG volcanplot
 #' @export
-DEGVolcanoPlot <- function() {
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+DEGVolcanoPlot <- function(select.pval=0.05, select.log2FC=1) {
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     cat(paste0("************** Plotting Volcano plot **************\n"))
-    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))
+    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))
     ## Volcano plot
     # Make a basic volcano plot
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Volcano_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Volcano_plot.png"))
     par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
     topT <- as.data.frame(DEG_dataset)
     with(topT, plot(log2FC, -log10(pval), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value), xlim=c(-15,15), ylim = c(0,12)))
     # user4 input pvalue log2FC
     # pval to qvalue
-    with(subset(topT, pval<0.05 & abs(log2FC)>=1), points(log2FC, -log10(pval), pch=20, col="red"))
-    with(subset(topT, pval<0.05 & log2FC<= -1), points(log2FC, -log10(pval), pch=20, col="green"))
+    with(subset(topT, pval<select.pval & abs(log2FC)>=select.log2FC), points(log2FC, -log10(pval), pch=20, col="red"))
+    with(subset(topT, pval<select.pval & log2FC<= -1*select.log2FC), points(log2FC, -log10(pval), pch=20, col="green"))
     # hight = -log10(pavl) = height
-    abline(v=c(-3,3), h=2, col="black", lty='dashed')
+    abline(v=c(-1*select.log2FC,select.log2FC), h=-1*log10(select.pval), col="black", lty='dashed')
     #abline(v=0, col="black", lty=3, lwd=1.0)
     #abline(v=-2, col="black", lty=4, lwd=2.0)
     #abline(v=2, col="black", lty=4, lwd=2.0)
@@ -37,15 +37,15 @@ DEGVolcanoPlot <- function() {
 #'
 #' @export
 DEGMAPlot <- function() {
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     cat(paste0("************** Plotting MA plot **************\n"))
-    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))
+    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))
     ## Ma plot
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/MA_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/MA_plot.png"))
     p <- ggplot(DEG_dataset, aes(log2(FPKM.all.mean), log2FC, colour = qval<0.05)) +
       scale_color_manual(values=c("#999999", "#FF0000")) +
       geom_point() +
@@ -61,15 +61,15 @@ DEGMAPlot <- function() {
 #' Frequency plot
 #' @export
 DEGFrequencyPlot <- function() {
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     cat(paste0("************** Plotting  Frequency plot **************\n"))
-    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))
+    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))
     # frequency plot
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Frequency_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Frequency_plot.png"))
     pms <- DEG_dataset
     mypar(1, 1)
     pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
@@ -97,24 +97,24 @@ DEGFrequencyPlot <- function() {
 #' @export
 DEGTranscriptRelatedPlot <- function(){
   # draw for distribution of transcript count per gene
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     if (is.null(pkg.ballgown.data$bg_chrX)) {
       LoadBallgownObject()
     } else {
       cat(paste0("************** Plotting transcript related plot **************\n"))
-      if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Transcript_Related/"))){
-        dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Transcript_Related/"))
+      if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Transcript_Related/"))){
+        dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Transcript_Related/"))
       }
       transcript_gene_table <- indexes(pkg.ballgown.data$bg_chrX)$t2g
       counts=table(transcript_gene_table[,"g_id"])
       c_one = length(which(counts == 1))
       c_more_than_one = length(which(counts > 1))
       c_max = max(counts)
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Transcript_Related/Distribution_transcript_count_per_gene_plot.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Transcript_Related/Distribution_transcript_count_per_gene_plot.png"))
       hist(counts, breaks=50, col="bisque4", xlab="Transcripts per gene", main="Distribution of transcript count per gene")
       legend_text = c(paste("Genes with one transcript =", c_one), paste("Genes with more than one transcript =", c_more_than_one), paste("Max transcripts for single gene = ", c_max))
       legend("topright", legend_text, lty=NULL)
@@ -124,7 +124,7 @@ DEGTranscriptRelatedPlot <- function(){
       full_table <- texpr(pkg.ballgown.data$bg_chrX, 'all')
       t.mini.length = min(full_table$length[full_table$length > 0])
       t.max.length = max(full_table$length[full_table$length > 0])
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Transcript_Related/Distribution_transcript_length_plot.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Transcript_Related/Distribution_transcript_length_plot.png"))
       hist(full_table$length, breaks=50, xlab="Transcript length (bp)", main="Distribution of transcript lengths", col="steelblue")
       legend_text = c(paste("Minimum transcript length =", t.mini.length), paste("Maximum transcript length =", t.max.length))
       legend("topright", legend_text, lty=NULL)
@@ -136,10 +136,10 @@ DEGTranscriptRelatedPlot <- function(){
 #'
 #' @export
 DEGFPKMBoxPlot <- function() {
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     if (is.null(pkg.ballgown.data$bg_chrX)) {
       LoadBallgownObject()
@@ -151,7 +151,7 @@ DEGFPKMBoxPlot <- function() {
       palette(tropical)
       fpkm = data.frame(texpr(pkg.ballgown.data$bg_chrX,meas="FPKM"))
       fpkm = log2(fpkm+1)
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/FPKM_box_plot.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/FPKM_box_plot.png"))
       boxplot(fpkm, col=as.numeric(pheno.data$sex), las=2, ylab='log2(FPKM+1)')
       dev.off()
     }
@@ -162,17 +162,17 @@ DEGFPKMBoxPlot <- function() {
 #' @export
 DEGPCAPlot <- function(){
   # http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     if (is.null(pkg.ballgown.data$bg_chrX)) {
       LoadBallgownObject()
     } else {
       cat(paste0("************** Plotting PCA plot **************\n"))
-      if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/"))){
-        dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/"))
+      if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/"))){
+        dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/"))
       }
       fpkm <- data.frame(texpr(pkg.ballgown.data$bg_chrX,meas="FPKM"))
       fpkm.trans <- data.frame(t(fpkm))
@@ -187,7 +187,7 @@ DEGPCAPlot <- function(){
       # scale.unit = TRUE ==> the data are scaled to unit variance before the analysis.
       fpkm.pca <- PCA(fpkm.trans.sort[,-ncol(fpkm.trans.sort)], scale.unit = TRUE, ncp = 2, graph = FALSE)
       eig.val <- get_eigenvalue(fpkm.pca)
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/Dimension_pca_plot.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/Dimension_pca_plot.png"))
       p1 <- fviz_eig(fpkm.pca, addlabels = TRUE, ylim = c(0, 50), title = "PCA Dimensions")
       print(p1)
       dev.off()
@@ -195,7 +195,7 @@ DEGPCAPlot <- function(){
       #var$cos2: represents the quality of representation for variables on the factor map. It’s calculated as the squared coordinates: var.cos2 = var.coord * var.coord.
       #var$contrib: contains the contributions (in percentage) of the variables to the principal components. The contribution of a variable (var) to a given principal component is (in percentage) : (var.cos2 * 100) / (total cos2 of the component).
       #var <- get_pca_var(res.pca)
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/PCA_plot_factoextra.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/PCA_plot_factoextra.png"))
       p2 <- fviz_pca_ind(fpkm.pca,
                    title = "Principal Component Analysis",
                    xlab = paste0("PC1(", round(data.frame(eig.val)$variance.percent[1], 2), "%)"), ylab = paste0("PC2(", round(data.frame(eig.val)$variance.percent[2],2), "%)"),
@@ -204,14 +204,14 @@ DEGPCAPlot <- function(){
                    pointsize = 2.5,
                    geom.ind = "point", # show points only (nbut not "text")
                    fill.ind = fpkm.trans.sort$attribute,
-                   col.ind = fpkm.trans.sort$attribute, # color by groups
+                   col.ind = fpkm.trans.sort$attribute # color by groups
                    #palette = c("#00AFBB", "#E7B800"),
                    #                 addEllipses = TRUE, # Concentration ellipses
       )
       print(p2)
       dev.off()
 
-      png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/PCA/PCA_plot_self.png"))
+      png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/PCA_plot_self.png"))
       fpkm.trans.sort$attribute <- factor(fpkm.trans.sort$attribute)
       length(fpkm.trans.sort)
       FPKM.res.PCA = PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort))
@@ -233,16 +233,16 @@ DEGPCAPlot <- function(){
 #'
 #' @export
 DEGCorrelationPlot <- function(){
-  if(file.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))){
+  if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
     # load gene name for further usage
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images"))
     }
     cat(paste0("************** Plotting Correlation plot **************\n"))
-    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/"))){
-      dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/"))
+    if(!dir.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/"))){
+      dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/"))
     }
-    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"))
+    DEG_dataset <- read.csv(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))
     pheno.data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
     pheno.data.table <- as.data.frame(table(pheno.data[2]))
     count <- 0
@@ -256,19 +256,19 @@ DEGCorrelationPlot <- function(){
     }
     res <- round(cor(head(DEG_dataset[select.column]), method = c("pearson", "kendall", "spearman")), 3)
     # Correlation_dot_plot.png
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_dot_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_dot_plot.png"))
     corrplot(res, type = "upper", order = "hclust",
              tl.col = "black", tl.srt = 45)
     dev.off()
 
     # Correlation_plot.png
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_plot.png"))
     p2 <- chart.Correlation(res, histogram=TRUE, pch=19)
     print(p2)
     dev.off()
 
     # Correlation_heat_plot.png
-    png(paste0(pkg.global.path.prefix$data_path, "DEG_results/images/Correlation/Correlation_heat_plot.png"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_heat_plot.png"))
     melted_res <- melt(res)
     colnames(melted_res) <- c("Var1", "Var2", "value")
     ggheatmap <- ggplot(melted_res, aes(Var1, Var2, fill = value))+

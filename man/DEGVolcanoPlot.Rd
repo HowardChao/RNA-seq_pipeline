@@ -4,7 +4,7 @@
 \alias{DEGVolcanoPlot}
 \title{DEG volcanplot}
 \usage{
-DEGVolcanoPlot()
+DEGVolcanoPlot(select.pval = 0.05, select.log2FC = 1)
 }
 \description{
 DEG volcanplot

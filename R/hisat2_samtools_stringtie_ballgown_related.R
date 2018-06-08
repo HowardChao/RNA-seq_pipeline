@@ -114,6 +114,48 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
   }
 }
 
+#'
+#'@export
+Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"){
+  check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=FALSE)
+  cat(paste0("\n************** Reporting hisat2 alignment **************\n"))
+  if (isTRUE(check.results$phenodata.file.df) && check.results$phenodata.invalid.column.number.df == 0 && check.results$bam.files.number.df != 0){
+    file.read <- paste0(pkg.global.path.prefix$data_path, "Rscript_out/RNASEQ_PIPELINE.Rout")
+    sample.name <- sort(gsub(paste0(".bam$"), replace = "", check.results$bam.files.df))
+    iteration.num <- length(sample.name)
+    load.data <- readChar(file.read, file.info(file.read)$size)
+    # overall alignment rate
+    overall.alignment <- strsplit(load.data, "\n")
+    overall.alignment.with.NA <- str_extract(overall.alignment[[1]], "[0-9]*.[0-9]*% overall alignment rate")
+    overall.alignment.result <- overall.alignment.with.NA[!is.na(overall.alignment.with.NA)]
+    overall.alignment.result.cut <- gsub(" overall alignment rate", " ", overall.alignment.result)
+    # different mapping rate
+    first.split <- strsplit(load.data, "\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* Hisat2 Aligning \\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\n")
+    second.split <- strsplit(first.split[[1]][2], "\n\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* Current progress of RNA-seq files in")
+    split.lines <- strsplit(second.split[[1]][1], "\n")
+    alignment.rate.with.NA <- str_extract(split.lines[[1]], "[0-9]* \\([0-9]*.[0-9]*%\\) aligned concordantly")
+    alignment.first.result <- alignment.rate.with.NA[!is.na(alignment.rate.with.NA)]
+    alignment.first.result.cut1 <- gsub(") aligned concordantly", " ", alignment.first.result)
+    alignment.first.result.cut2 <- gsub("[0-9]* \\(", " ", alignment.first.result.cut1)
+    report.data.frame <- data.frame(matrix(0, ncol = 0, nrow = 3))
+    row.names(report.data.frame) <- c("Unique mapping rate", "Multiple mapping rate", "Overall alignment rate")
+    for( i in 1:iteration.num){
+      add.column <- c()
+      for( j in (i*3-1):(i*3)){
+        add.column <- c(add.column, alignment.first.result.cut2[j])
+      }
+      add.column <- c(add.column, overall.alignment.result.cut[i])
+      report.data.frame[[(sample.name[i])]] <- add.column
+    }
+    dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/"))
+    write.csv(report.data.frame, file = paste0(pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/Alignment_report.csv"))
+    png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/Alignment_report.png"), width = iteration.num*100 + 50, height = 40*4)
+    p <- grid.table(report.data.frame)
+    print(p)
+    dev.off()
+  }
+}
+
 #' use 'samtools' to sort and convert the SAM files to BAM
 #' @export
 SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num.parallel.threads = 8) {
@@ -270,48 +312,6 @@ StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
   }
 }
 
-#'
-#'@export
-StringTieReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"){
-  check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=FALSE)
-  cat(paste0("\n************** Reporting stringtie alignment **************\n"))
-  if (isTRUE(check.results$phenodata.file.df) && check.results$phenodata.invalid.column.number.df == 0 && check.results$bam.files.number.df != 0){
-    file.read <- paste0(pkg.global.path.prefix$data_path, "Rscript_out/RNASEQ_PIPELINE.Rout")
-    sample.name <- sort(gsub(paste0(".bam$"), replace = "", check.results$bam.files.df))
-    iteration.num <- length(sample.name)
-    load.data <- readChar(file.read, file.info(file.read)$size)
-    # overall alignment rate
-    overall.alignment <- strsplit(load.data, "\n")
-    overall.alignment.with.NA <- str_extract(overall.alignment[[1]], "[0-9]*.[0-9]*% overall alignment rate")
-    overall.alignment.result <- overall.alignment.with.NA[!is.na(overall.alignment.with.NA)]
-    overall.alignment.result.cut <- gsub(" overall alignment rate", " ", overall.alignment.result)
-    # different mapping rate
-    first.split <- strsplit(load.data, "\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* Hisat2 Aligning \\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\n")
-    second.split <- strsplit(first.split[[1]][2], "\n\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* Current progress of RNA-seq files in")
-    split.lines <- strsplit(second.split[[1]][1], "\n")
-    alignment.rate.with.NA <- str_extract(split.lines[[1]], "[0-9]* \\([0-9]*.[0-9]*%\\) aligned concordantly")
-    alignment.first.result <- alignment.rate.with.NA[!is.na(alignment.rate.with.NA)]
-    alignment.first.result.cut1 <- gsub(") aligned concordantly", " ", alignment.first.result)
-    alignment.first.result.cut2 <- gsub("[0-9]* \\(", " ", alignment.first.result.cut1)
-    report.data.frame <- data.frame(matrix(0, ncol = 0, nrow = 3))
-    row.names(report.data.frame) <- c("Unique mapping rate", "Multiple mapping rate", "Overall alignment rate")
-    for( i in 1:iteration.num){
-      add.column <- c()
-      for( j in (i*3-1):(i*3)){
-        add.column <- c(add.column, alignment.first.result.cut2[j])
-      }
-      add.column <- c(add.column, overall.alignment.result.cut[i])
-      report.data.frame[[(sample.name[i])]] <- add.column
-    }
-    dir.create(paste0(pkg.global.path.prefix$data_path, "gene_data/Alignment_Report/"))
-    write.csv(report.data.frame, file = paste0(pkg.global.path.prefix$data_path, "gene_data/Alignment_Report/Alignment_report.csv"))
-    png(paste0(pkg.global.path.prefix$data_path, "gene_data/Alignment_Report/Alignment_report.png"), width = iteration.num*100 + 50, height = 40*4)
-    p <- grid.table(report.data.frame)
-    print(p)
-    dev.off()
-  }
-}
-
 #' Examine how the transcripts compare with the reference annotation
 #' @export
 GffcompareRefSample <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA") {
@@ -367,7 +367,7 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
       cat('\n')
       sample.table <- as.data.frame(table(pheno_data[covariate]))
       if (length(row.names(sample.table)) == 2) {
-        dir.create(paste0(pkg.global.path.prefix$data_path, "DEG_results/"))
+        dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/"))
         cat("\u25CF 2. Sorting phenodata.csv : \n")
         pheno_data.arrange <- arrange(pheno_data, unlist(pheno_data[covariate]))
         print(pheno_data.arrange)
@@ -432,7 +432,7 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         results_transcripts[["pval"]] <- results_transcripts.pval
         results_transcripts[["qval"]] <- results_transcripts.qval
         cat("     \u25CF writing data.frame into 'FPKM_DEG_result.csv' ......'\n\n")
-        write.csv(results_transcripts, paste0(pkg.global.path.prefix$data_path, "DEG_results/FPKM_DEG_result.csv"), row.names=FALSE)
+        write.csv(results_transcripts, paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"), row.names=FALSE)
         cat("\u25CF 5. Printing DEG dataset : \n")
         print(head(results_transcripts))
         cat("\n")

@@ -307,6 +307,20 @@ MkdirRNAseq_bin <- function() {
   }
 }
 
+#' Make RNAseq_results/ directory
+#' @export
+MkdirRNAseq_results <- function(){
+  if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
+    cat("************** Creating 'RNAseq_results/' directory ************\n")
+    RNAseq_results.dir <- dir.create(file.path(paste0(pkg.global.path.prefix$data_path, 'RNAseq_results/')), showWarnings = FALSE) == 0
+    if (!isTRUE(RNAseq_results.dir)) {
+      cat(paste0("(\u2714) : Create '", pkg.global.path.prefix$data_path, "RNAseq_results/'.\n"))
+    } else {
+      cat(paste0("(\u2718) : Fail to create '", pkg.global.path.prefix$data_path, "RNAseq_results/'.\n     Please check whether the directory is already exit.\n"))
+    }
+  }
+}
+
 #' Check sample gene and binary directory
 #' @export
 CheckDirAll <- function(print = TRUE) {
@@ -346,6 +360,7 @@ MkdirAll <- function() {
   if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))) {
     MkdirGeneDir()
     MkdirRNAseq_bin()
+    MkdirRNAseq_results()
   }
 }
 

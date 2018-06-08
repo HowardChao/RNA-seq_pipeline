@@ -5,6 +5,7 @@
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/cmd_batch_install_tools.R="5A243212"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/cmd_batch_rnaseq_pipline.R="690EE15F"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/default_setting.R="DD4A93B4"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/functional_analysis.R="96A4F1EE"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/global_variable.R="1BAAE6DC"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/hisat2_samtools_stringtie_ballgown_related.R="B5606C46"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/prepDE_create_count_table.R="7946F641"
