@@ -32,7 +32,7 @@ InstallToolsCMD <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NO
           seventh <- "CheckToolAll()"
           writeLines(c(first, second, third, fourth, fifth, sixth, seventh), fileConn)
           close(fileConn)
-          system2(command = 'R', args = paste0("CMD BATCH ", pkg.global.path.prefix$data_path, "/Rscript/INSTALL_TOOLS.R ", pkg.global.path.prefix$data_path, "/Rscript_out/INSTALL_TOOLS.Rout"), stdout = "", wait = FALSE)
+          system2(command = 'nohup', args = paste0("R CMD BATCH ", pkg.global.path.prefix$data_path, "/Rscript/INSTALL_TOOLS.R ", pkg.global.path.prefix$data_path, "/Rscript_out/INSTALL_TOOLS.Rout"), stdout = "", wait = FALSE)
           cat(paste0("\u2605 Tools are installing in the background. Check current progress in '", pkg.global.path.prefix$data_path, "/Rscript_out/INSTALL_TOOLS.Rout'\n\n"))
         }
       }
@@ -63,7 +63,6 @@ get_os <- function(){
 InstallHisat2Bianry <- function(){
   os <- as.character(get_os())
   url <- 'ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/'
-  cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/\n"))
   # setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/"))
   if (os == "linux"){
     os.file.name.zip <- "hisat2-2.1.0-Linux_x86_64.zip"
@@ -86,7 +85,7 @@ InstallHisat2Bianry <- function(){
   system2(command = 'unzip', args = paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip," -d ", pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/"))
   current.path <- getwd()
   setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/", os.file.name, "/"))
-  cat("\n************** Moving Hisat2 Binary ************\n")
+  cat("\n************** Moving Hisat2 Binary ************")
   system2(command = 'cp', args = c("hisat2*", "*.py", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/")), stderr = FALSE)
   on.exit(setwd(current.path))
   cat(paste0("\n'", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip,"' has been installed.\n"))
@@ -99,7 +98,6 @@ InstallHisat2Bianry <- function(){
 InstallStringTieBinary <- function(){
   os <- as.character(get_os())
   url <- 'http://ccb.jhu.edu/software/stringtie/dl/'
-  cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/\n"))
   if (os == "linux"){
     os.file.name.zip <- "stringtie-1.3.4d.Linux_x86_64.tar.gz"
     os.file.name <- "stringtie-1.3.4d.Linux_x86_64"
@@ -121,7 +119,7 @@ InstallStringTieBinary <- function(){
   system2(command = 'tar', args = c("xvzf", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip), "-C", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/")))
   current.path <- getwd()
   setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/", os.file.name))
-  cat("\n************** Moving stringtie Binary ************\n")
+  cat("\n************** Moving stringtie Binary ************")
   system2(command = 'cp', args = c("stringtie", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/")), stderr = FALSE)
   on.exit(setwd(current.path))
   cat(paste0("\n'", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip,"' has been installed.\n"))
@@ -135,7 +133,6 @@ InstallGffcompareBinary <- function(){
   os <- as.character(get_os())
   current.path <- getwd()
   url <- 'http://ccb.jhu.edu/software/stringtie/dl/'
-  cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/\n"))
   if (os == "linux"){
     os.file.name.zip <- "gffcompare-0.10.4.Linux_x86_64.tar.gz"
     os.file.name <- "gffcompare-0.10.4.Linux_x86_64"
@@ -157,7 +154,7 @@ InstallGffcompareBinary <- function(){
   system2(command = 'tar', args = c("xvzf", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip), "-C", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/")))
   current.path <- getwd()
   setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/", os.file.name))
-  cat("\n************** Moving gffcompare Binary ************\n")
+  cat("\n************** Moving gffcompare Binary ************")
   system2(command = 'cp', args = c("gffcompare", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/")), stderr = FALSE)
   on.exit(setwd(current.path))
   cat(paste0("\n'", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip,"' has been installed.\n"))
@@ -171,7 +168,6 @@ InstallSamtoolsBinary <- function(){
   os <- as.character(get_os())
   current.path <- getwd()
   url <- 'https://github.com/samtools/samtools/releases/download/1.8/samtools-1.8.tar.bz2'
-  cat(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/\n"))
   if (os == "linux"){
     os.file.name.zip <- "samtools-1.8.tar.bz2"
     os.file.name <- "samtools-1.8"
@@ -188,14 +184,16 @@ InstallSamtoolsBinary <- function(){
     return(FALSE)
   }
   cat(paste0("************** Installing samtools ", "(", os.file.name.zip, ") ************\n"))
-  download.file(url, paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip))
+  system2(command = 'curl', args = c('-L', 'https://github.com/samtools/samtools/releases/download/1.8/samtools-1.8.tar.bz2', '>', paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip)), stdout = "", wait = TRUE)
+  #download.file(url, paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip))
   cat(paste0("\n************** Unpacking samtools ", "(", os.file.name.zip, ") ************\n"))
   system2(command = 'tar', args = c("jxvf", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip), "-C", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/")))
   current.path <- getwd()
+  cat(paste0("\n************** Making samtools ", "(", os.file.name, ") ************"))
   setwd(paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/", os.file.name))
   system2(command = 'make', args = "clean", stderr = FALSE)
   system2(command = 'make')
-  cat("\n************** Moving samtools Binary ************\n")
+  cat("\n************** Moving samtools Binary ************")
   file.copy("samtools", paste0(pkg.global.path.prefix$data_path, "RNAseq_bin/"))
   on.exit(setwd(current.path))
   cat(paste0("\n'", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/", os.file.name.zip,"' has been installed.\n"))
@@ -413,6 +411,11 @@ InstallSamtoolsBinary <- function(){
 #'
 #' Install Hisat2, StringTie, Gffcompare, Samtools
 InstallAll <- function() {
+  cat("\u2618\u2618\u2618\u2618\u2618\u2618\u2618\u2618  Start installing ... \u2618\u2618\u2618\u2618\u2618\u2618\u2618\u2618\n")
+  cat("   \u261E\u261E  \u25CF'hisat2', \u25CF'stringtie', \u25CF'gffcompare', \u25CF'samtools' will be installed. ... \n")
+  cat(paste0("   \u261E\u261E  Compressed files will be in '", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/'"), "\n")
+  cat(paste0("   \u261E\u261E  Unpacked files will be in '", pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/'"), "\n")
+  cat(paste0("   \u261E\u261E  Binary files will be copied to '", pkg.global.path.prefix$data_path, "RNAseq_bin/'"), "\n\n")
   InstallHisat2Bianry()
   InstallStringTieBinary()
   InstallGffcompareBinary()
@@ -516,18 +519,4 @@ CheckToolAll <- function(print=TRUE) {
     return(FALSE)
   }
 }
-
-#' Add '~/RNAseq_bin/ to R environment "PATH"
-#' @export
-ExportPath <- function() {
-  if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
-    cat("************** Adding PATH to R environment ************\n")
-    old.path <- Sys.getenv("PATH")
-    Sys.setenv(
-      PATH = paste(old.path, paste0(pkg.global.path.prefix$data_path, "RNAseq_bin"), sep = ":")
-    )
-    cat("R environment 'PATH' : ", Sys.getenv("PATH"), "\n\n")
-  }
-}
-
 

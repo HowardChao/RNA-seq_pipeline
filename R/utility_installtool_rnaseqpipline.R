@@ -10,7 +10,7 @@ SetPrefixPath <- function(path.prefix = "NOT_SET_YET", print = TRUE) {
     }
     if (print) {
       cat(c("************** Setting prefix path ************\n"))
-      cat(paste0("The following files will be installed under '", pkg.global.path.prefix$data_path, "'\n\n"))
+      cat(paste0("(\u270e) : The following files will be installed under '", pkg.global.path.prefix$data_path, "'\n\n"))
     }
     return(TRUE)
   } else if (path.prefix == "NOT_SET_YET") {
@@ -29,7 +29,7 @@ CheckPrefixPath <- function(path.prefix = pkg.global.path.prefix$data_path, prin
     cat(c("************** Checking prefix path ************\n"))
   }
   if (path.prefix == "NOT_SET_YET") {
-    cat("(\u2718) :You haven't set the prefix directory for the following steps.\n     Please run 'SetPrefixPath()' first to set the prefix directory.\n\n")
+    cat("(\u2718) : You haven't set the prefix directory for the following steps.\n       Please run 'SetPrefixPath()' first to set the prefix directory.\n\n")
     return(FALSE)
   } else {
     if (print) {
@@ -200,7 +200,7 @@ CopyInputDir <- function(input.path.prefix = "NOT_SET_YET", gene.name = "NO_DATA
     if (isTRUE(CheckDirAll(print = FALSE))){
       current.path <- getwd()
       setwd(paste0(pkg.global.path.prefix$data_path, "gene_data/"))
-      cat(c("************** Copying", paste0("'", pkg.global.path.prefix$input.files, "input_files/"), "************\n"))
+      cat(c("************** Copying", paste0("'", pkg.global.path.prefix$input.files, "input_files/'"), "************\n"))
       cat(c("Copying From :", paste0(pkg.global.path.prefix$input.files, "input_files/", gene.name, ".gtf"), "\n"))
       file.copy(paste0(pkg.global.path.prefix$input.files, "input_files/", gene.name, ".gtf"), paste0(getwd(), "/ref_genes/", gene.name, ".gtf"))
       cat(c("          To :"), paste0(getwd(), "/ref_genes/", gene.name, ".gtf", "\n"))
@@ -563,3 +563,18 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
     }
   }
 }
+
+#' Add '~/RNAseq_bin/ to R environment "PATH"
+#' @export
+ExportPath <- function() {
+  if (isTRUE(CheckPrefixPath(pkg.global.path.prefix$data_path, print = FALSE))){
+    cat("************** Adding PATH to R environment ************\n")
+    old.path <- Sys.getenv("PATH")
+    Sys.setenv(
+      PATH = paste(old.path, paste0(pkg.global.path.prefix$data_path, "RNAseq_bin"), sep = ":")
+    )
+    cat("\u27a4\u27a4 R environment 'PATH' : ", Sys.getenv("PATH"), "\n\n")
+  }
+}
+
+

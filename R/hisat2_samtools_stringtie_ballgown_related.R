@@ -153,6 +153,7 @@ Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DAT
     p <- grid.table(report.data.frame)
     print(p)
     dev.off()
+    cat(c("Results are in", paste0("'", pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/'"), "\n\n"))
   }
 }
 
