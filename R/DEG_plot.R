@@ -147,12 +147,14 @@ DEGFPKMBoxPlot <- function() {
       cat(paste0("************** Plotting FPKM Box plot **************\n"))
       pheno.data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
       # frequency plot
-      tropical <- c('darkorange', 'dodgerblue')
-      palette(tropical)
+      # tropical <- c('darkorange', 'dodgerblue')
+      # palette(tropical)
+      my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
+                  rgb(50, 147, 255,maxColorValue = 255))
       fpkm = data.frame(texpr(pkg.ballgown.data$bg_chrX,meas="FPKM"))
       fpkm = log2(fpkm+1)
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/FPKM_box_plot.png"))
-      boxplot(fpkm, col=as.numeric(pheno.data$sex), las=2, ylab='log2(FPKM+1)')
+      boxplot(fpkm, col=my_colors[as.numeric(pheno.data$sex)], las=2, ylab='log2(FPKM+1)')
       dev.off()
     }
   }
@@ -183,9 +185,10 @@ DEGPCAPlot <- function(){
       fpkm.trans.sort <- fpkm.trans[ order(row.names(fpkm.trans)), ]
       pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
       pheno_data.sort <- pheno_data[order(pheno_data$id),]
-      fpkm.trans.sort$attribute <- as.character(pheno_data.sort[,2])
+      fpkm.trans.sort$attribute <- pheno_data.sort[,2]
       # scale.unit = TRUE ==> the data are scaled to unit variance before the analysis.
-      fpkm.pca <- PCA(fpkm.trans.sort[,-ncol(fpkm.trans.sort)], scale.unit = TRUE, ncp = 2, graph = FALSE)
+      # fpkm.pca <- PCA(fpkm.trans.sort[,-ncol(fpkm.trans.sort)], scale.unit = TRUE, ncp = 2, graph = FALSE)
+      fpkm.pca = PCA(fpkm.trans.sort, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
       eig.val <- get_eigenvalue(fpkm.pca)
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/Dimension_pca_plot.png"))
       p1 <- fviz_eig(fpkm.pca, addlabels = TRUE, ylim = c(0, 50), title = "PCA Dimensions")
@@ -203,8 +206,10 @@ DEGPCAPlot <- function(){
                    pointshape = 21,
                    pointsize = 2.5,
                    geom.ind = "point", # show points only (nbut not "text")
+                   habillage = fpkm.trans.sort$attribute,
                    fill.ind = fpkm.trans.sort$attribute,
-                   col.ind = fpkm.trans.sort$attribute # color by groups
+                   col.ind = fpkm.trans.sort$attribute, # color by groups
+                   addEllipses=TRUE
                    #palette = c("#00AFBB", "#E7B800"),
                    #                 addEllipses = TRUE, # Concentration ellipses
       )
@@ -212,16 +217,18 @@ DEGPCAPlot <- function(){
       dev.off()
 
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/PCA_plot_self.png"))
-      fpkm.trans.sort$attribute <- factor(fpkm.trans.sort$attribute)
-      length(fpkm.trans.sort)
+      # fpkm.trans.sort$attribute <- factor(fpkm.trans.sort$attribute)
+      #length(fpkm.trans.sort)
       FPKM.res.PCA = PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
 
       my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
                   rgb(50, 147, 255,maxColorValue = 255))
 
-      par(mfrow=c(1,1))
+      #par(mfrow=c(1,1))
+      # fpkm.trans.sort <- fpkm.trans[ order(row.names(fpkm.trans)), ]
+      #FPKM.res.PCA$ind$coord <- FPKM.res.PCA$ind$coord[ order(row.names(FPKM.res.PCA$ind$coord)), ]
       plot(FPKM.res.PCA$ind$coord[,1] , FPKM.res.PCA$ind$coord[,2], xlab=paste0("PC1(", round(FPKM.res.PCA$eig[,2][1], 2), "%)") , ylab=paste0("PC2(", round(FPKM.res.PCA$eig[,2][2], 2), "%)") , pch=20 , cex=3 ,
-           col=my_colors )
+           col=my_colors[as.numeric(FPKM.res.PCA$call$quali.sup$quali.sup[,1])] )
       #my_colors[as.numeric(res.PCA$call$quali.sup$quali.sup[,1])]
       abline(h=0 , v=0, lty= 2)
       legend("bottomright", legend=levels(FPKM.res.PCA$call$quali.sup$quali.sup[,1] ) , col=my_colors, pch=20 )
@@ -273,7 +280,7 @@ DEGCorrelationPlot <- function(){
     colnames(melted_res) <- c("Var1", "Var2", "value")
     ggheatmap <- ggplot(melted_res, aes(Var1, Var2, fill = value))+
       geom_tile(color = "white")+
-      scale_fill_gradient2(low = "blue", high = "red", mid = "white",
+      scale_fill_gradient2(low = "white", high = "red",
                            midpoint = 0, limit = c(-1,1), space = "Lab",
                            name="Pearson\nCorrelation") +
       theme_minimal()+ # minimal theme
