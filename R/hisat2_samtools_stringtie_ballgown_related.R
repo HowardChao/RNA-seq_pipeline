@@ -350,6 +350,9 @@ GffcompareRefSample <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
 #' @export
 BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", covariate = "NO_DATA") {
   if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA" || covariate == "NO_DATA") {
+    if (gene.name == "NO_DATA") {
+      cat("(\u2718) :gene.name is missing.\n\n")
+    }
     if (sample.pattern == "NO_DATA") {
       cat("(\u2718) :sample.pattern is missing.\n\n")
     }

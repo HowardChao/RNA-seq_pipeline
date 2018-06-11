@@ -214,7 +214,7 @@ DEGPCAPlot <- function(){
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/PCA_plot_self.png"))
       fpkm.trans.sort$attribute <- factor(fpkm.trans.sort$attribute)
       length(fpkm.trans.sort)
-      FPKM.res.PCA = PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort))
+      FPKM.res.PCA = PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
 
       my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
                   rgb(50, 147, 255,maxColorValue = 255))
