@@ -421,7 +421,6 @@ InstallAll <- function() {
   InstallGffcompareBinary()
   InstallSamtoolsBinary()
   #return(CheckToolAll(print=FALSE))
-  #sink()
 }
 
 

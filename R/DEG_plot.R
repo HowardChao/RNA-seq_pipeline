@@ -13,11 +13,11 @@ DEGVolcanoPlot <- function(select.pval=0.05, select.log2FC=1) {
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Volcano_plot.png"))
     par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
     topT <- as.data.frame(DEG_dataset)
-    with(topT, plot(log2FC, -log10(pval), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value), xlim=c(-15,15), ylim = c(0,12)))
+    with(topT, plot(log2FC, -log10(pval), pch=20, main="Volcano plot", cex=0.4, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value), xlim=c(-15,15), ylim = c(0,12)))
     # user4 input pvalue log2FC
     # pval to qvalue
-    with(subset(topT, pval<select.pval & abs(log2FC)>=select.log2FC), points(log2FC, -log10(pval), pch=20, col="red"))
-    with(subset(topT, pval<select.pval & log2FC<= -1*select.log2FC), points(log2FC, -log10(pval), pch=20, col="green"))
+    with(subset(topT, pval<select.pval & abs(log2FC)>=select.log2FC), points(log2FC, -log10(pval), pch=20, cex=0.4, col="red"))
+    with(subset(topT, pval<select.pval & log2FC<= -1*select.log2FC), points(log2FC, -log10(pval), pch=20, cex=0.4, col="green"))
     # hight = -log10(pavl) = height
     abline(v=c(-1*select.log2FC,select.log2FC), h=-1*log10(select.pval), col="black", lty='dashed')
     #abline(v=0, col="black", lty=3, lwd=1.0)
@@ -147,7 +147,7 @@ DEGFPKMBoxPlot <- function() {
       cat(paste0("************** Plotting FPKM Box plot **************\n"))
       pheno.data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
       # frequency plot
-      tropical <- c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
+      tropical <- c('darkorange', 'dodgerblue')
       palette(tropical)
       fpkm = data.frame(texpr(pkg.ballgown.data$bg_chrX,meas="FPKM"))
       fpkm = log2(fpkm+1)
