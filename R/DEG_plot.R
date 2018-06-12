@@ -154,7 +154,7 @@ DEGFPKMBoxPlot <- function() {
       fpkm = data.frame(texpr(pkg.ballgown.data$bg_chrX,meas="FPKM"))
       fpkm = log2(fpkm+1)
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/FPKM_box_plot.png"))
-      boxplot(fpkm, col=my_colors[as.numeric(pheno.data$sex)], las=2, ylab='log2(FPKM+1)')
+      boxplot(fpkm, col=my_colors[as.numeric(pheno.data[,2])], las=2, ylab='log2(FPKM+1)')
       dev.off()
     }
   }
@@ -231,7 +231,8 @@ DEGPCAPlot <- function(){
            col=my_colors[as.numeric(FPKM.res.PCA$call$quali.sup$quali.sup[,1])] )
       #my_colors[as.numeric(res.PCA$call$quali.sup$quali.sup[,1])]
       abline(h=0 , v=0, lty= 2)
-      legend("bottomright", legend=levels(FPKM.res.PCA$call$quali.sup$quali.sup[,1] ) , col=my_colors, pch=20 )
+      par(xpd=TRUE)
+      legend("bottomright",inset=c(0,1), horiz=TRUE, bty="n", legend=levels(FPKM.res.PCA$call$quali.sup$quali.sup[,1] ) , col=my_colors, pch=20 )
       dev.off()
     }
   }
@@ -261,11 +262,10 @@ DEGCorrelationPlot <- function(){
       }
       count <- count + pheno.data.table$Freq[i]
     }
-    res <- round(cor(head(DEG_dataset[select.column]), method = c("pearson", "kendall", "spearman")), 3)
+    res <- round(cor(DEG_dataset[select.column], method = c("pearson", "kendall", "spearman")), 3)
     # Correlation_dot_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_dot_plot.png"))
-    corrplot(res, type = "upper", order = "hclust",
-             tl.col = "black", tl.srt = 45)
+    corrplot(res, type = "upper",tl.col = "black", tl.srt = 45)
     dev.off()
 
     # Correlation_plot.png
@@ -280,7 +280,7 @@ DEGCorrelationPlot <- function(){
     colnames(melted_res) <- c("Var1", "Var2", "value")
     ggheatmap <- ggplot(melted_res, aes(Var1, Var2, fill = value))+
       geom_tile(color = "white")+
-      scale_fill_gradient2(low = "white", high = "red",
+      scale_fill_gradient2(low = "white",mid ="#ff7e7e"  ,high = "red",
                            midpoint = 0, limit = c(-1,1), space = "Lab",
                            name="Pearson\nCorrelation") +
       theme_minimal()+ # minimal theme
