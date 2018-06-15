@@ -73,10 +73,10 @@ InstallHisat2Bianry <- function(){
     os.file.name <- "hisat2-2.1.0"
     url <- paste0(url, os.file.name)
   } else if (os == "windows"){
-    cat("Hisat2 is not supporting windows.\n\n")
+    stop("Hisat2 is not supporting windows.\n\n")
     return(FALSE)
   } else {
-    cat("Unknow operating system.\n\n")
+    stop("Unknow operating system.\n\n")
     return(FALSE)
   }
   cat(paste0("************** Installing Hisat2 ", "(", os.file.name.zip, ") ************\n"))
@@ -107,10 +107,10 @@ InstallStringTieBinary <- function(){
     os.file.name <- "stringtie-1.3.4d.OSX_x86_64"
     url <- paste0(url, os.file.name)
   } else if (os == "windows"){
-    cat("Stringtie is not supporting windows.\n\n")
+    stop("Stringtie is not supporting windows.\n\n")
     return(FALSE)
   } else {
-    cat("Unknow operating system.\n\n")
+    stop("Unknow operating system.\n\n")
     return(FALSE)
   }
   cat(paste0("************** Installing stringtie ", "(", os.file.name.zip, ") ************\n"))
@@ -142,10 +142,10 @@ InstallGffcompareBinary <- function(){
     os.file.name <- "gffcompare-0.10.4.OSX_x86_64"
     url <- paste0(url, os.file.name)
   } else if (os == "windows"){
-    cat("Gffcompare is not supporting windows.\n\n")
+    stop("Gffcompare is not supporting windows.\n\n")
     return(FALSE)
   } else {
-    cat("Unknow operating system.\n\n")
+    stop("Unknow operating system.\n\n")
     return(FALSE)
   }
   cat(paste0("************** Installing gffcompare ", "(", os.file.name.zip, ") ************\n"))
@@ -177,10 +177,10 @@ InstallSamtoolsBinary <- function(){
     os.file.name <- "samtools-1.8"
     #url <- paste0(url, os.file.name)
   } else if (os == "windows"){
-    cat("Samtools is not supporting windows.\n\n")
+    stop("Samtools is not supporting windows.\n\n")
     return(FALSE)
   } else {
-    cat("Unknow operating system.\n\n")
+    stop("Unknow operating system.\n\n")
     return(FALSE)
   }
   cat(paste0("************** Installing samtools ", "(", os.file.name.zip, ") ************\n"))
@@ -514,7 +514,7 @@ CheckToolAll <- function(print=TRUE) {
   if (isTRUE(hisat2.check) && isTRUE(stringtie.check) && isTRUE(gff.check) && isTRUE(samtool.check)){
     return(TRUE)
   } else {
-    cat("(\u2718) : Run 'ExportPath()' to set the environment.\n\n")
+    stop("(\u2718) Necessary program is missing.\n     1. Check 'INSTALL_TOOLS.Rout' whether tools are properly installed.\n     2. Run 'ExportPath()' to set the environment.\n\n")
     return(FALSE)
   }
 }

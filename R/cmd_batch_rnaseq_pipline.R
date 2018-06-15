@@ -86,7 +86,7 @@ RNAseqPipeline <- function(path.prefix = "NOT_SET_YET", input.path.prefix = "NOT
             }
           }
           else{
-            cat(paste0("(\u2718) :Necessary files are lost.\n     Please check 'ref_genes/", gene.name, ".gtf' , 'ref_genome/", gene.name, ".fa' , 'samples_.fastq.gz/XXX_", gene.name, "_*.fastq.gz' are exit.\n\n" ))
+            stop(paste0("(\u2718) Necessary files are lost.\n     Please check whether 'ref_genes/", gene.name, ".gtf' , 'ref_genome/", gene.name, ".fa' , 'samples_.fastq.gz/XXX_", gene.name, "_*.fastq.gz' are exit.\n\n" ))
           }
         }
       }

@@ -30,7 +30,7 @@ DEGVolcanoPlot <- function(select.pval=0.05, select.log2FC=1) {
     #with(subset(results_transcripts, pval<.05 & abs(log2FC)>2), textxy(log2FC, -log10(pval), labs=geneNames, cex=.8))
     dev.off()
   } else {
-    cat("(\u2718) : 'FPKM_DEG_result.csv' haven't created yet.\n\n")
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 
@@ -54,7 +54,7 @@ DEGMAPlot <- function() {
     print(p)
     dev.off()
   } else {
-    cat("(\u2718) : 'FPKM_DEG_result.csv' haven't created yet.\n\n")
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 
@@ -90,6 +90,8 @@ DEGFrequencyPlot <- function() {
       }
     }
     dev.off()
+  } else {
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 
@@ -130,6 +132,8 @@ DEGTranscriptRelatedPlot <- function(){
       legend("topright", legend_text, lty=NULL)
       dev.off()
     }
+  } else {
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 
@@ -157,6 +161,8 @@ DEGFPKMBoxPlot <- function() {
       boxplot(fpkm, col=my_colors[as.numeric(pheno.data[,2])], las=2, ylab='log2(FPKM+1)')
       dev.off()
     }
+  } else {
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 
@@ -235,6 +241,8 @@ DEGPCAPlot <- function(){
       legend("bottomright",inset=c(0,1), horiz=TRUE, bty="n", legend=levels(FPKM.res.PCA$call$quali.sup$quali.sup[,1] ) , col=my_colors, pch=20 )
       dev.off()
     }
+  } else {
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 
@@ -290,7 +298,8 @@ DEGCorrelationPlot <- function(){
     # Print the heatmap
     print(ggheatmap)
     dev.off()
-
+  } else {
+    stop("(\u2718) 'FPKM_DEG_result.csv' haven't created yet.\n\n")
   }
 }
 

@@ -14,10 +14,10 @@ SetPrefixPath <- function(path.prefix = "NOT_SET_YET", print = TRUE) {
     }
     return(TRUE)
   } else if (path.prefix == "NOT_SET_YET") {
-    cat("(\u2718) :Please give value to prefix path.\n\n")
+    stop("(\u2718) Please give value to prefix path.\n\n")
     return(FALSE)
   } else {
-    cat(paste0("(\u2718) :Prefix path '", path.prefix, "' is invalid. Please try another one.\n\n"))
+    stop(paste0("(\u2718) Prefix path '", path.prefix, "' is invalid. Please try another one.\n\n"))
     return(FALSE)
   }
 }
@@ -29,12 +29,11 @@ CheckPrefixPath <- function(path.prefix = pkg.global.path.prefix$data_path, prin
     cat(c("************** Checking prefix path ************\n"))
   }
   if (path.prefix == "NOT_SET_YET") {
-    cat("(\u2718) : You haven't set the prefix directory for the following steps.\n       Please run 'SetPrefixPath()' first to set the prefix directory.\n\n")
+    stop("(\u2718) You haven't set the prefix directory for the following steps.\n       Please run 'SetPrefixPath()' first to set the prefix directory.\n\n")
     return(FALSE)
   } else {
     if (print) {
       cat(paste0("(\u2714) :Prefix directory: '", pkg.global.path.prefix$data_path, "'\n\n"))
-      # print(ls.str(pkg.global.path.prefix))
     }
     return(TRUE)
   }
@@ -370,10 +369,10 @@ ProgressGenesFiles <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
   if (isTRUE(CheckDirAll(print = FALSE))){
     if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
       if (gene.name == "NO_DATA") {
-        cat("(\u2718) :gene.name is missing.\n     Gene files checking fails\n\n")
+        cat("(\u2718) : gene.name is missing.\n     Gene files checking fails\n\n")
       }
       if (sample.pattern == "NO_DATA"){
-        cat("(\u2718) :sample.pattern is missing.\n     Gene files checking fails\n\n")
+        cat("(\u2718) : sample.pattern is missing.\n     Gene files checking fails\n\n")
       }
       return(FALSE)
     } else {

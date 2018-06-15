@@ -9,14 +9,14 @@ CreateHisat2Index <- function (gene.name = "NO_DATA", sample.pattern = "NO_DATA"
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else {
         if (!is.logical(splice.site.info) || !is.logical(exon.info)) {
-          cat("(\u2718) :Please make sure the type of 'splice.site.info' and 'exon.info' are logical.\n")
+          stop("(\u2718) Please make sure the type of 'splice.site.info' and 'exon.info' are logical.\n")
         } else {
           check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
           cat(paste0("\n************** Creating Hisat2 Index **************\n"))
@@ -54,7 +54,7 @@ CreateHisat2Index <- function (gene.name = "NO_DATA", sample.pattern = "NO_DATA"
             on.exit(setwd(current.path))
             cat(paste0("'", pkg.global.path.prefix$data_path, "gene_data/indexes/", gene.name, "_tran.*.ht2' has been created.\n\n"))
           } else {
-            cat(c(paste0("(\u2718) :'", gene.name, ".gtf'"), "or", paste0("(X) :'", gene.name, ".fa'"), "is missing.\n\n"))
+            stop(c(paste0("(\u2718) '", gene.name, ".gtf' "), "or", paste0(" '", gene.name, ".fa'"), "is missing.\n\n"))
           }
         }
       }
@@ -69,10 +69,10 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\nn")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else {
         check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
@@ -85,7 +85,7 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
           deleteback <- gsub("[1-2]*.fastq.gz$", replace = "", check.results$fastq.gz.files.df)
           sample.table.r.value <- gsub(paste0("[A-Z, a-z]*[0-9]*_"), replace = "", deleteback)
           if (isTRUE(length(unique(sample.table.r.value)) != 1)){
-            cat("(\u2718) :Inconsistent formats. Please check files are all",  paste0("'XXX_r*.fastq.gz'"), "OR",  paste0("'XXX_R*.fastq.gz'"), "OR",  paste0("'XXX_*.fastq.gz'"), "\n\n")
+            stop("(\u2718) Inconsistent formats. Please check files are all",  paste0("'XXX_r*.fastq.gz'"), "OR",  paste0("'XXX_R*.fastq.gz'"), "OR",  paste0("'XXX_*.fastq.gz'"), "\n\n")
           } else {
             sample.table <- table(gsub(paste0("_[R]*[r]*[1-2]*.fastq.gz$"), replace = "", check.results$fastq.gz.files.df))
             iteration.num <- length(sample.table)
@@ -107,7 +107,7 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
             on.exit(setwd(current.path))
           }
         } else {
-          cat(c(paste0("(\u2718) :'", gene.name, "_tran.*.ht2'"), "or 'XXX_*.fastq.gz' is missing.\n\n"))
+          stop(c(paste0("(\u2718) '", gene.name, "_tran.*.ht2' "), "or 'XXX_*.fastq.gz' is missing.\n\n"))
         }
       }
     }
@@ -119,10 +119,10 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
 Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"){
   if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
     if (gene.name == "NO_DATA") {
-      cat("(\u2718) :gene.name is missing.\nn")
+      cat("(\u2718) : gene.name is missing.\nn")
     }
     if (sample.pattern == "NO_DATA") {
-      cat("(\u2718) :sample.pattern is missing.\n\n")
+      cat("(\u2718) : sample.pattern is missing.\n\n")
     }
   } else {
     check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=FALSE)
@@ -173,10 +173,10 @@ SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num
     if (isTRUE(CheckDirAll(print = FALSE))) {
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else {
         check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
@@ -198,7 +198,7 @@ SamtoolsToBam <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", num
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c("(\u2718) :'XXX.sam' is missing.\n\n"))
+          stop(c("(\u2718) 'XXX.sam' is missing.\n\n"))
         }
       }
     }
@@ -212,10 +212,10 @@ StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA",
     if (isTRUE(CheckDirAll(print = FALSE))) {
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else {
         check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
@@ -234,7 +234,7 @@ StringTieAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA",
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c(paste0("(\u2718) :'", gene.name, ".gtf'"), "or 'XXX.bam' is missing.\n\n"))
+          stop(c(paste0("(\u2718) '", gene.name, ".gtf' "), "or 'XXX.bam' is missing.\n\n"))
         }
       }
     }
@@ -248,10 +248,10 @@ StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else{
         check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
@@ -277,7 +277,7 @@ StringTieMergeTrans <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c(paste0("(\u2718) :'", gene.name, ".gtf'"), "or", "'XXX.gtf' is missing.\n\n"))
+          stop(c(paste0("(\u2718) :'", gene.name, ".gtf' "), "or", " 'XXX.gtf' is missing.\n\n"))
         }
       }
     }
@@ -291,10 +291,10 @@ StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else{
         check.results <- ProgressGenesFiles(gene.name, sample.pattern, print=TRUE)
@@ -315,7 +315,7 @@ StringTieToBallgown <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c(paste0("(\u2718) :'stringtie_merged.gtf'"), "or", "'XXX.bam' is missing.\n\n"))
+          stop(c(paste0("(\u2718) 'stringtie_merged.gtf' "), "or", " 'XXX.bam' is missing.\n\n"))
         }
       }
     }
@@ -329,10 +329,10 @@ GffcompareRefSample <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
     if (isTRUE(CheckDirAll(print = FALSE))){
       if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
         if (gene.name == "NO_DATA") {
-          cat("(\u2718) :gene.name is missing.\n\n")
+          cat("(\u2718) : gene.name is missing.\n\n")
         }
         if (sample.pattern == "NO_DATA") {
-          cat("(\u2718) :sample.pattern is missing.\n\n")
+          cat("(\u2718) : sample.pattern is missing.\n\n")
         }
       } else if (sample.pattern == "NO_DATA") {
         cat("(\u2718) :sample.pattern is missing.\n\n")
@@ -348,7 +348,7 @@ GffcompareRefSample <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
           cat("\n")
           on.exit(setwd(current.path))
         } else {
-          cat(c(paste0("(\u2718) :'", gene.name, ".gtf'"), "or", paste0("'stringtie_merged.gtf'"), "is missing.\n\n"))
+          stop(c(paste0("(\u2718) '", gene.name, ".gtf' "), "or", paste0(" 'stringtie_merged.gtf'"), "is missing.\n\n"))
         }
       }
     }
@@ -360,13 +360,13 @@ GffcompareRefSample <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
 BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", covariate = "NO_DATA") {
   if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA" || covariate == "NO_DATA") {
     if (gene.name == "NO_DATA") {
-      cat("(\u2718) :gene.name is missing.\n\n")
+      cat("(\u2718) : gene.name is missing.\n\n")
     }
     if (sample.pattern == "NO_DATA") {
-      cat("(\u2718) :sample.pattern is missing.\n\n")
+      cat("(\u2718) : sample.pattern is missing.\n\n")
     }
     if (covariate == "NO_DATA") {
-      cat("(\u2718) :covariate is missing.\n\n")
+      cat("(\u2718) : covariate is missing.\n\n")
     }
   } else {
     results <- ProgressGenesFiles(gene.name = gene.name, sample.pattern = sample.pattern, print = FALSE)
@@ -450,8 +450,7 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         print(head(results_transcripts))
         cat("\n")
       } else {
-        cat("(\u2718) : This pipline is only available for 2-group comparisons.\n")
-        cat(paste0("      ",length(row.names(sample.table)), " is detected." ))
+        stop(paste0("(\u2718) This pipline is only available for 2-group comparisons.\n", "      ",length(row.names(sample.table)), "-group is detected.\n\n"))
       }
     }
   }
@@ -464,7 +463,7 @@ LoadBallgownObject <- function() {
     load(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
     pkg.ballgown.data$bg_chrX <- bg
   } else {
-    cat(paste0("(\u2718) : '", paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"), "' haven't created yet. Please run \"BallgownPreprocess(gene.name, sample.pattern, covariate)\" first.\n\n"))
+    stop(paste0("(\u2718) '", paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"), "' haven't created yet. Please run \"BallgownPreprocess(gene.name, sample.pattern, covariate)\" first.\n\n"))
   }
 }
 
