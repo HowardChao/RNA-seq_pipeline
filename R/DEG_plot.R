@@ -74,7 +74,7 @@ DEGFrequencyPlot <- function() {
     mypar(1, 1)
     pheno_data <- read.csv(paste0(pkg.global.path.prefix$data_path, "gene_data/phenodata.csv"))
     sample.table <- as.data.frame(table(pheno_data[2]))
-    shist(log2(pms[, 5]), unit = 0.1, type = "n", xlab = "log (base 2) FPKM",
+    rafalib::shist(log2(pms[, 5]), unit = 0.1, type = "n", xlab = "log (base 2) FPKM",
           main = "All samples", xlim = c(-5, 15))
     for(i in 1:length(row.names(sample.table))){
       current.sum <- 0
@@ -86,7 +86,7 @@ DEGFrequencyPlot <- function() {
       }
       for(j in 1:sample.table$Freq[i]){
         plot.column.number <- 4+j+current.sum + i -1
-        shist(log2(pms[, plot.column.number]), unit = 0.1, col = plot.column.number, add = TRUE, lwd = 2, lty = plot.column.number)
+        rafalib::shist(log2(pms[, plot.column.number]), unit = 0.1, col = plot.column.number, add = TRUE, lwd = 2, lty = plot.column.number)
       }
     }
     dev.off()
@@ -194,10 +194,10 @@ DEGPCAPlot <- function(){
       fpkm.trans.sort$attribute <- pheno_data.sort[,2]
       # scale.unit = TRUE ==> the data are scaled to unit variance before the analysis.
       # fpkm.pca <- PCA(fpkm.trans.sort[,-ncol(fpkm.trans.sort)], scale.unit = TRUE, ncp = 2, graph = FALSE)
-      fpkm.pca = PCA(fpkm.trans.sort, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
-      eig.val <- get_eigenvalue(fpkm.pca)
+      fpkm.pca = FactoMineR::PCA(fpkm.trans.sort, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
+      eig.val <- factoextra::get_eigenvalue(fpkm.pca)
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/Dimension_pca_plot.png"))
-      p1 <- fviz_eig(fpkm.pca, addlabels = TRUE, ylim = c(0, 50), title = "PCA Dimensions")
+      p1 <- factoextra::fviz_eig(fpkm.pca, addlabels = TRUE, ylim = c(0, 50), title = "PCA Dimensions")
       print(p1)
       dev.off()
       #var$coord: coordinates of variables to create a scatter plot
@@ -205,7 +205,7 @@ DEGPCAPlot <- function(){
       #var$contrib: contains the contributions (in percentage) of the variables to the principal components. The contribution of a variable (var) to a given principal component is (in percentage) : (var.cos2 * 100) / (total cos2 of the component).
       #var <- get_pca_var(res.pca)
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/PCA_plot_factoextra.png"))
-      p2 <- fviz_pca_ind(fpkm.pca,
+      p2 <- factoextra::fviz_pca_ind(fpkm.pca,
                    title = "Principal Component Analysis",
                    xlab = paste0("PC1(", round(data.frame(eig.val)$variance.percent[1], 2), "%)"), ylab = paste0("PC2(", round(data.frame(eig.val)$variance.percent[2],2), "%)"),
                    legend.title = "Treatment variable", legend.position = "top",
@@ -225,7 +225,7 @@ DEGPCAPlot <- function(){
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/PCA/PCA_plot_self.png"))
       # fpkm.trans.sort$attribute <- factor(fpkm.trans.sort$attribute)
       #length(fpkm.trans.sort)
-      FPKM.res.PCA = PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
+      FPKM.res.PCA = FactoMineR::PCA(fpkm.trans.sort, scale.unit=TRUE, ncp=2, quali.sup=length(fpkm.trans.sort), graph = FALSE)
 
       my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
                   rgb(50, 147, 255,maxColorValue = 255))
@@ -273,18 +273,18 @@ DEGCorrelationPlot <- function(){
     res <- round(cor(DEG_dataset[select.column], method = c("pearson", "kendall", "spearman")), 3)
     # Correlation_dot_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_dot_plot.png"))
-    corrplot(res, type = "upper",tl.col = "black", tl.srt = 45)
+    corrplot::corrplot(res, type = "upper",tl.col = "black", tl.srt = 45)
     dev.off()
 
     # Correlation_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_plot.png"))
-    p2 <- chart.Correlation(res, histogram=TRUE, pch=19)
+    p2 <- PerformanceAnalytics::chart.Correlation(res, histogram=TRUE, pch=19)
     print(p2)
     dev.off()
 
     # Correlation_heat_plot.png
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/images/Correlation/Correlation_heat_plot.png"))
-    melted_res <- melt(res)
+    melted_res <- reshape2::melt(res)
     colnames(melted_res) <- c("Var1", "Var2", "value")
     ggheatmap <- ggplot(melted_res, aes(Var1, Var2, fill = value))+
       geom_tile(color = "white")+

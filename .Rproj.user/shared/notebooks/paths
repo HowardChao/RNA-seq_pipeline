@@ -1,7 +1,7 @@
 /home/kuan-hao/bioinformatics/R_package/RNASeq/.Rbuildignore="49017D3E"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/DESCRIPTION="33BBB906"
-/home/kuan-hao/bioinformatics/R_package/RNASeq/NAMESPACE="957E50F8"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/DEG_plot.R="26014B75"
+/home/kuan-hao/bioinformatics/R_package/RNASeq/R/Quality_control.R="7B41FB0F"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/cmd_batch_install_tools.R="5A243212"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/cmd_batch_rnaseq_pipline.R="690EE15F"
 /home/kuan-hao/bioinformatics/R_package/RNASeq/R/default_setting.R="DD4A93B4"

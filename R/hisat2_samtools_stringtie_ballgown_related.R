@@ -119,7 +119,7 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
 Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"){
   if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
     if (gene.name == "NO_DATA") {
-      cat("(\u2718) : gene.name is missing.\nn")
+      cat("(\u2718) : gene.name is missing.\n\n")
     }
     if (sample.pattern == "NO_DATA") {
       cat("(\u2718) : sample.pattern is missing.\n\n")
@@ -134,14 +134,14 @@ Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DAT
       load.data <- readChar(file.read, file.info(file.read)$size)
       # overall alignment rate
       overall.alignment <- strsplit(load.data, "\n")
-      overall.alignment.with.NA <- str_extract(overall.alignment[[1]], "[0-9]*.[0-9]*% overall alignment rate")
+      overall.alignment.with.NA <- stringr::str_extract(overall.alignment[[1]], "[0-9]*.[0-9]*% overall alignment rate")
       overall.alignment.result <- overall.alignment.with.NA[!is.na(overall.alignment.with.NA)]
       overall.alignment.result.cut <- gsub(" overall alignment rate", " ", overall.alignment.result)
       # different mapping rate
       first.split <- strsplit(load.data, "\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* Hisat2 Aligning \\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\n")
       second.split <- strsplit(first.split[[1]][2], "\n\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* Current progress of RNA-seq files in")
       split.lines <- strsplit(second.split[[1]][1], "\n")
-      alignment.rate.with.NA <- str_extract(split.lines[[1]], "[0-9]* \\([0-9]*.[0-9]*%\\) aligned concordantly")
+      alignment.rate.with.NA <- stringr::str_extract(split.lines[[1]], "[0-9]* \\([0-9]*.[0-9]*%\\) aligned concordantly")
       alignment.first.result <- alignment.rate.with.NA[!is.na(alignment.rate.with.NA)]
       alignment.first.result.cut1 <- gsub(") aligned concordantly", " ", alignment.first.result)
       alignment.first.result.cut2 <- gsub("[0-9]* \\(", " ", alignment.first.result.cut1)
@@ -158,7 +158,7 @@ Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DAT
       dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/"))
       write.csv(report.data.frame, file = paste0(pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/Alignment_report.csv"))
       png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/Alignment_report.png"), width = iteration.num*100 + 200, height = 40*4)
-      p <- grid.table(report.data.frame)
+      p <- gridExtra::grid.table(report.data.frame)
       print(p)
       dev.off()
       cat(c("Results are in", paste0("'", pkg.global.path.prefix$data_path, "RNAseq_results/Alignment_Report/'"), "\n\n"))
@@ -396,7 +396,11 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         bg <- pkg.ballgown.data$bg_chrX
         save(bg, file = paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
         cat('\n')
-        pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX,"rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1",genomesubset=TRUE)
+        ans <- rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1
+        print(ans)
+        ls(envir=parent.frame())
+        pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX, cond = 'rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1', genomesubset=TRUE)
+        print(ls(envir=parent.frame()))
         #print(pkg.ballgown.data$bg_chrX_filt)
 
         # differential expression
@@ -454,6 +458,13 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
       }
     }
   }
+}
+
+#' Check ballgown object
+#' @export
+CheckBallgownObject <- function() {
+  print(pkg.ballgown.data$bg_chrX)
+  print(pkg.ballgown.data$bg_chrX_filt)
 }
 
 #' load ballgown object

@@ -30,10 +30,10 @@ PreDECountTable <- function(sample.pattern="NO_DATA", print=TRUE) {
         cat("************** Creating gene and transcript raw count file ************\n")
         #print(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/raw_count/prepDE.py -i ",  pkg.global.path.prefix$data_path, "gene_data/ballgown/raw_count/sample_lst.txt"))
         # have to check python !!!
-        if(py_available(initialize = "TRUE")){
+        if(reticulate::py_available(initialize = "TRUE")){
           cat("(\u2714) : Python is available on your device!\n")
-          python.version <- as.numeric(py_config()$version)
-          cat(paste0("       Python version : ", py_config()$version, "\n"))
+          python.version <- as.numeric(reticulate::py_config()$version)
+          cat(paste0("       Python version : ", reticulate::py_config()$version, "\n"))
           if(python.version >= 3) {
             cat("(\u270D) : Converting 'prepDE.py' from python2 to python3 \n\n")
             system2(command = '2to3', arg = paste0("-w ", pkg.global.path.prefix$data_path, "gene_data/ballgown/raw_count/prepDE.py"))
@@ -70,21 +70,21 @@ DEGedgeRPlot <- function() {
     gene.data.frame <- data.frame(gene.id=count.table$gene_id)
 
     # create DGEList object (edgeR)
-    deglist.object <- DGEList(counts=count.table[-1], group = group, genes = gene.data.frame)
+    deglist.object <- edgeR::DGEList(counts=count.table[-1], group = group, genes = gene.data.frame)
     # Normalization
     deglist.object <- calcNormFactors(deglist.object, method="TMM")
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/edgeR/MDS_plot.png"))
     my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
                 rgb(50, 147, 255,maxColorValue = 255))
 
-    plotMDS(deglist.object, top = 1000, labels = NULL, col = my_colors[as.numeric(deglist.object$samples$group)],
+    edgeR::plotMDS(deglist.object, top = 1000, labels = NULL, col = my_colors[as.numeric(deglist.object$samples$group)],
             pch = 20, cex = 2)
     par(xpd=TRUE)
     legend("bottomright",inset=c(0,1), horiz=TRUE, bty="n", legend=levels(deglist.object$samples$group) , col=my_colors, pch=20 )
     dev.off()
 
-    countsPerMillion <- cpm(deglist.object)
-    logcountsPerMillion <- cpm(deglist.object, log=TRUE)
+    countsPerMillion <- edgeR::cpm(deglist.object)
+    logcountsPerMillion <- edgeR::cpm(deglist.object, log=TRUE)
     # countCheck <- countsPerMillion > 1
 
     # estimating Dispersions
@@ -92,26 +92,26 @@ DEGedgeRPlot <- function() {
     # sampleType[grep("female", sampleType)] <- "F"
     # sampleType[grep("male", sampleType)] <- "M"
     # set up model
-    designMat <- model.matrix(~sampleType)
+    designMat <- edgeR::model.matrix(~sampleType)
 
-    dgList <- estimateGLMCommonDisp(deglist.object, design=designMat)
-    dgList <- estimateGLMTrendedDisp(dgList, design=designMat)
-    dgList <- estimateGLMTagwiseDisp(dgList, design=designMat)
+    dgList <- edgeR::estimateGLMCommonDisp(deglist.object, design=designMat)
+    dgList <- edgeR::estimateGLMTrendedDisp(dgList, design=designMat)
+    dgList <- edgeR::estimateGLMTagwiseDisp(dgList, design=designMat)
     cat(paste0("************** Plotting BCV (Biological Coefficient Of Variation) plot (edgeR) **************\n"))
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/edgeR/BCV_plot.png"))
-    p <- plotBCV(dgList)
+    p <- edgeR::plotBCV(dgList)
     print(p)
     dev.off()
 
     # plot smear plot
-    fit <- glmFit(dgList, designMat)
-    lrt <- glmLRT(fit, coef=2)
-    edgeR_result <- topTags(lrt)
-    deGenes <- decideTestsDGE(lrt, p=0.001)
+    fit <- edgeR::glmFit(dgList, designMat)
+    lrt <- edgeR::glmLRT(fit, coef=2)
+    edgeR_result <- edgeR::topTags(lrt)
+    deGenes <- edgeR::decideTestsDGE(lrt, p=0.001)
     deGenes <- rownames(lrt)[as.logical(deGenes)]
     cat(paste0("************** Plotting smear plot (edgeR) **************\n"))
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/edgeR/Smear_plot.png"))
-    p <- plotSmear(lrt, de.tags=deGenes)
+    p <- edgeR::plotSmear(lrt, de.tags=deGenes)
     print(p)
     abline(h=c(-1, 1), col=2)
     dev.off()
@@ -132,13 +132,13 @@ DEDESeq2Plot <- function() {
     # Deseq data
     colData <- as.data.frame(as.character(group))
     colnames(colData) = c("covariate")
-    ddsMat <- DESeqDataSetFromMatrix(countData = count.table[-1],
+    ddsMat <- DESeq2::DESeqDataSetFromMatrix(countData = count.table[-1],
                                      colData = colData,
                                      design = ~covariate)
 
     # transformation
-    vsd <- varianceStabilizingTransformation(ddsMat)
-    plotPCA(vsd, "covariate")
+    vsd <- DESeq2::varianceStabilizingTransformation(ddsMat)
+    DESeq2::plotPCA(vsd, "covariate")
 
     # plot pca by ggplot2
     # data <- plotPCA(vsd, intgroup = c( "covariate"), returnData=TRUE)
@@ -148,15 +148,15 @@ DEDESeq2Plot <- function() {
       # ylab(paste0("PC2: ",percentVar[2],"% variance"))
 
     ## differential
-    ddsMat <- DESeq(ddsMat)
+    ddsMat <- DESeq2::DESeq(ddsMat)
     # building result table
-    res <- results(ddsMat)
+    res <- DESeq2::results(ddsMat)
     mcols(res, use.names=TRUE)
 
-    res.05 <- results(ddsMat, alpha=.05)
+    res.05 <- DESeq2::results(ddsMat, alpha=.05)
     table(res.05$padj < .05)
 
-    resLFC1 <- results(ddsMat, lfcThreshold=1)
+    resLFC1 <- DESeq2::results(ddsMat, lfcThreshold=1)
     table(resLFC1$padj < 0.1)
     # MA plot with DESeq2
     cat(paste0("************** Plotting MA plot (DESeq2) **************\n"))
@@ -171,7 +171,7 @@ DEDESeq2Plot <- function() {
     rownames(df) <- as.character(pheno_data$ids)
     cat(paste0("************** Plotting heatmap plot (DESeq2) **************\n"))
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/DESeq2/Heatmap_plot.png"))
-    pheatmap(mat, annotation_col=df)
+    pheatmap::pheatmap(mat, annotation_col=df)
     dev.off()
 #
 #     table(DESeq2=res$padj < 0.1, edgeR=tt.all$table$FDR < 0.1)

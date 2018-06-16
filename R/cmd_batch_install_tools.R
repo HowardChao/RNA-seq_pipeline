@@ -201,6 +201,120 @@ InstallSamtoolsBinary <- function(){
   return(TRUE)
 }
 
+#'
+#' Install Hisat2, StringTie, Gffcompare, Samtools
+InstallAll <- function() {
+  cat("\u2618\u2618\u2618\u2618\u2618\u2618\u2618\u2618  Start installing ... \u2618\u2618\u2618\u2618\u2618\u2618\u2618\u2618\n")
+  cat("   \u261E\u261E  \u25CF'hisat2', \u25CF'stringtie', \u25CF'gffcompare', \u25CF'samtools' will be installed. ... \n")
+  cat(paste0("   \u261E\u261E  Compressed files will be in '", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/'"), "\n")
+  cat(paste0("   \u261E\u261E  Unpacked files will be in '", pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/'"), "\n")
+  cat(paste0("   \u261E\u261E  Binary files will be copied to '", pkg.global.path.prefix$data_path, "RNAseq_bin/'"), "\n\n")
+  InstallHisat2Bianry()
+  InstallStringTieBinary()
+  InstallGffcompareBinary()
+  InstallSamtoolsBinary()
+  #return(CheckToolAll(print=FALSE))
+}
+
+
+#' Check 'hisat2'
+#' Check whether 'hisat2' is installed on the workstation
+#' @export
+CheckHisat2 <- function(print=TRUE){
+  if (print) {
+    cat("************** Checking hisat2 command ************\n")
+  }
+  hisat2.installed <- system('hisat2 --version', ignore.stdout = !print , ignore.stderr = !print)==0
+  if( isTRUE(hisat2.installed)){
+    if(isTRUE(print)){
+      cat("(\u2714) : 'hisat2' is installed\n\n")
+    }
+    return(TRUE)
+  }
+  else{
+    cat("(\u2718) : 'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
+  }
+}
+
+#' Check s'tringtie'
+#' Check whether 'stringtie' is installed on the workstation
+#' @export
+CheckStringTie <- function(print=TRUE){
+  if (print){
+    cat("************** Checking stringtie command ************\n")
+  }
+  stringtie.installed <- system( 'stringtie --version', ignore.stdout = !print, ignore.stderr = !print)==0
+  if( isTRUE(stringtie.installed)){
+    if(isTRUE(print)){
+      cat("(\u2714) : 'stringtie' is installed\n\n")
+    }
+    return(TRUE)
+  }
+  else{
+    cat("(\u2718) : 'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
+  }
+}
+
+#' Check Gffcompare
+#' Check whether Gffcompare is installed on the workstation
+#' @export
+CheckGffcompare <- function(print=TRUE) {
+  if(print) {
+    cat("************** Checking gffcompare command ************\n")
+  }
+  gffcompare.old <- system( 'gffcompare --version', ignore.stdout = !print, ignore.stderr = !print)==0
+  if( isTRUE(gffcompare.old)){
+    if(isTRUE(print)){
+      cat("(\u2714) : 'gffcompare' is installed\n\n")
+    }
+    return(TRUE)
+  }
+  else{
+    cat("(\u2718) : \'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
+  }
+}
+
+#' Check Samtools
+#' Check whether Samtools is installed on the workstation
+#' @export
+CheckSamtools <- function(print=TRUE){
+  if (print) {
+    cat("************** Checking samtools command ************\n")
+  }
+  samtools.old <- system( 'samtools --version', ignore.stdout = !print, ignore.stderr = !print)==0
+  if( isTRUE(samtools.old)){
+    if(isTRUE(print)){
+      cat("(\u2714) : 'samtools' is installed\n\n")
+    }
+    return(TRUE)
+  }
+  else{
+    cat("(\u2718) : \'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
+    return(FALSE)
+  }
+}
+
+#' Check whether programs are installed
+#' @export
+CheckToolAll <- function(print=TRUE) {
+  hisat2.check <- CheckHisat2(print=print)
+  stringtie.check <- CheckStringTie(print=print)
+  gff.check <- CheckGffcompare(print=print)
+  samtool.check <- CheckSamtools(print=print)
+  if (isTRUE(hisat2.check) && isTRUE(stringtie.check) && isTRUE(gff.check) && isTRUE(samtool.check)){
+    return(TRUE)
+  } else {
+    stop("(\u2718) Necessary program is missing.\n     1. Check 'INSTALL_TOOLS.Rout' whether tools are properly installed.\n     2. Run 'ExportPath()' to set the environment.\n\n")
+    return(FALSE)
+  }
+}
+
+
+
+
 #' #' Install Hisat2 binary
 #' #' @export
 #' InstallHisat2Bianry <-function(download.file = "NOT_SET_YET"){
@@ -407,115 +521,4 @@ InstallSamtoolsBinary <- function(){
 #'     on.exit(setwd(current.path))
 #'   }
 #' }
-
-#'
-#' Install Hisat2, StringTie, Gffcompare, Samtools
-InstallAll <- function() {
-  cat("\u2618\u2618\u2618\u2618\u2618\u2618\u2618\u2618  Start installing ... \u2618\u2618\u2618\u2618\u2618\u2618\u2618\u2618\n")
-  cat("   \u261E\u261E  \u25CF'hisat2', \u25CF'stringtie', \u25CF'gffcompare', \u25CF'samtools' will be installed. ... \n")
-  cat(paste0("   \u261E\u261E  Compressed files will be in '", pkg.global.path.prefix$data_path, "RNAseq_bin/Download/'"), "\n")
-  cat(paste0("   \u261E\u261E  Unpacked files will be in '", pkg.global.path.prefix$data_path, "RNAseq_bin/Unpacked/'"), "\n")
-  cat(paste0("   \u261E\u261E  Binary files will be copied to '", pkg.global.path.prefix$data_path, "RNAseq_bin/'"), "\n\n")
-  InstallHisat2Bianry()
-  InstallStringTieBinary()
-  InstallGffcompareBinary()
-  InstallSamtoolsBinary()
-  #return(CheckToolAll(print=FALSE))
-}
-
-
-#' Check 'hisat2'
-#' Check whether 'hisat2' is installed on the workstation
-#' @export
-CheckHisat2 <- function(print=TRUE){
-  if (print) {
-    cat("************** Checking hisat2 command ************\n")
-  }
-  hisat2.installed <- system('hisat2 --version', ignore.stdout = !print , ignore.stderr = !print)==0
-  if( isTRUE(hisat2.installed)){
-    if(isTRUE(print)){
-      cat("(\u2714) : 'hisat2' is installed\n\n")
-    }
-    return(TRUE)
-  }
-  else{
-    cat("(\u2718) : 'hisat2' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
-    return(FALSE)
-  }
-}
-
-#' Check s'tringtie'
-#' Check whether 'stringtie' is installed on the workstation
-#' @export
-CheckStringTie <- function(print=TRUE){
-  if (print){
-    cat("************** Checking stringtie command ************\n")
-  }
-  stringtie.installed <- system( 'stringtie --version', ignore.stdout = !print, ignore.stderr = !print)==0
-  if( isTRUE(stringtie.installed)){
-    if(isTRUE(print)){
-      cat("(\u2714) : 'stringtie' is installed\n\n")
-    }
-    return(TRUE)
-  }
-  else{
-    cat("(\u2718) : 'stringtie' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
-    return(FALSE)
-  }
-}
-
-#' Check Gffcompare
-#' Check whether Gffcompare is installed on the workstation
-#' @export
-CheckGffcompare <- function(print=TRUE) {
-  if(print) {
-    cat("************** Checking gffcompare command ************\n")
-  }
-  gffcompare.old <- system( 'gffcompare --version', ignore.stdout = !print, ignore.stderr = !print)==0
-  if( isTRUE(gffcompare.old)){
-    if(isTRUE(print)){
-      cat("(\u2714) : 'gffcompare' is installed\n\n")
-    }
-    return(TRUE)
-  }
-  else{
-    cat("(\u2718) : \'gffcompare\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
-    return(FALSE)
-  }
-}
-
-#' Check Samtools
-#' Check whether Samtools is installed on the workstation
-#' @export
-CheckSamtools <- function(print=TRUE){
-  if (print) {
-    cat("************** Checking samtools command ************\n")
-  }
-  samtools.old <- system( 'samtools --version', ignore.stdout = !print, ignore.stderr = !print)==0
-  if( isTRUE(samtools.old)){
-    if(isTRUE(print)){
-      cat("(\u2714) : 'samtools' is installed\n\n")
-    }
-    return(TRUE)
-  }
-  else{
-    cat("(\u2718) : \'samtools\' command is not found on this device. Please run 'InstallAll()' to install the necessary programs or 'ExportPath' to update the path.\n\n")
-    return(FALSE)
-  }
-}
-
-#' Check whether programs are installed
-#' @export
-CheckToolAll <- function(print=TRUE) {
-  hisat2.check <- CheckHisat2(print=print)
-  stringtie.check <- CheckStringTie(print=print)
-  gff.check <- CheckGffcompare(print=print)
-  samtool.check <- CheckSamtools(print=print)
-  if (isTRUE(hisat2.check) && isTRUE(stringtie.check) && isTRUE(gff.check) && isTRUE(samtool.check)){
-    return(TRUE)
-  } else {
-    stop("(\u2718) Necessary program is missing.\n     1. Check 'INSTALL_TOOLS.Rout' whether tools are properly installed.\n     2. Run 'ExportPath()' to set the environment.\n\n")
-    return(FALSE)
-  }
-}
 

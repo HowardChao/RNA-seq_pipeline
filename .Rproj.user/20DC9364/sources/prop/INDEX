@@ -5,6 +5,7 @@
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FNAMESPACE="D94868D3"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FDEG_plot.R="CFBF9B89"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FDEG_volcano_plot.R="1E69A706"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FQuality_control.R="45F24299"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2FRNAseq_pipeline.R="2ABC2BCC"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fballgown_related.R="D077874"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fcheck_all_before_RNAseq.R="F9EA9DDA"

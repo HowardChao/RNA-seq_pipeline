@@ -10,13 +10,7 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Depends:
-    ggplot2,
-    devtools,
-    genefilter,
-    dplyr,
-    RSkittleBrewer,
-    ballgown,
+Import:
     rafalib,
     factoextra,
     FactoMineR,
@@ -29,4 +23,12 @@ Depends:
     grid,
     reshape2,
     reticulate,
-    pheatmap
+    pheatmap,
+    systemPipeR,
+    systemPipeRdata
+Depends:
+    ballgown,
+    ggplot2,
+    devtools,
+    genefilter,
+    dplyr
