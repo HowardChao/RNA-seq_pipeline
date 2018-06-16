@@ -1,4 +1,6 @@
 #' converting stringtie ballogwn preprocessed data to count table
+#'
+#' @importFrom reticulate py_config py_available
 #' @export
 PreDECountTable <- function(sample.pattern="NO_DATA", print=TRUE) {
   # ftp server : ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-source.zip
@@ -55,6 +57,8 @@ PreDECountTable <- function(sample.pattern="NO_DATA", print=TRUE) {
 }
 
 #' DEG analysis with edgeR
+#'
+#' @import edgeR
 #' @export
 DEGedgeRPlot <- function() {
   if(file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/raw_count/gene_count_matrix.csv"))){
@@ -72,12 +76,12 @@ DEGedgeRPlot <- function() {
     # create DGEList object (edgeR)
     deglist.object <- edgeR::DGEList(counts=count.table[-1], group = group, genes = gene.data.frame)
     # Normalization
-    deglist.object <- calcNormFactors(deglist.object, method="TMM")
+    deglist.object <- edgeR::calcNormFactors(deglist.object, method="TMM")
     png(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/edgeR/MDS_plot.png"))
     my_colors=c(rgb(255, 47, 35,maxColorValue = 255),
                 rgb(50, 147, 255,maxColorValue = 255))
 
-    edgeR::plotMDS(deglist.object, top = 1000, labels = NULL, col = my_colors[as.numeric(deglist.object$samples$group)],
+    plotMDS(deglist.object, top = 1000, labels = NULL, col = my_colors[as.numeric(deglist.object$samples$group)],
             pch = 20, cex = 2)
     par(xpd=TRUE)
     legend("bottomright",inset=c(0,1), horiz=TRUE, bty="n", legend=levels(deglist.object$samples$group) , col=my_colors, pch=20 )
@@ -92,7 +96,7 @@ DEGedgeRPlot <- function() {
     # sampleType[grep("female", sampleType)] <- "F"
     # sampleType[grep("male", sampleType)] <- "M"
     # set up model
-    designMat <- edgeR::model.matrix(~sampleType)
+    designMat <- model.matrix(~sampleType)
 
     dgList <- edgeR::estimateGLMCommonDisp(deglist.object, design=designMat)
     dgList <- edgeR::estimateGLMTrendedDisp(dgList, design=designMat)
@@ -118,6 +122,11 @@ DEGedgeRPlot <- function() {
   }
 }
 
+#' DEG analysis with DESeq2
+#'
+#' @import DESeq2
+#' @importFrom pheatmap pheatmap
+#' @export
 DEDESeq2Plot <- function() {
   if(file.exists(paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/raw_count/gene_count_matrix.csv"))){
     # load gene name for further usage

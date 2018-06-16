@@ -114,8 +114,11 @@ Hisat2AlignmentDefault <- function(gene.name = "NO_DATA", sample.pattern = "NO_D
   }
 }
 
+#' Report Hisat2 assemble rate
 #'
-#'@export
+#' @importFrom stringr str_extract
+#' @importFrom gridExtra grid.table
+#' @export
 Hisat2ReportAssemble <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"){
   if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA"){
     if (gene.name == "NO_DATA") {
@@ -356,6 +359,10 @@ GffcompareRefSample <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA
 }
 
 #' Run ballgown analysis
+#'
+#' @import ballgown
+#' @import genefilter
+#' @importFrom dplyr arrange
 #' @export
 BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA", covariate = "NO_DATA") {
   if (gene.name == "NO_DATA" || sample.pattern == "NO_DATA" || covariate == "NO_DATA") {
@@ -382,7 +389,7 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
       if (length(row.names(sample.table)) == 2) {
         dir.create(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/"))
         cat("\u25CF 2. Sorting phenodata.csv : \n")
-        pheno_data.arrange <- arrange(pheno_data, unlist(pheno_data[covariate]))
+        pheno_data.arrange <- dplyr::arrange(pheno_data, unlist(pheno_data[covariate]))
         print(pheno_data.arrange)
         cat('\n')
         # for adding FPKM column!
@@ -396,12 +403,8 @@ BallgownPreprocess <- function(gene.name = "NO_DATA", sample.pattern = "NO_DATA"
         bg <- pkg.ballgown.data$bg_chrX
         save(bg, file = paste0(pkg.global.path.prefix$data_path, "gene_data/ballgown/ballgown.rda"))
         cat('\n')
-        ans <- rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1
-        print(ans)
         ls(envir=parent.frame())
         pkg.ballgown.data$bg_chrX_filt <- ballgown::subset(pkg.ballgown.data$bg_chrX, cond = 'rowVars(ballgown::texpr(pkg.ballgown.data$bg_chrX)) >1', genomesubset=TRUE)
-        print(ls(envir=parent.frame()))
-        #print(pkg.ballgown.data$bg_chrX_filt)
 
         # differential expression
         cat("\u25CF 4. Differential expression preprocessing : \n")

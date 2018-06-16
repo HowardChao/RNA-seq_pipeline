@@ -34,7 +34,9 @@ DEGVolcanoPlot <- function(select.pval=0.05, select.log2FC=1) {
   }
 }
 
+#' DEGMAPlot
 #'
+#' @import ggplot2
 #' @export
 DEGMAPlot <- function() {
   if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
@@ -59,6 +61,8 @@ DEGMAPlot <- function() {
 }
 
 #' Frequency plot
+#'
+#' @importFrom rafalib shist
 #' @export
 DEGFrequencyPlot <- function() {
   if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){
@@ -95,6 +99,7 @@ DEGFrequencyPlot <- function() {
   }
 }
 
+#' DEGTranscriptRelatedPlot
 #'
 #' @export
 DEGTranscriptRelatedPlot <- function(){
@@ -166,7 +171,10 @@ DEGFPKMBoxPlot <- function() {
   }
 }
 
+#' DEGPCAPlot
 #'
+#' @importFrom FactoMineR PCA
+#' @importFrom factoextra get_eigenvalue fviz_eig fviz_pca_ind
 #' @export
 DEGPCAPlot <- function(){
   # http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/
@@ -246,7 +254,11 @@ DEGPCAPlot <- function(){
   }
 }
 
+#' Plot correlation plo
 #'
+#' @importFrom corrplot corrplot
+#' @importFrom PerformanceAnalytics chart.Correlation
+#' @importFrom reshape2 melt
 #' @export
 DEGCorrelationPlot <- function(){
   if(file.exists(paste0(pkg.global.path.prefix$data_path, "RNAseq_results/DEG_results/FPKM_DEG_result.csv"))){

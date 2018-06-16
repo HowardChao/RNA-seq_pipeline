@@ -34,3 +34,6 @@
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Fstringtie_related.R="2E4D4D1A"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Futility_installtool_and_rnaseqpipline.R="E21E35F2"
 ~%2Fbioinformatics%2FR_package%2FRNASeq%2FR%2Futility_installtool_rnaseqpipline.R="94341A3B"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2Fman%2FBallgownPreprocess.Rd="916C6C2D"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2Fman%2FDEGVolcanoPlot.Rd="D1F0FAEA"
+~%2Fbioinformatics%2FR_package%2FRNASeq%2Fman%2Fhello.Rd="A8CAB938"
