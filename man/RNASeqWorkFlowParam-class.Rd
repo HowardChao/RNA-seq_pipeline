@@ -13,7 +13,7 @@ An S4 class for storing RNA-Seq workflow parameters of this package
 \section{Slots}{
 
 \describe{
-\item{\code{path.prefix}}{directory holding installations and analysis results}
+\item{\code{path.prefix}}{the directory holding installations and analysis results}
 
 \item{\code{input.path.prefix}}{user has to prepared valid 'input_files/' under this directory}
 
