@@ -30,3 +30,6 @@ Depends:
     genefilter,
     edgeR,
     DESeq2
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
